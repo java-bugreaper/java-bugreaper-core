@@ -5,8 +5,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.java-bugreaper</groupId>
-    <artifactId>core</artifactId>
+    <groupId>io.ambu550</groupId>
+    <artifactId>bugreaper-core</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-rc</version>
 
