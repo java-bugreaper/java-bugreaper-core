@@ -1,0 +1,44 @@
+<html title="test title">
+<head>
+<style>
+                    table {
+                        width: 100%;
+                        margin-bottom: 1rem;
+                        color: #111314;
+                        border-collapse: collapse;
+                        font-size: 12;
+                    }
+                    table td, table th {
+                        vertical-align: center;
+                        text-align:center;
+                        border: 1px solid #dee2e6;
+                    }
+                    tr:nth-of-type(even) {
+                        background-color:#faf7eb;
+                    }
+                    tr:nth-of-type(odd) {
+                        background-color:#f0faf4;
+                    }
+                    table th{
+                        position: sticky;
+                        top: 0;
+                        background-color:#FBFCFC!important;
+                    }
+                    #stick-column {
+                        position: sticky;
+                        left: 0;
+                        font-weight: bold;
+                    }
+</style>
+</head>
+<body>
+<table>
+<tr>
+<th>3</th><th>Positive_test_1_0_1</th><th>Negative_test_1_0_1</th><th>Negative_test_1_0_2</th></tr>
+<tr><td id="stick-column">first param</td><td bgcolor="yellow" style="font-weight:bold">"3,0*"</td><td bgcolor="yellow" style="font-weight:bold">empty*</td><td bgcolor="yellow" style="font-weight:bold">null*</td></tr>
+<tr><td id="stick-column">second param</td><td>3</td><td>1</td><td>4</td></tr>
+<tr style="background-color:green;"><td id="stick-column">==EXPECTED RESULT==</td><td></td><td></td><td></td></tr>
+<tr><td id="stick-column">sum</td><td>6</td><td>error</td><td>error</td></tr>
+</table>
+</body>
+</html>

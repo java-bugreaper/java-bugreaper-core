@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": [
+    "status",
+    "name",
+    "array"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "array": {
+      "type": "array"
+    }
+  }
+}

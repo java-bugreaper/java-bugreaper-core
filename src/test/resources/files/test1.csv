@@ -1,0 +1,4 @@
+,pos_1_0_1,pos_1_0_2,pos_1_0_3,pos_1_0_4,pos_1_0_5,pos_1_0_6,pos_1_0_7
+first param,1,3,0,5,9,4,2
+second param,2,3,1,0,2,-2,-6
+Expected result,3,6,1,5,11,2,-4
