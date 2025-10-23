@@ -1,0 +1,43 @@
+<html title="test title">
+<head>
+<style>
+                    table {
+                        width: 100%;
+                        margin-bottom: 1rem;
+                        color: #111314;
+                        border-collapse: collapse;
+                        font-size: 12;
+                    }
+                    table td, table th {
+                        vertical-align: center;
+                        text-align:center;
+                        border: 1px solid #dee2e6;
+                    }
+                    tr:nth-of-type(even) {
+                        background-color:#faf7eb;
+                    }
+                    tr:nth-of-type(odd) {
+                        background-color:#f0faf4;
+                    }
+                    table th{
+                        position: sticky;
+                        top: 0;
+                        background-color:#FBFCFC!important;
+                    }
+                    #stick-column {
+                        position: sticky;
+                        left: 0;
+                        font-weight: bold;
+                    }
+</style>
+</head>
+<body>
+<table>
+<tr>
+<th>7</th><th>pos_1_0_1</th><th>pos_1_0_2</th><th>pos_1_0_3</th><th>pos_1_0_4</th><th>pos_1_0_5</th><th>pos_1_0_6</th><th>pos_1_0_7</th></tr>
+<tr><td id="stick-column">first param</td><td>1</td><td>3</td><td>0</td><td>5</td><td>9</td><td>4</td><td>2</td></tr>
+<tr><td id="stick-column">second param</td><td>2</td><td>3</td><td>1</td><td>0</td><td>2</td><td>-2</td><td>-6</td></tr>
+<tr><td id="stick-column">Expected result</td><td>3</td><td>6</td><td>1</td><td>5</td><td>11</td><td>2</td><td>-4</td></tr>
+</table>
+</body>
+</html>

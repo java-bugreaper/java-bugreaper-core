@@ -1,0 +1,5 @@
+,Positive_test_1_0_1,Negative_test_1_0_1,Negative_test_1_0_2
+first param,"3,0*",empty*,null*
+second param,3,1,4
+==EXPECTED RESULT==,,,
+sum,6,error,error
