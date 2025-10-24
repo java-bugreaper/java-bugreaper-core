@@ -7,8 +7,29 @@
 
     <groupId>io.gitlab.ambu550</groupId>
     <artifactId>bugreaper-core</artifactId>
+    <name>BUGREAPER CORE</name>
+    <description>Core part for "BUGREAPER" family modules used for testing</description>
+    <url>https://ambu550.gitlab.io/java-bugreaper-core</url>
+
     <packaging>jar</packaging>
-    <version>0.0.2-rc</version>
+    <version>0.0.3-rc</version>
+
+
+    <developers>
+        <developer>
+            <id>ambu550</id>
+            <name>Oleksii Betin</name>
+            <email>ambulance003@ukr.net</email>
+            <url>https://www.linkedin.com/in/ambu550/</url>
+
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+
 
     <licenses>
         <license>
@@ -19,7 +40,7 @@
     </licenses>
 
     <scm>
-        <url>https://svn.apache.org/viewvc/maven</url>
+        <url>https://ambu550.gitlab.io/java-bugreaper-core</url>
     </scm>
 
     <properties>
@@ -52,10 +73,6 @@
         <jacoco-maven-plugin>0.8.11</jacoco-maven-plugin>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-
-        <!--    for unit tests   -->
-
-        <testcontainers.version>1.20.6</testcontainers.version>
 
     </properties>
 
@@ -189,6 +206,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.2</version>
+                <configuration>
+<!--                    This is often the default behavior, but explicitly setting it can be useful -->
+<!--                    <createChecksum>true</createChecksum>-->
+                </configuration>
             </plugin>
 
             <!--    for comments will be visible in IDEA               -->
@@ -225,20 +246,14 @@
                     <doclint>none</doclint>
                 </configuration>
             </plugin>
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.3</version>
-                <configuration>
-                    <doclint>all,-missing</doclint>
-                </configuration>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <version>1.4</version>
                 <executions>
                     <execution>
-                        <id>attach-javadoc</id>
-                        <phase>site</phase>
                         <goals>
-                            <goal>javadoc</goal>
+                            <goal>artifacts</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -290,25 +305,55 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/maven</url>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+<!--                                    <keyname>key</keyname>-->
+<!--                                    <useAgent>true</useAgent>-->
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>2.5.2</version>
+                        <configuration>
+                            <createChecksum>true</createChecksum>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
     <distributionManagement>
         <site>
             <id>site</id>
             <name>site</name>
-            <url>https://ambu550.gitlab.io/java-bugreaper-core//</url>
+            <url>https://ambu550.gitlab.io/java-bugreaper-core</url>
         </site>
         <repository>
             <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/maven</url>
+            <url>https://gitlab.com/api/v4/projects/75490960/packages/maven</url>
         </repository>
         <snapshotRepository>
             <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/maven</url>
+            <url>https://gitlab.com/api/v4/projects/75490960/packages/maven</url>
         </snapshotRepository>
     </distributionManagement>
 
