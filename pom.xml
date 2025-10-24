@@ -12,7 +12,7 @@
     <url>https://ambu550.gitlab.io/java-bugreaper-core</url>
 
     <packaging>jar</packaging>
-    <version>0.0.3-rc</version>
+    <version>0.0.3</version>
 
 
     <developers>
