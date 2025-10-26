@@ -9,7 +9,7 @@ Core part for "BUGREAPER" family modules used for testing
 
 ## [BugReaper Family](https://gitlab.com/search?search=ambu550%2Fjava-bugreaper&nav_source=navbar&search_code=true&repository_ref=main)
 
-
+## [Sandbox project with examples](https://gitlab.com/ambu550/java-bugreaper-sandbox)
 
 ### Requirements:
 

@@ -1,6 +1,6 @@
 package io.bugreaper.core.allurereporter;
 
-import io.bugreaper.core.filereaders.ResourcesFileReader;
+import io.bugreaper.core.filereaders.FileReader;
 import io.bugreaper.core.mappers.StringMappers;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Param;
@@ -81,7 +81,7 @@ public class AllureReporter {
      * @param filePath path in resources
      */
     public static void attachFromCsv(String name, String filePath) {
-        AllureBuilder.reportHtmlCsvCases(name, ResourcesFileReader.readCsvToArray(filePath));
+        AllureBuilder.reportHtmlCsvCases(name, FileReader.readCsvToArray(filePath));
     }
 
 }

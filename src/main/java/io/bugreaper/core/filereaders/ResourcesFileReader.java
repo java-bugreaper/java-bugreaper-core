@@ -5,15 +5,13 @@ import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -30,44 +28,26 @@ public class ResourcesFileReader {
         throw new IllegalStateException("Utility class");
     }
 
+    static final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesFileReader.class);
     private static final String RES_PATH = getResourcesPath();
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
     private static final String FAILED_WRITE_MESSAGE = "Failed to write file {} is directory exists?";
 
 
+    /**
+     * get resource path & cut build/target part (to get rel path to resources if there is project in project)
+     * <P> WARNING! if in tests there are custom build dir it`s not work
+     */
     private static String getResourcesPath(){
-        return new File("")
-                .getAbsolutePath() + "/src/test/resources/";
+        String classResourcesPath = String.valueOf(Path.of(Objects.requireNonNull(classLoader.getResource("")).getPath()));
+        classResourcesPath = classResourcesPath.replaceAll("/build/.*", "");
+        classResourcesPath = classResourcesPath.replaceAll("/target/.*", "");
+        classResourcesPath = classResourcesPath + "/src/test/resources/";
+        return classResourcesPath;
     }
 
     // From resources directly
-
-    /**
-     * Read file in resources CSV and convert to array
-     *
-     * @param filePath path to file in resources
-     * @return List with data
-     * @throws FileReaderException with a missing file
-     */
-    @SuppressWarnings("squid:S5998")
-    public static List<List<String>> readCsvToArray(String filePath) {
-        List<List<String>> records;
-
-        Path path = getProjectFilePath(filePath);
-
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            records = reader.lines()
-                    .map(line -> Arrays.asList(line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)")))
-                    .toList();
-        }catch (NoSuchFileException e) {
-            LOGGER.error("Tests dir: {}", RES_PATH);
-            throw new FileReaderException("File not found: " + path, e);
-        }catch (Exception e) {
-            throw new FileReaderException(FAILED_READ_MESSAGE + path, e);
-        }
-        return records;
-    }
 
 
     /**
