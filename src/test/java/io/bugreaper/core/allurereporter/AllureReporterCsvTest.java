@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.bugreaper.core.allurereporter.AllureBuilder.reportHtmlCsvCases;
 import static io.bugreaper.core.filereaders.FileReader.readTextFromFile;
-import static io.bugreaper.core.filereaders.ResourcesFileReader.readCsvToArray;
+import static io.bugreaper.core.filereaders.FileReader.readCsvToArray;
 import static io.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -77,7 +77,7 @@ class AllureReporterCsvTest {
         }
 
         assertEquals(
-                "File not found: " + System.getProperty("user.dir") + "/src/test/resources/" + file,
+                "File not exist in resources: " + file,
                 errorMessage,
                 "File not found error: " + errorMessage);
     }
