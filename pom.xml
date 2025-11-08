@@ -9,10 +9,10 @@
     <artifactId>bugreaper-core</artifactId>
     <name>BUGREAPER CORE</name>
     <description>Core part for "BUGREAPER" family modules used for testing</description>
-    <url>https://gitlab.com/ambu550/java-bugreaper-core</url>
+    <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
 
     <packaging>jar</packaging>
-    <version>0.0.5</version>
+    <version>0.0.6-rc</version>
 
 
     <developers>
@@ -40,10 +40,15 @@
     </licenses>
 
     <scm>
-        <url>https://gitlab.com/ambu550/java-bugreaper-core</url>
+        <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
     </scm>
 
     <properties>
+
+        <sonar.projectKey>java-bugreaper-core</sonar.projectKey>
+        <sonar.projectName>java-bugreaper-core</sonar.projectName>
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+
 
         <maven.build.timestamp.format>yyyy-MM-dd HH</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -351,7 +356,7 @@
         <site>
             <id>site</id>
             <name>site</name>
-            <url>https://ambu550.gitlab.io/java-bugreaper-core</url>
+            <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
         </site>
         <repository>
             <id>gitlab-maven</id>

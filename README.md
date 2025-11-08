@@ -1,15 +1,18 @@
 # BUGREAPER CORE MODULE
 
-Core part for "BUGREAPER" family modules used for testing
+### Core part for "BUGREAPER" family modules used for testing
+
+Contains packages and wrapped methods for testing with pre-prepared steps and attachments for reports
 
 
-## [apiDOC](https://ambu550.gitlab.io/java-bugreaper-core/apidocs/index.html)
+## [apiDOC](https://bug-reaper.gitlab.io/java-bugreaper-core/apidocs/index.html)
 
-## [Project information](https://ambu550.gitlab.io/java-bugreaper-core/)
+## [Project information](https://bug-reaper.gitlab.io/java-bugreaper-core)
 
-## [BugReaper Family](https://gitlab.com/search?search=ambu550%2Fjava-bugreaper&nav_source=navbar&search_code=true&repository_ref=main)
+## [Sandbox project with examples](https://gitlab.com/bug-reaper/java-bugreaper-sandbox)
 
-## [Sandbox project with examples](https://gitlab.com/ambu550/java-bugreaper-sandbox)
+## [BugReaper Family](https://gitlab.com/bug-reaper)
+
 
 ### Requirements:
 

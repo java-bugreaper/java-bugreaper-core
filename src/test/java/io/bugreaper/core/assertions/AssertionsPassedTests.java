@@ -2,8 +2,7 @@ package io.bugreaper.core.assertions;
 
 import org.junit.jupiter.api.Test;
 
-import static io.bugreaper.core.assertions.Asserts.assertBooleans;
-import static io.bugreaper.core.assertions.Asserts.assertStrings;
+import static io.bugreaper.core.assertions.Asserts.*;
 import static io.bugreaper.core.assertions.JsonAsserts.*;
 
 
@@ -18,6 +17,27 @@ class AssertionsPassedTests {
     @Test
     void testAssertBooleans() {
         assertBooleans(true, true);
+    }
+
+    @Test
+    void testAssertGreater() {
+        assertGreater(3, 2);
+    }
+
+    @Test
+    void testAssertEmpty() {
+        assertEmpty(0);
+    }
+
+    @Test
+    void testAssertNotEmpty() {
+        assertNotEmpty(1);
+    }
+
+
+    @Test
+    void testAssertLess() {
+        assertLess(4, 5);
     }
 
     @Test

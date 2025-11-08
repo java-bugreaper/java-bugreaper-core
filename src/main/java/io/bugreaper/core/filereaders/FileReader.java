@@ -115,7 +115,6 @@ public class FileReader {
             throw new FileReaderException("File not exist in resources: " + filePath, e);
         }
 
-
     }
 
 }

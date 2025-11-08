@@ -1,6 +1,7 @@
 package io.bugreaper.core.assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public final class Asserts {
 
@@ -10,15 +11,35 @@ public final class Asserts {
 
 
     public static void assertStrings(String expectedString, String actualString) {
-        assertAll(() -> assertEquals(expectedString, actualString));
+        assertEquals(expectedString, actualString);
     }
 
     public static void containsStrings(String expectedSubString, String actualString) {
-        assertAll(() -> assertTrue(actualString.contains(expectedSubString)));
+        assertTrue(actualString.contains(expectedSubString));
     }
 
     public static void assertBooleans(boolean expected, boolean actual) {
-        assertAll(() -> assertEquals(expected, actual));
+        assertEquals(expected, actual);
+    }
+
+    public static void assertIntEquals(int expected, int actual) {
+        assertEquals(expected, actual);
+    }
+
+    public static void assertGreater(int expected, int actual) {
+        assertTrue(expected > actual);
+    }
+
+    public static void assertLess(int expected, int actual) {
+        assertTrue(expected < actual);
+    }
+
+    public static void assertNotEmpty(int actual) {
+        assertNotEquals(0,  actual);
+    }
+
+    public static void assertEmpty(int actual) {
+        assertEquals(0,  actual);
     }
 
 }

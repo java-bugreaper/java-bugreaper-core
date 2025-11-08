@@ -11,6 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class AssertionsCatchTests {
 
     @Test
+    void testAssertGreaterFailed() {
+        assertThrows(AssertionError.class, () ->
+                assertGreater(2, 2));
+    }
+
+    @Test
+    void testAssertLessFailed() {
+        assertThrows(AssertionError.class, () ->
+                assertLess(5, 5));
+    }
+
+    @Test
     void testAssertStringFailed() {
         String actual = "str1";
         String expected = "str2";
