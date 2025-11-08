@@ -30,6 +30,7 @@ Contains packages and wrapped methods for testing with pre-prepared steps and at
 | Lib                                                                                                | Version  | Description                                    |
 |----------------------------------------------------------------------------------------------------|----------|------------------------------------------------|
 | [Junit5](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)                   | 5.12.1   | test framework                                 |
+| [Junit Launcher](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher)    | 1.12.2   | for tests launch                               |
 | [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest)                               | 3.0      | matcher framework                              |
 | [AspectJ Weaver](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver)                     | 1.9.22.1 | applies aspects to Java classes (for test run) |
 | [Allure Attachments](https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments)       | 2.30.0   | Allure report generate                         |
