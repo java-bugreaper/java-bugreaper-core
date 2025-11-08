@@ -5,10 +5,22 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.ambu550</groupId>
+    <groupId>io.gitlab.ambu550</groupId>
     <artifactId>bugreaper-core</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1-rc</version>
+    <version>0.0.2-rc</version>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://svn.apache.org/viewvc/maven</url>
+    </scm>
 
     <properties>
 
@@ -173,6 +185,11 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
 
             <!--    for comments will be visible in IDEA               -->
             <plugin>
@@ -188,6 +205,25 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Optional: Add Javadoc options here, e.g., for fixing warnings -->
+                    <doclint>none</doclint>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -264,7 +300,7 @@
         <site>
             <id>site</id>
             <name>site</name>
-            <url>https://java-testhelper-core-ambu550-1f8723467f72abd0047dfa797c79a09304.gitlab.io/</url>
+            <url>https://ambu550.gitlab.io/java-bugreaper-core//</url>
         </site>
         <repository>
             <id>gitlab-maven</id>
