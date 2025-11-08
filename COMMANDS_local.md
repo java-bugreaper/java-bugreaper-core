@@ -23,5 +23,5 @@ mvn deploy -s settings_local.xml -Dmaven.test.skip=true
 
 #### installation with checksum and asc
 ````
-mvn install -s settings_local.xml -Dmaven.test.skip=true -P release
+mvn clean install -s settings_local.xml -Dmaven.test.skip=true -P release
 ````

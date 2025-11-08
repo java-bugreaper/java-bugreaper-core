@@ -21,7 +21,7 @@ class AssertionsPassedTests {
 
     @Test
     void testAssertGreater() {
-        assertGreater(3, 2);
+        assertGreaterThanExpected(2, 3);
     }
 
     @Test
@@ -37,7 +37,7 @@ class AssertionsPassedTests {
 
     @Test
     void testAssertLess() {
-        assertLess(4, 5);
+        assertLessThanExpected(5, 4);
     }
 
     @Test

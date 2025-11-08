@@ -10,12 +10,12 @@ class AssertionsWithAwaitPassedTests {
 
     @Test
     void testAssertLess() {
-        assertLessWithAwait(2, 3, 200, "Goods");
+        assertLessThanExpectedWithAwait(3, 2, 200, "Goods");
     }
 
     @Test
     void testAssertGreater() {
-        assertGreaterWithAwait(2, 1, 200, "Goods");
+        assertGreaterThanExpectedWithAwait(1, 2, 200, "Goods");
     }
 
     @Test

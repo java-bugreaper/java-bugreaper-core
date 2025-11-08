@@ -9,8 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static io.bugreaper.core.mappers.StringMappers.listToString;
-import static io.bugreaper.core.mappers.StringMappers.stringMapper;
+import static io.bugreaper.core.mappers.StringMappers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -101,7 +100,6 @@ class StringMappersTests {
                 
                 three
                 ]""";
-        listToString(list);
 
         assertEquals(listToString(list),
                 ar,
@@ -116,7 +114,6 @@ class StringMappersTests {
                 [
                 
                 ]""";
-        listToString(list);
 
         assertEquals(listToString(list),
                 ar,
@@ -128,13 +125,45 @@ class StringMappersTests {
         ArrayList<String> list = null;
 
         String ar = "";
-        listToString(list);
 
         assertEquals(listToString(list),
                 ar,
                 "List null beautify for attach");
     }
 
+    @Test
+    void testFormatMillisecondsOnly(){
+        assertEquals("105 milliseconds",
+                formatMilliseconds(105),
+                "message with milliseconds");
+    }
 
+    @Test
+    void testFormatMillisecondOnly(){
+        assertEquals("1 millisecond",
+                formatMilliseconds(1),
+                "message with millisecond");
+    }
+
+    @Test
+    void testFormatMillisecondZeroOnly(){
+        assertEquals("0 milliseconds",
+                formatMilliseconds(0),
+                "message with 0 milliseconds");
+    }
+
+    @Test
+    void testFormatSecondsOnly(){
+        assertEquals("5 seconds",
+                formatMilliseconds(5000),
+                "message with seconds");
+    }
+
+    @Test
+    void testFormatSecondsAndMilliseconds(){
+        assertEquals("1 second 330 milliseconds",
+                formatMilliseconds(1330),
+                "message with seconds");
+    }
 
 }

@@ -16,36 +16,37 @@ class AssertionsWithAwaitFailedTests {
     void testAssertLess() {
 
         Throwable exception = assertThrows(AssertionWithAwaitFailedError.class, () ->
-                assertLessWithAwait(3, 2, 101, "Goods"));
+                assertLessThanExpectedWithAwait(2, 3, 101, "Goods"));
 
         MatcherAssert.assertThat(
                 "Exception await less assert",
                 exception.getMessage(),
-                is("Goods expected to be LESS than <3> but got <2> within 101 milliseconds"));
+                is("Goods expected to be LESS than <2> but got <3> within 101 milliseconds"));
     }
 
     @Test
     void testAssertGreater() {
 
         Throwable exception = assertThrows(AssertionWithAwaitFailedError.class, () ->
-                assertGreaterWithAwait(2, 3, 102, "Goods"));
+                assertGreaterThanExpectedWithAwait(3, 2, 102, "Goods"));
 
         MatcherAssert.assertThat(
                 "Exception await greater assert",
                 exception.getMessage(),
-                is("Goods expected to be GREATER than <2> but got <3> within 102 milliseconds"));
+                is("Goods expected to be GREATER than <3> but got <2> within 102 milliseconds"));
+
     }
 
     @Test
     void testAssertEqualFailed() {
 
         Throwable exception = assertThrows(AssertionWithAwaitFailedError.class, () ->
-                assertIntEqualsWithAwait(2, 3, 104, "Goods"));
+                assertIntEqualsWithAwait(2, 3, 1000, "Goods"));
 
         MatcherAssert.assertThat(
                 "Exception await equals assert",
                 exception.getMessage(),
-                is("Goods expected to be EXACTLY <2> but got <3> within 104 milliseconds"));
+                is("Goods expected to be EXACTLY <2> but got <3> within 1 second"));
 
     }
 
@@ -53,12 +54,12 @@ class AssertionsWithAwaitFailedTests {
     void testAssertNotEmpty() {
 
         Throwable exception = assertThrows(AssertionWithAwaitFailedError.class, () ->
-                assertNotEmptyWithAwait( 0, 200, "Goods"));
+                assertNotEmptyWithAwait( 0, 1200, "Goods"));
 
         MatcherAssert.assertThat(
                 "Exception await not empty assert",
                 exception.getMessage(),
-                is("Goods expected to be NOT <0> but got <0> within 200 milliseconds"));
+                is("Goods expected to be NOT <0> but got <0> within 1 second 200 milliseconds"));
     }
 
     @Test

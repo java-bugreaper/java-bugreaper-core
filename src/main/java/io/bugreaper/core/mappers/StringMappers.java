@@ -80,5 +80,28 @@ public final class StringMappers {
 
     }
 
+    public static String formatMilliseconds(long milliseconds) {
+        long seconds = milliseconds / 1000;
+        long remainingMs = milliseconds % 1000;
+
+        StringBuilder result = new StringBuilder();
+
+        if (seconds > 0) {
+            result.append(seconds).append(" second");
+            if (seconds > 1) result.append("s");
+        }
+
+        if (remainingMs > 0) {
+            if (!result.isEmpty()) result.append(" ");
+            result.append(remainingMs).append(" millisecond");
+            if (remainingMs > 1) result.append("s");
+        }
+
+        if (result.isEmpty()) {
+            result.append("0 milliseconds");
+        }
+
+        return result.toString();
+    }
 
 }
