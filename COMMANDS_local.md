@@ -19,8 +19,6 @@ mvn install -Dmaven.test.skip=true -DcreateChecksum=false
 mvn deploy -s settings_local.xml -Dmaven.test.skip=true
 ````
 
-
-
 # FOR MAVEN CENTRAL
 
 #### installation with checksum and asc

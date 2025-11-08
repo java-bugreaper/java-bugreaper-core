@@ -53,7 +53,7 @@ publish:
   stage: build
   script:
     - mvn deploy -s settings.xml -Dmaven.test.skip=true -Dstyle.color=always
-  only: [ branches ] ##TODO
+  only: [ tags ]
 
 site:
   stage: build
