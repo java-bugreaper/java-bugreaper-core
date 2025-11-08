@@ -34,6 +34,10 @@ class AssertionsPassedTests {
         assertNotEmpty(1);
     }
 
+    @Test
+    void testAssertIntEquals() {
+        assertIntEquals(5, 5);
+    }
 
     @Test
     void testAssertLess() {
