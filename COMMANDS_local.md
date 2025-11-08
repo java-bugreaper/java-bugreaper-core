@@ -9,7 +9,7 @@ mvn versions:display-dependency-updates
 mvn dependency:tree
 ````
 
-#### base installation like in git
+#### base installation to mavenLocal()
 ````
 mvn install -Dmaven.test.skip=true -DcreateChecksum=false
 ````

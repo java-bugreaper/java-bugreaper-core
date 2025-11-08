@@ -2,6 +2,15 @@
 
 Core part for "BUGREAPER" family modules used for testing
 
+
+## [apiDOC](https://ambu550.gitlab.io/java-bugreaper-core/apidocs/index.html)
+
+## [Project information](https://ambu550.gitlab.io/java-bugreaper-core/)
+
+## [BugReaper Family](https://gitlab.com/search?search=ambu550%2Fjava-bugreaper&nav_source=navbar&search_code=true&repository_ref=main)
+
+
+
 ### Requirements:
 
     JAVA >= 17
