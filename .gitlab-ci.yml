@@ -70,7 +70,7 @@ pages:
   dependencies: [ "site" ]
   script:
     - mkdir public
-    - mv ./target/site/apidocs/* public
+    - mv ./target/site/* public
   only: [ tags ]
   artifacts:
     paths:
