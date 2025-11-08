@@ -24,7 +24,7 @@ public class JsonEquals implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have JSON equals";
+        return "should have JSON EQUAL to:";
     }
 
 }

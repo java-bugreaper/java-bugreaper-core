@@ -19,6 +19,6 @@ public class StringContains implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have string CONTAINS [" + expectedString + "]";
+        return "should have STRING CONTAINS: [" + expectedString + "]";
     }
 }

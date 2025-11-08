@@ -25,7 +25,7 @@ public class JsonContainsFromFile implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have JSON contains";
+        return "should have JSON CONTAINS expected part:";
     }
 
 }

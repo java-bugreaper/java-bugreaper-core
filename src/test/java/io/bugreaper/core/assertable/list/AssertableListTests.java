@@ -38,12 +38,12 @@ class AssertableListTests {
         var listForTest = new AssertableStringList(actualList);
 
         String er = listForTest
-                .testInLIst(elementsCountInList(3))
-                .testInLIst(stringEqualsInList("dummy"))
-                .testInLIst(stringContainsInList("test"))
-                .testInLIst(customStringMatcherInList(startsWithIgnoringCase("DU")))
-                .testInLIst(customStringMatcherInList(stringContainsInOrder("te", "st")))
-                .extractFromList(grabLastElementInList());
+                .verifyInList(hasExactCount(3))
+                .verifyInList(stringEqual("dummy"))
+                .verifyInList(stringContains("test"))
+                .verifyInList(stringMatchesCustom(startsWithIgnoringCase("DU")))
+                .verifyInList(stringMatchesCustom(stringContainsInOrder("te", "st")))
+                .extractFromList(grabLastElement());
 
         assertAll(() -> assertEquals("test", er,
                 "Grab last element "));
@@ -58,10 +58,10 @@ class AssertableListTests {
         var listForTest = new AssertableStringList(actualList);
 
         String er = listForTest
-                .testInLIst(stringEqualsInList("dummy"))
-                .testInLIst(stringEqualsInList(null))
-                .testInLIst(customStringMatcherInList(matchesRegex("..mmy")))
-                .extractFromList(grabLastElementInList());
+                .verifyInList(stringEqual("dummy"))
+                .verifyInList(stringEqual(null))
+                .verifyInList(stringMatchesCustom(matchesRegex("..mmy")))
+                .extractFromList(grabLastElement());
 
         assertAll(() -> assertNull(er, "Grab last element "));
     }
@@ -76,13 +76,13 @@ class AssertableListTests {
         var listForTest = new AssertableStringList(actualList);
 
         listForTest
-                .testInLIst(isJsonType())
-                .testInLIst(jsonContainsInList("""
+                .verifyInList(isJsonType())
+                .verifyInList(jsonContains("""
                   {
                     "status": 11
                   }"""))
-                .testInLIst(jsonEqualsInList(json))
-                .testInLIst(jsonSchemaCheckInList("""
+                .verifyInList(jsonEqual(json))
+                .verifyInList(jsonMatchesSchema("""
                         {
                           "type": "object",
                           "required": [
@@ -117,10 +117,10 @@ class AssertableListTests {
         var listForTest = new AssertableStringList(actualList);
 
         listForTest
-                .testInLIst(isJsonType())
-                .testInLIst(jsonContainsInList(Path.of("testdata/json/json_contains.json")))
-                .testInLIst(jsonEqualsInList(Path.of("testdata/json/json_equal.json")))
-                .testInLIst(jsonSchemaCheckInList(Path.of("testdata/json/schema_1.json")));
+                .verifyInList(isJsonType())
+                .verifyInList(jsonContains(Path.of("testdata/json/json_contains.json")))
+                .verifyInList(jsonEqual(Path.of("testdata/json/json_equal.json")))
+                .verifyInList(jsonMatchesSchema(Path.of("testdata/json/schema_1.json")));
 
     }
 

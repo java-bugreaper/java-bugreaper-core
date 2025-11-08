@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static io.bugreaper.core.assertions.JsonAsserts.checkJson;
+import static io.bugreaper.core.assertions.JsonAsserts.assertValidJson;
 
 
 /**
@@ -21,7 +21,7 @@ import static io.bugreaper.core.assertions.JsonAsserts.checkJson;
  * <p> CAN BE PROBLEM with dynamic files (that recreates while running tests)
  * <p> For dynamic files use {@link ResourcesFileReader}
  */
-public class FileReader {
+public final class FileReader {
 
     private FileReader() {
         throw new IllegalStateException("Utility class");
@@ -63,7 +63,7 @@ public class FileReader {
 
         try {
             String result = Files.readString(getFilePath(filePath));
-            checkJson(result);
+            assertValidJson(result);
             return result;
         } catch (IllegalArgumentException e) {
             logFullPath();

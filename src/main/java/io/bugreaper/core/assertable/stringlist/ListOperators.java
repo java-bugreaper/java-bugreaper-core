@@ -19,27 +19,27 @@ public class ListOperators {
      * @param expectedString expected string
      * @throws AssertionError on assert fail
      */
-    public static StringEquals stringEqualsInList(String expectedString) {
+    public static StringEquals stringEqual(String expectedString) {
         return new StringEquals(expectedString);
     }
 
-    public static StringContains stringContainsInList(String expectedString) {
+    public static StringContains stringContains(String expectedString) {
         return new StringContains(expectedString);
     }
 
-    public static JsonEquals jsonEqualsInList(String expectedJson) {
+    public static JsonEquals jsonEqual(String expectedJson) {
         return new JsonEquals(expectedJson);
     }
 
-    public static JsonEqualsFromFile jsonEqualsInList(Path path) {
+    public static JsonEqualsFromFile jsonEqual(Path path) {
         return new JsonEqualsFromFile(path);
     }
 
-    public static JsonContains jsonContainsInList(String expectedJsonPart) {
+    public static JsonContains jsonContains(String expectedJsonPart) {
         return new JsonContains(expectedJsonPart);
     }
 
-    public static JsonContainsFromFile jsonContainsInList(Path path) {
+    public static JsonContainsFromFile jsonContains(Path path) {
         return new JsonContainsFromFile(path);
     }
 
@@ -49,7 +49,7 @@ public class ListOperators {
      * @param expectedSchema expected Json Schema
      * @throws AssertionError on assert fail
      */
-    public static JsonSchemaCheck jsonSchemaCheckInList(String expectedSchema) {
+    public static JsonSchemaCheck jsonMatchesSchema(String expectedSchema) {
         return new JsonSchemaCheck(expectedSchema);
     }
 
@@ -59,7 +59,7 @@ public class ListOperators {
      * @param path path to files with Schema (in resources)
      * @throws AssertionError on assert fail
      */
-    public static JsonSchemaCheckFile jsonSchemaCheckInList(Path path) {
+    public static JsonSchemaCheckFile jsonMatchesSchema(Path path) {
         return new JsonSchemaCheckFile(path);
     }
 
@@ -79,7 +79,7 @@ public class ListOperators {
      * @return AssertableStringList
      * @throws AssertionError on assert fail
      */
-    public static CustomMatcher customStringMatcherInList(Matcher<String> matcher) {
+    public static CustomMatcher stringMatchesCustom(Matcher<String> matcher) {
         return new CustomMatcher(matcher);
     }
 
@@ -90,11 +90,16 @@ public class ListOperators {
      * @return AssertableStringList
      * @throws AssertionError on assert fail
      */
-    public static ElementsCount elementsCountInList(int cnt) {
+    public static ElementsCount hasExactCount(int cnt) {
         return new ElementsCount(cnt);
     }
 
-    public static LastElement grabLastElementInList() {
+    /**
+     * Grab last element from AssertableStringList
+     *
+     * @return String with last element
+     */
+    public static LastElement grabLastElement() {
         return new LastElement();
     }
 

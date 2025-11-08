@@ -21,6 +21,6 @@ public class CustomMatcher implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have string match to [" + matcher + "] ";
+        return "should have STRING match to [" + matcher + "]";
     }
 }

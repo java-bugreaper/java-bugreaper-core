@@ -58,6 +58,10 @@ public class AllureReporter {
         Allure.addAttachment(name, TYPE_JSON, readTextFromFile(path));
     }
 
+    public static void createHtmlAllureAttachment(String name, String attachment) {
+        Allure.addAttachment(name, "text/html", attachment, ".html");
+    }
+
     public static void attachCanBeNull(String name, String result) {
         if (result == null) {
             result = "null";

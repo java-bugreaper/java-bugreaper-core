@@ -21,7 +21,7 @@ public class ElementsCount implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have count: " + cnt;
+        return "should have count EQUAL to: " + cnt;
     }
 
 }

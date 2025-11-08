@@ -23,9 +23,9 @@ class AllureReporterTest {
 
     @Test
     void testReporter() {
-        Logger logger = (Logger) LoggerFactory.getLogger(LOGGER_NAME);
-        logger.setLevel(Level.INFO);
-        logger.addAppender(memoryAppender);
+        Logger testLogger = (Logger) LoggerFactory.getLogger(LOGGER_NAME);
+        testLogger.setLevel(Level.INFO);
+        testLogger.addAppender(memoryAppender);
 
         memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
         memoryAppender.start();

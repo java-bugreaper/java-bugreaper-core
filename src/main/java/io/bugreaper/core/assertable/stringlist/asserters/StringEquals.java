@@ -19,6 +19,6 @@ public class StringEquals implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have string EQUALS [" + expectedString + "]";
+        return "should have STRING EQUAL: [" + expectedString + "]";
     }
 }

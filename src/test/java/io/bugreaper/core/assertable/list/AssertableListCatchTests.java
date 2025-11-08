@@ -39,7 +39,7 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(AssertionFailedError.class, () ->
                 listForTest
-                        .testInLIst(jsonContainsInList("""
+                        .verifyInList(jsonContains("""
                   {
                     "status": 12
                   }""")));
@@ -62,7 +62,7 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(AssertionFailedError.class, () ->
                 listForTest
-                        .testInLIst(jsonEqualsInList("""
+                        .verifyInList(jsonEqual("""
                   {
                     "status": 12
                   }""")));
@@ -86,7 +86,7 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(AssertionFailedError.class, () ->
                 listForTest
-                        .testInLIst(isJsonType()));
+                        .verifyInList(isJsonType()));
 
         MatcherAssert.assertThat(
                 "Exception on failed validation JSON type",
@@ -105,7 +105,7 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(AssertionFailedError.class, () ->
                 listForTest
-                        .testInLIst(jsonSchemaCheckInList("""
+                        .verifyInList(jsonMatchesSchema("""
                         {
                           "type": "object",
                           "required": [
@@ -134,12 +134,12 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 listForTest
-                        .testInLIst(jsonContainsInList("not json")));
+                        .verifyInList(jsonContains("not json")));
 
         MatcherAssert.assertThat(
                 "Exception on failed validation JSON contains input",
                 exception.getMessage(),
-                StringContains.containsString("Wrong JSON/JSONArray format"));
+                StringContains.containsString("Invalid strict JSON/JSONArray"));
 
     }
 
@@ -154,12 +154,12 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 listForTest
-                        .testInLIst(jsonEqualsInList("not json")));
+                        .verifyInList(jsonEqual("not json")));
 
         MatcherAssert.assertThat(
                 "Exception on failed validation JSON equal input",
                 exception.getMessage(),
-                StringContains.containsString("Wrong JSON/JSONArray format"));
+                StringContains.containsString("Invalid strict JSON/JSONArray"));
 
 
     }
@@ -175,12 +175,12 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 listForTest
-                        .testInLIst(jsonSchemaCheckInList("not json")));
+                        .verifyInList(jsonMatchesSchema("not json")));
 
         MatcherAssert.assertThat(
                 "Exception on failed validation JSON Schema input",
                 exception.getMessage(),
-                StringContains.containsString("Wrong JSON/JSONArray format"));
+                StringContains.containsString("Invalid strict JSON/JSONArray"));
     }
 
 }

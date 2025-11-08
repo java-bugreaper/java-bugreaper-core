@@ -1,14 +1,13 @@
 package io.bugreaper.core.assertions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.ValidationMessage;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
@@ -27,6 +26,11 @@ public class JsonAsserts {
         throw new IllegalStateException("Utility class");
     }
 
+    private static final ObjectMapper strictMapper = new ObjectMapper();
+
+    // Lenient mapper allows trailing commas
+    private static final ObjectMapper lenientMapper = new ObjectMapper()
+            .configure(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature(), true);
 
     /**
      * Assertion without strict array ordering
@@ -76,7 +80,6 @@ public class JsonAsserts {
         try {
             assertJsonNotMethod(unexpectedPart, actualJson, false);
         }catch (AssertionError e) {
-            LOGGER.warn("=====");
             fail("Actual Json contains unexpected Json part:\n" + unexpectedPart);
         }
     }
@@ -137,19 +140,38 @@ public class JsonAsserts {
     }
 
     /**
-     * Check is String Json/JsonArray type
+     * Check is String Json/JsonArray type STRICT (even extra coma throw exception!)
      * @param jsonData String with data
      * @exception IllegalArgumentException if not Json/JsonArray type
      */
-    public static void checkJson(String jsonData) {
+    public static void assertValidJson(String jsonData) {
+        validateJsonInternal(jsonData, strictMapper, false);
+    }
+
+    /**
+     * Check is String Json/JsonArray type (extra coma throw passed)
+     * @param jsonData String with data
+     * @exception IllegalArgumentException if not Json/JsonArray type
+     */
+    public static void assertLenientValidJson(String jsonData) {
+        validateJsonInternal(jsonData, lenientMapper, true);
+    }
+
+
+    private static void validateJsonInternal(String jsonData, ObjectMapper mapper, boolean allowTrailingComma) {
+        if (jsonData == null || jsonData.trim().isEmpty()) {
+            throw new IllegalArgumentException("JSON string is null or empty");
+        }
+
         try {
-            new JSONObject(jsonData);
-        } catch (JSONException | NullPointerException e) {
-            try {
-                new JSONArray(jsonData);
-            } catch (JSONException | NullPointerException ex) {
-                throw new IllegalArgumentException(String.format("Wrong JSON/JSONArray format:%n%s", jsonData), ex);
+            JsonNode node = mapper.readTree(jsonData);
+            if (!node.isObject() && !node.isArray()) {
+                throw new IllegalArgumentException("JSON must be an object or array at the root");
             }
+        } catch (JsonProcessingException e) {
+            String mode = allowTrailingComma ? "lenient" : "strict";
+            throw new IllegalArgumentException(
+                    "Invalid " + mode + " JSON/JSONArray: " + e.getOriginalMessage(), e);
         }
     }
 

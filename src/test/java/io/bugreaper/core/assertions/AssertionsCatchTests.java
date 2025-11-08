@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.bugreaper.core.assertions.Asserts.*;
 import static io.bugreaper.core.assertions.JsonAsserts.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AssertionsCatchTests {
@@ -349,7 +350,7 @@ class AssertionsCatchTests {
 
 
     @Test
-    void testJsonTest() {
+    void testJsonStrictWithTrailingCommaTest() {
 
         String actual = """
                 {
@@ -357,11 +358,99 @@ class AssertionsCatchTests {
                 }""";
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                checkJson(actual));
+                assertValidJson(actual));
 
-        assertEquals("Wrong JSON/JSONArray format:\n" + actual,
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
                 exception.getMessage(),
-                "Exception for assert JSON type error");
+                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+    }
+    @Test
+    void testJsonArrayStrictWithTrailingCommaTest() {
+
+        String actual = """
+                [
+                {
+                  "id": 1010,
+                },
+                {
+                  "id": 1011,
+                },
+                ]""";
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertValidJson(actual));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+    }
+    @Test
+    void testJsonStrictNotJsonTest() {
+
+        String actual = "test";
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertValidJson(actual));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+    }
+
+    @Test
+    void testJsonLenientWithInvalidJsonTest() {
+
+        String actual = """
+                {
+                  "id"
+                }""";
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertLenientValidJson(actual));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                StringContains.containsString("Invalid lenient JSON/JSONArray:"));
+    }
+
+    @Test
+    void testJsonLenientWithEmptyStringTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertLenientValidJson(""));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                is("JSON string is null or empty"));
+    }
+
+    @Test
+    void testJsonLenientWithNullTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertLenientValidJson(null));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                is("JSON string is null or empty"));
+    }
+
+    @Test
+    void testJsonStrictWithSpacesTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                assertValidJson("    "));
+
+        MatcherAssert.assertThat(
+                "Exception for assert JSON type error",
+                exception.getMessage(),
+                is("JSON string is null or empty"));
     }
 
 }

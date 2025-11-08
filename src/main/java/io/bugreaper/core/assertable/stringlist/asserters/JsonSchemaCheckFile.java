@@ -25,7 +25,7 @@ public class JsonSchemaCheckFile implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have JSON with schema";
+        return "should have JSON MATCH SCHEMA";
     }
 
 }

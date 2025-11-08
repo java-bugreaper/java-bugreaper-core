@@ -177,4 +177,44 @@ class AssertionsPassedTests {
 
     }
 
+    @Test
+    void testJsonCheckTest() {
+
+        String actual = """
+                {
+                  "id": 1010
+                }""";
+
+                assertValidJson(actual);
+
+    }
+
+    @Test
+    void testJsonLenientWithTrailingCommaTest() {
+
+        String actual = """
+                {
+                  "id": 1010,
+                }""";
+
+        assertLenientValidJson(actual);
+
+    }
+
+    @Test
+    void testJsonArrayLenientWithTrailingCommaTest() {
+
+        String actual = """
+                [
+                {
+                  "id": 1010,
+                },
+                {
+                  "id": 1011,
+                },
+                ]""";
+
+        assertLenientValidJson(actual);
+
+    }
 }

@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.text.MessageFormat;
-import java.util.Objects;
 
+import static io.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestResourcesPath;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
@@ -22,32 +22,16 @@ import static org.junit.jupiter.api.Assertions.fail;
  * <p> Work with dynamic files (that recreates while running tests)
  */
 @SuppressWarnings("squid:S5960")
-public class ResourcesFileReader {
+public final class ResourcesFileReader {
 
     private ResourcesFileReader() {
         throw new IllegalStateException("Utility class");
     }
 
-    static final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesFileReader.class);
-    private static final String RES_PATH = getResourcesPath();
+    private static final String RES_PATH = getTestResourcesPath();
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
     private static final String FAILED_WRITE_MESSAGE = "Failed to write file {} is directory exists?";
-
-
-    /**
-     * get resource path & cut build/target part (to get rel path to resources if there is project in project)
-     * <P> WARNING! if in tests there are custom build dir it`s not work
-     */
-    private static String getResourcesPath(){
-        String classResourcesPath = String.valueOf(Path.of(Objects.requireNonNull(classLoader.getResource("")).getPath()));
-        classResourcesPath = classResourcesPath.replaceAll("/build/.*", "");
-        classResourcesPath = classResourcesPath.replaceAll("/target/.*", "");
-        classResourcesPath = classResourcesPath + "/src/test/resources/";
-        return classResourcesPath;
-    }
-
-    // From resources directly
 
 
     /**
@@ -120,7 +104,7 @@ public class ResourcesFileReader {
 
 
     private static Path getProjectFilePath(String filePath) {
-        return Path.of(RES_PATH + filePath);
+        return Path.of(RES_PATH, filePath);
     }
 
     /**
@@ -131,9 +115,9 @@ public class ResourcesFileReader {
      */
     public static void deleteResourceFile(String filePath) {
 
-        File file = new File(RES_PATH + filePath);
+        File file = new File(RES_PATH, filePath);
         try {
-            Files.delete(Path.of(RES_PATH + filePath));
+            Files.delete(Path.of(RES_PATH, filePath));
         } catch (NoSuchFileException e) {
             throw new FileReaderException("File for delete not exist: " + file, e);
         }  catch (Exception e) {
@@ -179,7 +163,7 @@ public class ResourcesFileReader {
      * @throws FileReaderException on read fail
      */
     public static long getResourceFileSize(String fileName) {
-        Path path = Paths.get(RES_PATH + fileName);
+        Path path = Paths.get(RES_PATH, fileName);
 
         try {
             return Files.size(path);
@@ -196,7 +180,7 @@ public class ResourcesFileReader {
      * @return boolean
      */
     public static boolean resourceFileExistsStatus(String fileName) {
-        File file = new File(RES_PATH + fileName);
+        File file = new File(RES_PATH, fileName);
         return file.exists();
     }
 

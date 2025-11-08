@@ -74,7 +74,7 @@ public final class ListAsserts {
 
     public static void equalsJsonInList(String expectedJson, List<String> actualList) {
 
-        checkJson(expectedJson);
+        assertValidJson(expectedJson);
         
         StringBuilder trace = listJsonAsserterBuilder(expectedJson, actualList, JSONCompareMode.STRICT);
 
@@ -86,7 +86,7 @@ public final class ListAsserts {
 
     public static void containsJsonInList(String expectedJsonPart, List<String> actualList) {
 
-        checkJson(expectedJsonPart);
+        assertValidJson(expectedJsonPart);
 
         StringBuilder trace = listJsonAsserterBuilder(expectedJsonPart, actualList, JSONCompareMode.LENIENT);
 
@@ -98,7 +98,7 @@ public final class ListAsserts {
 
     public static void jsonSchemaCheckInList(String expectedSchema, List<String> actualBodiesList) {
 
-        checkJson(expectedSchema);
+        assertValidJson(expectedSchema);
 
         StringBuilder trace = listJsonSchemaBuilder(expectedSchema, actualBodiesList);
 
@@ -115,7 +115,7 @@ public final class ListAsserts {
         }
 
         throw new AssertionFailedError(
-                MessageFormat.format("There is no elements in the list {0}:\n{1}\n {2}",
+                MessageFormat.format("There is no elements in the list {0}:\n{1}\n{2}",
                         modifier, expectedObject, trace));
     }
 
@@ -151,7 +151,7 @@ public final class ListAsserts {
 
         for (String actual : actualList) {
             try {
-                checkJson(actual);
+                assertValidJson(actual);
                 return null;
             } catch (AssertionError | IllegalArgumentException ex) {
                 trace = traceBuilder(trace, ex.getMessage());

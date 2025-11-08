@@ -14,7 +14,7 @@ public class IsJsonType implements ListCondition {
 
     @Override
     public String toString() {
-        return "list should have JSON element";
+        return "should have value of JSON type";
     }
 
 }

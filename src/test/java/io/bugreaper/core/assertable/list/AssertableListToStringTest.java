@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -17,9 +18,9 @@ class AssertableListToStringTest {
     void testMessageElementsCount() {
         String message =  new ElementsCount(2).toString();
 
-        assertAll(() -> assertEquals(
-                "list should have count: 2",
-                message));
+        assertEquals(
+                "should have count EQUAL to: 2",
+                message);
     }
 
 
@@ -27,18 +28,18 @@ class AssertableListToStringTest {
     void testMessageIsJsonType() {
         String message =  new IsJsonType().toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON element",
-                message));
+        assertEquals(
+                "should have value of JSON type",
+                message);
     }
 
     @Test
     void testMessageJsonContains() {
         String message =  new JsonContains("test").toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON contains",
-                message));
+        assertEquals(
+                "should have JSON CONTAINS expected part:",
+                message);
     }
 
     @Test
@@ -46,18 +47,18 @@ class AssertableListToStringTest {
         String message =  new JsonContainsFromFile(Path.of("/dir/file"))
                 .toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON contains",
-                message));
+        assertEquals(
+                "should have JSON CONTAINS expected part:",
+                message);
     }
 
     @Test
     void testMessageJsonEquals() {
-        String message =  new JsonEquals("test").toString();
+        String message =  new JsonEquals("logs/test").toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON equals",
-                message));
+        assertEquals(
+                "should have JSON EQUAL to:",
+                message);
     }
 
     @Test
@@ -65,46 +66,55 @@ class AssertableListToStringTest {
         String message =  new JsonEqualsFromFile(Path.of("/dir/file"))
                 .toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON equals",
-                message));
+        assertEquals(
+                "should have JSON EQUAL to:",
+                message);
     }
 
     @Test
     void testMessageJsonSchemaCheck() {
-        String message =  new JsonSchemaCheck("test").toString();
+        String message =  new JsonSchemaCheck("logs/test").toString();
 
-        assertAll(() -> assertEquals(
-                "list should have JSON with schema",
-                message));
+        assertEquals(
+                "should have JSON MATCH SCHEMA",
+                message);
     }
 
     @Test
     void testMessageJsonSchemaCheckFile() {
         String message =  new JsonSchemaCheckFile(Path.of("/dir/file"))
                 .toString();
-
-        assertAll(() -> assertEquals(
-                "list should have JSON with schema",
-                message));
+        assertEquals(
+                "should have JSON MATCH SCHEMA",
+                message);
     }
 
     @Test
     void testMessageStringContains() {
         String message =  new StringContains("test").toString();
 
-        assertAll(() -> assertEquals(
-                "list should have string CONTAINS [test]",
-                message));
+        assertEquals(
+                "should have STRING CONTAINS: [test]",
+                message);
     }
 
     @Test
     void testMessageStringEquals() {
-        String message =  new StringEquals("test").toString();
+        String message =  new StringEquals("logs_test").toString();
 
-        assertAll(() -> assertEquals(
-                "list should have string EQUALS [test]",
-                message));
+        assertEquals(
+                "should have STRING EQUAL: [logs_test]",
+                message);
     }
+
+    @Test
+    void testCustomMatcher() {
+        String message =  new CustomMatcher((stringContainsInOrder("te", "st"))).toString();
+
+        assertEquals(
+                "should have STRING match to [a string containing \"te\", \"st\" in order]",
+                message);
+    }
+
 
 }

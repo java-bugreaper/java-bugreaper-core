@@ -12,7 +12,7 @@
     <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
 
     <packaging>jar</packaging>
-    <version>0.0.7</version>
+    <version>0.0.8-rc</version>
 
 
     <developers>
@@ -122,7 +122,7 @@
 
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-attachments</artifactId>
+           <artifactId>allure-attachments</artifactId>
             <version>${allureVersion}</version>
         </dependency>
 

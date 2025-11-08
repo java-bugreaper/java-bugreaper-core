@@ -29,7 +29,7 @@ class ListAssertionsPassedTests {
 
         actualList.add("dummy");
         actualList.add(null);
-        actualList.add("test");
+        actualList.add("logs/test");
 
         assertCountElementsInList(3, actualList);
 

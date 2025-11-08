@@ -14,14 +14,14 @@ public class AssertableStringList {
         this.arrayList = list;
     }
 
-
-    @Step("assert -> {listCondition}")
-    public AssertableStringList testInLIst(ListCondition listCondition) {
+    // in modules maybe reuse with override message
+    @Step("(Assert): {listCondition}")
+    public AssertableStringList verifyInList(ListCondition listCondition) {
         listCondition.test(arrayList);
         return this;
     }
 
-    @Step("extract -> {extractType}")
+    @Step("extract: {extractType}")
     public String extractFromList(ExtractType extractType) {
         return  extractType.extract(arrayList);
     }

@@ -113,9 +113,6 @@ class ListAssertionsCatchTests {
 
         String exceptionText = exception.getMessage();
 
-        System.out.println("=======");
-        System.out.println(exceptionText);
-
         MatcherAssert.assertThat(
                 "Exception on failed contains String in list assertion main message",
                 exceptionText,

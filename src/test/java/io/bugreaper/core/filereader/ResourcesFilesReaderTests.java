@@ -61,7 +61,7 @@ class ResourcesFilesReaderTests {
 
         String errorMessage = null;
         var file = "wrong/write_test.tmp";
-        var text = "test";
+        var text = "logs/test";
 
 
         try {
@@ -221,6 +221,7 @@ class ResourcesFilesReaderTests {
     @Test
     void testSeeResourceFileNotEmpty() {
         String fileName = "temp/empty_temp.txt";
+
 
         createResourceFileWithSize(fileName, 0);
 
