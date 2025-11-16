@@ -1,10 +1,14 @@
 package io.bugreaper.core.filereader;
 
 
+import io.bugreaper.core.exceptions.FileReaderException;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 
 import static io.bugreaper.core.filereaders.FileReader.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileReaderNegativeTests {
 
@@ -37,26 +41,36 @@ class FileReaderNegativeTests {
             errorMessage = e.getMessage();
         }
 
-        assertEquals("Can't find file in resources: " + path,
+        assertEquals("File not exist in resources: " + path,
                 errorMessage, "File absent exception message: " + errorMessage);
     }
 
     @Test
     void testReadTextNotExist() {
 
-        String errorMessage = null;
         final String path = "files/test_not_exist.txt";
 
-        try {
-            readTextFromFile(path);
-        } catch (Exception e) {
-            errorMessage = e.getMessage();
-        }
+        Throwable exception = assertThrows(FileReaderException.class, () ->
+                readTextFromFile(path));
 
-        assertEquals("Some problem with: " + path,
-                errorMessage, "File problem exception message: " + errorMessage);
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("File not exist in resources: files/test_not_exist.txt"));
 
     }
 
+    @Test
+    void testReadJsonNotExist() {
 
+
+        final String path = "files/test_not_exist.txt";
+
+        Throwable exception = assertThrows(FileReaderException.class, () ->
+                readJsonFromFile(path));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("File not exist in resources: files/test_not_exist.txt"));
+
+    }
 }

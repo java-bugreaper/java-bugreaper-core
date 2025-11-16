@@ -1,9 +1,19 @@
 package io.bugreaper.modules.filehelper.interfaces;
 
 
+import io.bugreaper.modules.filehelper.LogHelper;
 import org.awaitility.core.ConditionTimeoutException;
 
 public interface LogHelperInt {
+
+    /**
+     * Configure await in asserts with await
+     *
+     * @param awaitMs ms await
+     * @return this
+     * @throws IllegalArgumentException on invalid setup
+     */
+    LogHelper withAwaitMs(int awaitMs);
 
     /**
      * Truncate file with logs

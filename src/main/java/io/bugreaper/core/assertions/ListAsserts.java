@@ -16,7 +16,6 @@ import static io.bugreaper.core.mappers.StringMappers.listToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class ListAsserts {
@@ -121,11 +120,11 @@ public final class ListAsserts {
 
     public static void assertCountElementsInList(int expectedCnt, List<String> actualList) {
 
-        assertAll(() -> assertEquals(
+        assertEquals(
                 expectedCnt,
                 actualList.size(),
                 "Count of elements in list not equal: " + expectedCnt
-        ));
+        );
     }
 
     // List builders

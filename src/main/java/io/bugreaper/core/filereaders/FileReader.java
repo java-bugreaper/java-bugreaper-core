@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.bugreaper.core.assertions.JsonAsserts.assertValidJson;
+import static io.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestResourcesPath;
 
 
 /**
@@ -43,9 +44,10 @@ public final class FileReader {
      * @throws FileReaderException with a missing file
      */
     public static String readTextFromFile(String filePath) {
+        Path path = getFilePath(filePath);
 
         try {
-            return Files.readString(getFilePath(filePath));
+            return Files.readString(path);
         } catch (Exception e) {
             logFullPath();
             throw new FileReaderException("Some problem with: " + filePath, e);
@@ -60,9 +62,10 @@ public final class FileReader {
      * @throws FileReaderException with a missing file or not JSON type
      */
     public static String readJsonFromFile(String filePath) {
+        Path path = getFilePath(filePath);
 
         try {
-            String result = Files.readString(getFilePath(filePath));
+            String result = Files.readString(path);
             assertValidJson(result);
             return result;
         } catch (IllegalArgumentException e) {
@@ -103,8 +106,8 @@ public final class FileReader {
 
     private static void logFullPath(){
         LOGGER.error(
-                "Project class path info: {}",
-                Path.of(Objects.requireNonNull(classLoader.getResource("")).getPath()));
+                "Project path info: {}",
+                getTestResourcesPath());
     }
 
     private static Path getFilePath(String filePath){
