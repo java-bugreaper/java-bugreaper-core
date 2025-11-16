@@ -23,8 +23,20 @@ public class ProjectPaths {
      * Works when core is a dependency (Maven or Gradle), regardless of module structure.
      */
     public static String getTestResourcesPath() {
-        try {
             // Try to locate a known resource from the test resources classpath
+
+            //can be moved to param or to config
+            Path testResources = getProjectPath().resolve("src/test/resources");
+
+            if (!testResources.toFile().exists()) {
+                LOGGER.warn("Test resources directory not found: {}", testResources);
+            }
+
+            return testResources.toAbsolutePath() + "/";
+    }
+
+    public static Path getProjectPath() {
+        try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             URL resourceUrl = classLoader.getResource(".");
             if (resourceUrl == null) {
@@ -34,17 +46,7 @@ public class ProjectPaths {
             // Convert to filesystem path
             Path testClassesDir = Paths.get(resourceUrl.toURI());
 
-            // Usually ends with: /build/resources/test OR /target/test-classes
-            Path projectRoot = findProjectRoot(testClassesDir);
-
-            //can be moved to param or to config
-            Path testResources = projectRoot.resolve("src/test/resources");
-
-            if (!testResources.toFile().exists()) {
-                LOGGER.warn("Test resources directory not found: {}", testResources);
-            }
-
-            return testResources.toAbsolutePath() + "/";
+            return findProjectRoot(testClassesDir);
 
         } catch (Exception e) {
             throw new FileReaderException("Failed to determine test resources path", e);
