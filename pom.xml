@@ -8,11 +8,11 @@
     <groupId>io.gitlab.ambu550</groupId>
     <artifactId>bugreaper-core</artifactId>
     <name>BUGREAPER CORE</name>
-    <description>Core part for "BUGREAPER" family modules used for testing</description>
+    <description>Core module for the BUGREAPER components used in testing</description>
     <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
 
     <packaging>jar</packaging>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 
 
     <developers>
@@ -200,7 +200,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>17</release>
+                    <source>17</source>
+                    <target>17</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

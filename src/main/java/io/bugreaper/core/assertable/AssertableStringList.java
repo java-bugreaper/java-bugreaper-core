@@ -21,7 +21,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have STRING CONTAINS: <{}>")
+    @Step("(Assert) List should have STRING CONTAINS: <{expectedSubString}>")
     public AssertableStringList seeListAnyContains(String expectedSubString) {
 
         containsStringInList(expectedSubString, arrayList);
@@ -30,7 +30,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have STRING EQUAL: <{}>")
+    @Step("(Assert) List should have STRING EQUAL: <{expectedString}>")
     public AssertableStringList seeListAnyEquals(String expectedString) {
 
         equalsStringInList(expectedString, arrayList);
@@ -111,7 +111,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have count EQUAL to: <{}>")
+    @Step("(Assert) List should have count EQUAL to: <{cnt}>")
     public AssertableStringList seeListHasExactlyCount(int cnt) {
         assertCountElementsInList(cnt, arrayList);
 
