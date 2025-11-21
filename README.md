@@ -40,3 +40,4 @@ Contains packages and wrapped methods for testing with pre-prepared steps and at
 | [JSONAssert](https://mvnrepository.com/artifact/org.skyscreamer/jsonassert)                        | 1.5.1    | for JSON asserts                               |
 | [JSONObject](https://mvnrepository.com/artifact/org.json/json)                                     | 20250517 | for JSON parse                                 |
 | [JsonSchemaValidator](https://mvnrepository.com/artifact/com.networknt/json-schema-validator)      | 1.0.76   | for JSON Schema validate                       |
+| [SnakeYAML](https://mvnrepository.com/artifact/org.yaml/snakeyaml)                                 | 2.2      | for YML config parse                           |

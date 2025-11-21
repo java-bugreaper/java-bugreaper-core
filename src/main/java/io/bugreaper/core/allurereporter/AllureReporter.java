@@ -20,6 +20,7 @@ public class AllureReporter {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AllureReporter.class);
+
     private static final String TYPE_JSON = "application/json";
     private static final String TYPE_TEXT = "text/plain";
 

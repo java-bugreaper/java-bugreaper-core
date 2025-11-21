@@ -18,12 +18,11 @@ public class AllureBuilder {
         throw new IllegalStateException("Utility class");
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AllureBuilder.class);
+
     private static final String ROW_END = "</tr>";
     private static final String HEADER_END = "</th>";
     private static final String CELL_END = "</td>";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AllureBuilder.class);
-
 
 
     public static String reportHtmlCsvCases(String name, List<List<String>> dataFromCsv) {

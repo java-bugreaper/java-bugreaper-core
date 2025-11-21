@@ -70,19 +70,19 @@ class FileHelperExtendTest extends FileHelper {
     }
 
     @Test
-    void testExistLogsFailedWithAwait() {
+    void testExistLogsFailedWithAwaitMs() {
         cleanFile(LOG_FILE);
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
-                seeFileContainsRegex(LOG_FILE, MESSAGE));
+                fileTime.seeFileContainsRegex(LOG_FILE, MESSAGE));
 
         MatcherAssert.assertThat(
                 "Failed message when message not exist in file",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in file ==> expected: not equal but was: <0> within 2 seconds."));
+                StringContains.containsString("Search: <<" + MESSAGE + ">> in file ==> expected: not equal but was: <0> within 400 milliseconds."));
     }
 
     @Test
-    void testExistLogsFailedWithAwaitSetTime() {
+    void testExistLogsFailedWithAwaitMsSetTime() {
         cleanFile(LOG_FILE);
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
                 fileTime.seeFileContainsRegex(LOG_FILE, MESSAGE));

@@ -10,6 +10,7 @@
 
     <!--  core logs  -->
     <logger name="io.bugreaper.core" level="INFO" />
+    <logger name="io.qameta.allure.AllureLifecycle" level="OFF" />
 
 
     <root level="INFO">

@@ -12,11 +12,12 @@ import java.nio.file.Paths;
 
 public class ProjectPaths {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectPaths.class);
-
     private ProjectPaths() {
         throw new IllegalStateException("Utility class");
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectPaths.class);
+
 
     /**
      * Resolves absolute path to the "src/test/resources" directory of the current runtime project.

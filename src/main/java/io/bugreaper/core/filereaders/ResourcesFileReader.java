@@ -29,7 +29,6 @@ public final class ResourcesFileReader {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesFileReader.class);
-    private static final String RES_PATH = getTestResourcesPath();
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
     private static final String FAILED_WRITE_MESSAGE = "Failed to write file {} is directory exists?";
 
@@ -104,7 +103,7 @@ public final class ResourcesFileReader {
 
 
     private static Path getProjectFilePath(String filePath) {
-        return Path.of(RES_PATH, filePath);
+        return Path.of(getTestResourcesPath(), filePath);
     }
 
     /**
@@ -115,9 +114,9 @@ public final class ResourcesFileReader {
      */
     public static void deleteResourceFile(String filePath) {
 
-        File file = new File(RES_PATH, filePath);
+        File file = new File(getTestResourcesPath(), filePath);
         try {
-            Files.delete(Path.of(RES_PATH, filePath));
+            Files.delete(Path.of(getTestResourcesPath(), filePath));
         } catch (NoSuchFileException e) {
             throw new FileReaderException("File for delete not exist: " + file, e);
         }  catch (Exception e) {
@@ -140,7 +139,7 @@ public final class ResourcesFileReader {
 
         byte[] pattern = "Abcdefg".getBytes();
 
-        try (FileOutputStream fos = new FileOutputStream(RES_PATH + fileName)) {
+        try (FileOutputStream fos = new FileOutputStream(getTestResourcesPath() + fileName)) {
             long bytesWritten = 0;
             while (bytesWritten < sizeInBytes) {
                 long bytesToWrite = Math.min(pattern.length, sizeInBytes - bytesWritten);
@@ -149,10 +148,10 @@ public final class ResourcesFileReader {
             }
         } catch (IOException e){
             LOGGER.error("Failed to write file {}, is directory exists in recourses?", fileName);
-            throw new FileReaderException("Failed to create file: " + RES_PATH + fileName, e);
+            throw new FileReaderException("Failed to create file: " + getTestResourcesPath() + fileName, e);
         }
 
-        LOGGER.debug("File with size {} bytes created {}{}", sizeInBytes, RES_PATH,fileName);
+        LOGGER.debug("File with size {} bytes created {}{}", sizeInBytes, getTestResourcesPath(),fileName);
     }
 
     /**
@@ -163,13 +162,13 @@ public final class ResourcesFileReader {
      * @throws FileReaderException on read fail
      */
     public static long getResourceFileSize(String fileName) {
-        Path path = Paths.get(RES_PATH, fileName);
+        Path path = Paths.get(getTestResourcesPath(), fileName);
 
         try {
             return Files.size(path);
         } catch (IOException e) {
             LOGGER.error("Failed read file {}, is directory exists in recourses?", fileName);
-            throw new FileReaderException(FAILED_READ_MESSAGE + RES_PATH + fileName, e);
+            throw new FileReaderException(FAILED_READ_MESSAGE + getTestResourcesPath() + fileName, e);
         }
     }
 
@@ -180,7 +179,7 @@ public final class ResourcesFileReader {
      * @return boolean
      */
     public static boolean resourceFileExistsStatus(String fileName) {
-        File file = new File(RES_PATH, fileName);
+        File file = new File(getTestResourcesPath(), fileName);
         return file.exists();
     }
 
@@ -193,7 +192,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileExists(String fileName) {
 
         if(!resourceFileExistsStatus(fileName)) {
-            fail(MessageFormat.format("File {0}{1} not exists", RES_PATH, fileName));
+            fail(MessageFormat.format("File {0}{1} not exists", getTestResourcesPath(), fileName));
         }
     }
 
@@ -206,7 +205,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileNotExists(String fileName) {
 
         if(resourceFileExistsStatus(fileName)) {
-            fail(MessageFormat.format("File {0}{1} exists", RES_PATH, fileName));
+            fail(MessageFormat.format("File {0}{1} exists", getTestResourcesPath(), fileName));
         }
     }
 
@@ -219,7 +218,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileNotEmpty(String fileName) {
 
         if(getResourceFileSize(fileName) == 0) {
-            fail(MessageFormat.format("File {0}{1} is empty", RES_PATH, fileName));
+            fail(MessageFormat.format("File {0}{1} is empty", getTestResourcesPath(), fileName));
         }
     }
 }

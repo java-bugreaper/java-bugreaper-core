@@ -1,10 +1,15 @@
 package io.bugreaper.modules.filehelper;
 
+import io.bugreaper.core.config.ConfigLoader;
+import io.bugreaper.core.config.YamlUtils;
 import io.bugreaper.modules.filehelper.interfaces.FileHelperInt;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,18 +23,63 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @SuppressWarnings("squid:S5960")
 public class FileHelper implements FileHelperInt {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+
     /**
      * default ms await in tests
      */
-    private long awaitMs = 2000;
+    private int await = 2000;
 
+
+    /**
+     * Constructor with configurations
+     * <p> Loads configuration from YAML file.
+     * <p>Default: bugreaper.yml
+     * <p>Custom: -DbugreaperEnv=test loads bugreaper-test.yml
+     */
+    public FileHelper() {
+        loadFromYaml();
+    }
+
+    private void loadFromYaml() {
+        Map<String, Object> rawData = ConfigLoader.loadYaml();
+
+        //optional config fields
+        Object awaitVal = YamlUtils.getValueByPath(rawData, "modules.file-helper.await", true);
+        if (awaitVal instanceof Number number) {
+            withAwaitMs(number.intValue());
+        }
+
+    }
+
+    // setters
+
+    /**
+     * Set await for asserts in MS
+     * @param awaitMs await in MS
+     * @throws IllegalArgumentException on invalid value (less 200)
+     */
     public FileHelper withAwaitMs(int awaitMs) {
         if (awaitMs < 200){
             throw new IllegalArgumentException("awaitMs too small (can`t bee less 200ms)");
         }
-        this.awaitMs = awaitMs;
+        this.await = awaitMs;
         return this;
     }
+
+    // getters
+
+    public int getAwait() { return await; }
+
+    public String getSummary() {
+        String info = String.format("""
+        %s:
+            await=%d""", this.getClass().getSimpleName(), await);
+
+        LOGGER.info(info);
+        return info;
+    }
+    // interactions
 
     @Step("(FILE) Clean {filePath} file")
     public void cleanFile(String filePath) {
@@ -89,7 +139,7 @@ public class FileHelper implements FileHelperInt {
     }
 
     private void seeFileContainWithAwaitSetup(String filePath, String expectedText, Boolean regex) {
-        await().pollDelay(ofMillis(0)).atMost(ofMillis(awaitMs)).untilAsserted(() ->
+        await().pollDelay(ofMillis(0)).atMost(ofMillis(await)).untilAsserted(() ->
                 assertNotEquals(0,
                         countMatchesInFile(filePath, expectedText, regex),
                         "\nSearch: <<" + expectedText + ">> in file"));
@@ -100,6 +150,5 @@ public class FileHelper implements FileHelperInt {
                 countMatchesInFile(filePath, expectedText, regex),
                 "\nSearch: <<" + expectedText + ">> not exist in file");
     }
-
 
 }

@@ -16,6 +16,15 @@ public interface LogHelperInt {
     LogHelper withAwaitMs(int awaitMs);
 
     /**
+     * Configure log file for interaction
+     *
+     * @param logFilePath log file in test resources
+     * @return this
+     * @throws IllegalArgumentException on invalid setup
+     */
+    LogHelper withLogfile(String logFilePath);
+
+    /**
      * Truncate file with logs
      *
      */

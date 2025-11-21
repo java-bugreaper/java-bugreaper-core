@@ -20,7 +20,7 @@ class LogHelperTest {
 
 
     @Test
-    void testExistLogsFailedWithAwaitSetTime() {
+    void testExistLogsFailedWithAwaitMsSetTime() {
         logReaderV2.cleanLogs();
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
                 logReaderV2.seeLogsContainsRegex(MESSAGE));

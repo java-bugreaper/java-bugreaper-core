@@ -1,0 +1,6 @@
+modules:
+  file-helper:
+    await: 400
+  log-helper:
+    await: 600
+    logfile: 'logs/byyml/config.log'

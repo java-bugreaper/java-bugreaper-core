@@ -7,12 +7,12 @@
 
     <groupId>io.gitlab.ambu550</groupId>
     <artifactId>bugreaper-core</artifactId>
-    <name>BUGREAPER CORE</name>
-    <description>Core module for the BUGREAPER components used in testing</description>
+    <name>BugReaper Core</name>
+    <description>Core module for the BugReaper components</description>
     <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
 
     <packaging>jar</packaging>
-    <version>0.0.9</version>
+    <version>0.1.0-rc</version>
 
 
     <developers>
@@ -63,6 +63,7 @@
 
         <allureVersion>2.27.0</allureVersion>
         <awaitility>4.3.0</awaitility>
+        <snakeyaml>2.2</snakeyaml>
 
         <apache.commons-text>1.13.0</apache.commons-text>
         <jackson-databind>2.18.3</jackson-databind>
@@ -166,6 +167,12 @@
             <groupId>com.networknt</groupId>
             <artifactId>json-schema-validator</artifactId>
             <version>${schema-validator}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml}</version>
         </dependency>
 
         <dependency>
