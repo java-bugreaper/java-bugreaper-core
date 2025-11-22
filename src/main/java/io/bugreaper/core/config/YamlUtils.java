@@ -14,6 +14,41 @@ public class YamlUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(YamlUtils.class);
 
+
+    public static String getStringValueByPath(Map<String, Object> root, String path){
+
+        Object value = getValueByPath(root, path, false);
+
+        checkType(value, path, String.class);
+        return value.toString();
+    }
+
+    public static int getIntegerValueByPath(Map<String, Object> root, String path){
+
+        Object value = getValueByPath(root, path, false);
+        checkType(value, path, Integer.class);
+        return (int) value;
+    }
+
+    public static boolean getBooleanValueByPath(Map<String, Object> root, String path){
+
+        Object value = getValueByPath(root, path, false);
+        checkType(value, path, Boolean.class);
+        return (boolean) value;
+    }
+
+    private static void checkType(Object value, String path, Class<?> expectedType) {
+        if (!expectedType.isInstance(value)) {
+            throw new IllegalArgumentException(
+                    String.format("%s must be a %s but was: %s",
+                            getValueKey(path),
+                            expectedType.getSimpleName(),
+                            value == null ? "null" : value.getClass().getName() //null validated on previous steps!
+                    )
+            );
+        }
+    }
+
     /**
      *
      * @param root config in Map format
@@ -68,6 +103,10 @@ public class YamlUtils {
     private static Object optionalFieldMissing(String path){
         LOGGER.error("Optional config field <{}> not found - using default value.", path);
         return null;
+    }
+
+    private static String getValueKey(String path) {
+        return path.substring(path.lastIndexOf('.') + 1);
     }
 
     /**
