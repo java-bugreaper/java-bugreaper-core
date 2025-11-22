@@ -21,7 +21,7 @@ public class ConfigLoader {
 
     /**
      * Loads a YAML file and returns its content as a nested Map.
-     * Returns empty map if file not found or failed to load.
+     * @throws ConfigException if file not found or failed to load
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> loadYaml() {

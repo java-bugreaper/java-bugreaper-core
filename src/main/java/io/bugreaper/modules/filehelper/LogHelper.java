@@ -61,9 +61,8 @@ public class LogHelper implements LogHelperInt {
         rawData = ConfigLoader.loadYaml();
 
         //required config fields
-        Object fileVal = YamlUtils.getValueByPath(rawData, "modules.log-helper.logfile", false);
-        assert fileVal != null;
-        withLogfile(fileVal.toString());
+        String fileVal = YamlUtils.getStringValueByPath(rawData, "modules.log-helper.logfile");
+        withLogfile(fileVal);
 
         //optional config fields
         Object awaitVal = YamlUtils.getValueByPath(rawData, "modules.log-helper.await", true);
