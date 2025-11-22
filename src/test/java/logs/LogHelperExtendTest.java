@@ -64,7 +64,7 @@ class LogHelperExtendTest extends LogHelper {
     }
 
     @Test
-    void testExistLogsFailedWithAwait() {
+    void testExistLogsFailedWithAwaitMs() {
         cleanLogs();
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
                 seeLogsContainsRegex(MESSAGE));

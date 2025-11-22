@@ -29,7 +29,6 @@ public final class FileReader {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileReader.class);
-    static final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
 
@@ -112,7 +111,7 @@ public final class FileReader {
 
     private static Path getFilePath(String filePath){
         try {
-            return Path.of(Objects.requireNonNull(classLoader.getResource(filePath)).getPath());
+            return Path.of(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath());
         }catch (NullPointerException e) {
             logFullPath();
             throw new FileReaderException("File not exist in resources: " + filePath, e);

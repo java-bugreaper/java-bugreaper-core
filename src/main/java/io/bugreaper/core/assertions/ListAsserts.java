@@ -24,8 +24,8 @@ public final class ListAsserts {
         throw new IllegalStateException("Utility class");
     }
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ListAsserts.class);
+
     private static final String LIST_LOG_MESSAGE = "Start assert for list:\n{}";
     private static final String ASSERT_LOG_MESSAGE = "Assert log: {}";
 

@@ -17,7 +17,7 @@ class FileHelperTest {
 
 
     @Test
-    void testExistLogsFailedWithAwaitSetTime() {
+    void testExistLogsFailedWithAwaitMsSetTime() {
         fileHelper.cleanFile(LOG_FILE);
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
                 fileHelper.seeFileContainsRegex(LOG_FILE, MESSAGE));
