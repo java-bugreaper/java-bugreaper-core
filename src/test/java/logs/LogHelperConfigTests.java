@@ -44,7 +44,7 @@ class LogHelperConfigTests {
 
         MatcherAssert.assertThat(
                 "Info summary",
-                logs.getSummary(),
+                logs.getConfigSummary(),
                 StringContains.containsString("""
                         LogHelper:
                             await=600
@@ -58,7 +58,7 @@ class LogHelperConfigTests {
         LogHelper logs = new LogHelper();
 
         logs.cleanLogs();
-        logs.getSummary();
+        logs.getConfigSummary();
 
         Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
                 logs.seeLogsContainString(MESSAGE));

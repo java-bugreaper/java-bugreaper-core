@@ -101,7 +101,7 @@ public class YamlUtils {
     }
 
     private static Object optionalFieldMissing(String path){
-        LOGGER.error("Optional config field <{}> not found - using default value.", path);
+        LOGGER.info("Optional config field <{}> not found - using default value.", path);
         return null;
     }
 
