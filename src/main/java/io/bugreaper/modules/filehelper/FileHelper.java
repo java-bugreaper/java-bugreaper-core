@@ -71,7 +71,7 @@ public class FileHelper implements FileHelperInt {
 
     public int getAwait() { return await; }
 
-    public String getSummary() {
+    public String getConfigSummary() {
         String info = String.format("""
         %s:
             await=%d""", this.getClass().getSimpleName(), await);
@@ -79,6 +79,7 @@ public class FileHelper implements FileHelperInt {
         LOGGER.info(info);
         return info;
     }
+
     // interactions
 
     @Step("(FILE) Clean {filePath} file")

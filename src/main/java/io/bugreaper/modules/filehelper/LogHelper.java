@@ -107,7 +107,7 @@ public class LogHelper implements LogHelperInt {
 
     public Map<String, Object> getRawData() { return rawData; }
 
-    public String getSummary() {
+    public String getConfigSummary() {
         String info = String.format("""
         %s:
             await=%d

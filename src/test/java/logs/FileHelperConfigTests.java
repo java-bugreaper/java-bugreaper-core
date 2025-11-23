@@ -21,7 +21,7 @@ class FileHelperConfigTests {
         FileHelper fileHelper = new FileHelper();
 
         assertEquals(550, fileHelper.getAwait(), "Await from default config");
-        fileHelper.getSummary();
+        fileHelper.getConfigSummary();
     }
 
     @Test
