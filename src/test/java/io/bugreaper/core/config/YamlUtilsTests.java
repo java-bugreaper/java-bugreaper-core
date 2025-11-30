@@ -3,92 +3,80 @@ package io.bugreaper.core.config;
 import io.bugreaper.core.exceptions.ConfigException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class YamlUtilsTests {
 
+
+    @BeforeAll
+    static void copyConfig() {
+        System.setProperty("bugreaperEnv", "yml");
+        YamlUtils.clearCache();
+    }
+
     @Test
     void testGetString() {
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", "my-string"));
-
-        assertEquals("my-string", YamlUtils.getStringValueByPath(rawData, "modules.test"));
+        assertEquals("my-string", YamlUtils.getStringValueByPath("for-test.test"));
     }
 
     @Test
     void testGetInteger() {
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", 8080));
-
-        assertEquals(8080, YamlUtils.getIntegerValueByPath(rawData, "modules.test"));
+        assertEquals(8080, YamlUtils.getIntegerValueByPath("for-test.test-n1"));
     }
 
     @Test
     void testGetBoolean() {
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", false));
-
-        assertFalse(YamlUtils.getBooleanValueByPath(rawData, "modules.test"));
+        assertFalse(YamlUtils.getBooleanValueByPath("for-test.test-b"));
     }
 
     @Test
     void testGetStringError() {
 
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", 1111));
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                YamlUtils.getStringValueByPath(rawData, "modules.test"));
+                YamlUtils.getStringValueByPath("for-test.test-w1"));
 
         MatcherAssert.assertThat(
                 exception.getMessage(),
-                StringContains.containsString("test must be a String but was: java.lang.Integer"));
+                StringContains.containsString("test-w1 must be a String but was: java.lang.Integer"));
     }
+
 
     @Test
     void testGetStringNullError() {
 
-        Map<String, Object>  nullable = new java.util.HashMap<>(Map.of());
-        nullable.put("test", null);
-
-        Map<String, Object>  rawData = new java.util.HashMap<>(Map.of());
-        rawData.put("modules", nullable);
-
         Throwable exception = assertThrows(ConfigException.class, () ->
-                YamlUtils.getStringValueByPath(rawData, "modules.test"));
+                YamlUtils.getStringValueByPath("for-test.test-null"));
 
         MatcherAssert.assertThat(
                 exception.getMessage(),
-                StringContains.containsString("Config key 'modules.test' is present but null. Null is not allowed"));
+                StringContains.containsString("Config key 'for-test.test-null' is present but null. Null is not allowed"));
     }
 
     @Test
     void testGetIntegerError() {
 
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", "string_data"));
-
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                YamlUtils.getIntegerValueByPath(rawData, "modules.test"));
+                YamlUtils.getIntegerValueByPath("for-test.test-w3"));
 
         MatcherAssert.assertThat(
                 exception.getMessage(),
-                StringContains.containsString("test must be a Integer but was: java.lang.String"));
+                StringContains.containsString("test-w3 must be a Integer but was: java.lang.String"));
     }
 
 
     @Test
     void testGetBooleanError() {
 
-        Map<String, Object>  rawData = Map.of("modules",  Map.of( "test", "true"));
-
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                YamlUtils.getBooleanValueByPath(rawData, "modules.test"));
+                YamlUtils.getBooleanValueByPath("for-test.test-w4"));
 
         MatcherAssert.assertThat(
                 exception.getMessage(),
-                StringContains.containsString("test must be a Boolean but was: java.lang.String"));
+                StringContains.containsString("test-w4 must be a Boolean but was: java.lang.String"));
     }
-    
-
 
 }

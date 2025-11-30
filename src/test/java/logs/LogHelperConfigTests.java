@@ -1,5 +1,6 @@
 package logs;
 
+import io.bugreaper.core.config.YamlUtils;
 import io.bugreaper.core.exceptions.ConfigException;
 import io.bugreaper.modules.filehelper.LogHelper;
 import org.awaitility.core.ConditionTimeoutException;
@@ -7,8 +8,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static io.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +25,7 @@ class LogHelperConfigTests {
     @BeforeEach
     void copyConfig() {
         System.clearProperty(PROPERTY);
+        YamlUtils.clearCache();
     }
 
     @Test
@@ -78,10 +78,6 @@ class LogHelperConfigTests {
 
         assertEquals(2000, logs.getAwait(), "Default await used");
         assertEquals("logs/byyml/noop.log", logs.getLogfilePath(), "Required key used");
-        assertEquals(
-                Map.of("modules",  Map.of( "log-helper", Map.of("logfile", "logs/byyml/noop.log"))),
-                logs.getRawData(),
-                "Check row data info");
     }
 
     @Test

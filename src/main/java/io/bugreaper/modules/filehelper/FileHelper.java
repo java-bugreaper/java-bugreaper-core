@@ -1,6 +1,5 @@
 package io.bugreaper.modules.filehelper;
 
-import io.bugreaper.core.config.ConfigLoader;
 import io.bugreaper.core.config.YamlUtils;
 import io.bugreaper.modules.filehelper.interfaces.FileHelperInt;
 import io.qameta.allure.Allure;
@@ -9,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,10 +40,9 @@ public class FileHelper implements FileHelperInt {
     }
 
     private void loadFromYaml() {
-        Map<String, Object> rawData = ConfigLoader.loadYaml();
 
         //optional config fields
-        Object awaitVal = YamlUtils.getValueByPath(rawData, "modules.file-helper.await", true);
+        Object awaitVal = YamlUtils.getValueByPath("modules.file-helper.await", true);
         if (awaitVal instanceof Number number) {
             withAwaitMs(number.intValue());
         }

@@ -1,6 +1,5 @@
 package io.bugreaper.modules.filehelper;
 
-import io.bugreaper.core.config.ConfigLoader;
 import io.bugreaper.core.config.YamlUtils;
 import io.bugreaper.modules.filehelper.interfaces.LogHelperInt;
 import io.qameta.allure.Allure;
@@ -9,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +29,6 @@ public class LogHelper implements LogHelperInt {
     private int await = 2000;
     private String logFilePath = "default/server.log";
 
-    private Map<String, Object> rawData = new LinkedHashMap<>();
 
     /**
      * Constructor with provided params
@@ -57,15 +53,12 @@ public class LogHelper implements LogHelperInt {
 
     private void loadFromYaml() {
 
-        //save read in multi projects
-        rawData = ConfigLoader.loadYaml();
-
         //required config fields
-        String fileVal = YamlUtils.getStringValueByPath(rawData, "modules.log-helper.logfile");
+        String fileVal = YamlUtils.getStringValueByPath("modules.log-helper.logfile");
         withLogfile(fileVal);
 
         //optional config fields
-        Object awaitVal = YamlUtils.getValueByPath(rawData, "modules.log-helper.await", true);
+        Object awaitVal = YamlUtils.getValueByPath("modules.log-helper.await", true);
         if (awaitVal instanceof Number number) {
             withAwaitMs(number.intValue());
         }
@@ -93,7 +86,7 @@ public class LogHelper implements LogHelperInt {
      * @throws IllegalArgumentException on invalid value
      */
     public LogHelper withLogfile(String logFilePath) {
-        if (logFilePath == null || logFilePath.equals("")) {
+        if (logFilePath == null || logFilePath.isEmpty()) {
             throw new IllegalArgumentException("logfile can`t bee empty or null");
         }
         this.logFilePath = logFilePath;
@@ -105,7 +98,6 @@ public class LogHelper implements LogHelperInt {
     public int getAwait() { return await; }
     public String getLogfilePath() { return logFilePath; }
 
-    public Map<String, Object> getRawData() { return rawData; }
 
     public String getConfigSummary() {
         String info = String.format("""
