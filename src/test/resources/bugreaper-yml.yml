@@ -1,0 +1,8 @@
+for-test:
+  test: my-string
+  test-n1: 8080
+  test-b: false
+  test-w1: 1111
+  test-w3: string_data
+  test-w4: "true"
+  test-null: null

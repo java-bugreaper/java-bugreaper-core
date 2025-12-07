@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Utility class responsible for selecting the correct YAML configuration
+ * filename based on the optional system property {@code -Dbugreaper=<suffix>}.
+ */
 public class ConfigLoader {
 
     private ConfigLoader() {
@@ -21,20 +23,19 @@ public class ConfigLoader {
 
     /**
      * Loads a YAML file and returns its content as a nested Map.
+     *
+     * @param fileName   name of the YAML file in resources
+     * @return parsed Map representation of the YAML
      * @throws ConfigException if file not found or failed to load
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> loadYaml() {
-        String fileName = YamlUtils.getConfigFileName();
+    public static Map<String, Object> loadYaml(String fileName) {
 
         Map<String, Object> result = new LinkedHashMap<>();
 
+        LOGGER.debug("Start read config from: {}", fileName);
         try (InputStream input = getInputStream(fileName, ConfigLoader.class)) {
 
-            if (input == null) {
-                LOGGER.error("Create config file in resources!");
-                throw new ConfigException("Config file not found: " + fileName);
-            }
 
             Yaml yaml = new Yaml();
             Object loaded = yaml.load(input);
@@ -50,20 +51,23 @@ public class ConfigLoader {
         return result;
     }
 
+    /**
+     * Loads a file from the classpath as an {@link InputStream}.
+     *
+     * @param fileName   name of the file in resources
+     * @param classRunFrom class used to resolve the classloader
+     * @return input stream for the resource
+     * @throws ConfigException if file is not found
+     */
     public static InputStream getInputStream(String fileName, Class<?> classRunFrom) {
-        try {
-            // 1. Check external file (project root or absolute path)
-            File file = new File(fileName);
-            if (file.exists()) {
-                return new FileInputStream(file);
-            }
 
-            // 2. Check classpath resources
-            return classRunFrom.getClassLoader().getResourceAsStream(fileName);
+        InputStream is = classRunFrom.getClassLoader().getResourceAsStream(fileName);
 
-        } catch (Exception e) {
-            return null;
+        if (is == null) {
+            LOGGER.error("Create config file in resources!");
+            throw new ConfigException("Config file not found: " + fileName);
         }
+        return is;
     }
 
 }

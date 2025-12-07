@@ -1,5 +1,6 @@
 package logs;
 
+import io.bugreaper.core.config.YamlUtils;
 import io.bugreaper.modules.filehelper.FileHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ class FileHelperConfigTests {
     @BeforeEach
     void copyConfig() {
         System.clearProperty(PROPERTY);
+        YamlUtils.clearCache();
     }
 
     @Test
