@@ -40,18 +40,18 @@ public class AllureReporter {
      * @param message    text message for step
      * @param attachment attachment text
      */
-    @Step("{message}")
-    public static void addStepAttachment(String message, String attachment) {
+    @Step("=> {message}")
+    public static void addStepAttachment(@Param(mode = HIDDEN) String message, @Param(mode = HIDDEN) String attachment) {
         Allure.addAttachment(message, TYPE_TEXT, attachment);
     }
 
-    @Step("{description}")
-    public static void attachFromFile(String description, String path) {
+    @Step("=> {description}")
+    public static void attachFromFile(@Param(mode = HIDDEN) String description, String path) {
         Allure.addAttachment(description, TYPE_JSON, readTextFromFile(path));
     }
 
-    @Step("{description}")
-    public static void attachFromFile(String description, String type, String path) {
+    @Step("=> {description}")
+    public static void attachFromFile(@Param(mode = HIDDEN) String description, String type, String path) {
         Allure.addAttachment(description, type, readTextFromFile(path));
     }
 

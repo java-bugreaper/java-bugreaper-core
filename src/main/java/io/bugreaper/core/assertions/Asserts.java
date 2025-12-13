@@ -26,12 +26,12 @@ public final class Asserts {
         assertEquals(expected, actual);
     }
 
-    public static void assertGreaterThanExpected(int expected, int actual) {
-        assertTrue(expected < actual);
+    public static void assertGreaterThanExpected(int expectedMin, int actual) {
+        assertTrue(actual > expectedMin);
     }
 
-    public static void assertLessThanExpected(int expected, int actual) {
-        assertTrue(expected > actual);
+    public static void assertLessThanExpected(int expectedMax, int actual) {
+        assertTrue(actual < expectedMax);
     }
 
     public static void assertNotEmpty(int actual) {
