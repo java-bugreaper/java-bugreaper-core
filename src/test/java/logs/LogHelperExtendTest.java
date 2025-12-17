@@ -1,12 +1,12 @@
 package logs;
 
-import io.bugreaper.modules.filehelper.LogHelper;
+import net.bugreaper.modules.filehelper.LogHelper;
 import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 
-import static io.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
+import static net.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

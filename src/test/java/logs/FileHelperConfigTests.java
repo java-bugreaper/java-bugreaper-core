@@ -1,7 +1,7 @@
 package logs;
 
-import io.bugreaper.core.config.YamlUtils;
-import io.bugreaper.modules.filehelper.FileHelper;
+import net.bugreaper.core.config.YamlUtils;
+import net.bugreaper.modules.filehelper.FileHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

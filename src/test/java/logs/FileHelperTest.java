@@ -1,6 +1,6 @@
 package logs;
 
-import io.bugreaper.modules.filehelper.FileHelper;
+import net.bugreaper.modules.filehelper.FileHelper;
 import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;

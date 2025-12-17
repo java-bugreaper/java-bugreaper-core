@@ -5,14 +5,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.gitlab.ambu550</groupId>
-    <artifactId>bugreaper-core</artifactId>
+    <groupId>net.bugreaper</groupId>
+    <artifactId>core</artifactId>
     <name>BugReaper Core</name>
     <description>Core module for the BugReaper components</description>
-    <url>https://gitlab.com/bug-reaper/java-bugreaper-core</url>
+    <url>https://www.bugreaper.net/</url>
 
     <packaging>jar</packaging>
-    <version>0.2.2</version>
+    <version>1.0.0</version>
 
 
     <developers>
