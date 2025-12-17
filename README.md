@@ -21,7 +21,7 @@ Contains packages and wrapped methods for testing with pre-prepared steps and at
 
 ### Logging:
 
-    <logger name="io.bugreaper.core" level="INFO"/>
+    <logger name="net.bugreaper.core" level="INFO"/>
 
 
 ### Dependencies
