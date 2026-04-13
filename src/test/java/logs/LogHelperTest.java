@@ -1,7 +1,6 @@
 package logs;
 
 import net.bugreaper.modules.filehelper.LogHelper;
-import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogHelperTest {
 
-    LogHelper logReaderV2 = new LogHelper(LOG_FILE).withAwaitMs(500);
-    LogHelper logReaderWrong = new LogHelper(WRONG_FILE).withAwaitMs(500);
+    LogHelper logReaderV2 = new LogHelper(LOG_FILE).setAwaitMs(500);
+    LogHelper logReaderWrong = new LogHelper(WRONG_FILE).setAwaitMs(500);
 
     public static final String WRONG_FILE = "logs/test/wrong.log";
     public static final String LOG_FILE = "logs/test/test.log";
@@ -20,15 +19,15 @@ class LogHelperTest {
 
 
     @Test
-    void testExistLogsFailedWithAwaitMsSetTime() {
+    void testExistLogsFailedSetAwaitMsSetTime() {
         logReaderV2.cleanLogs();
-        Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 logReaderV2.seeLogsContainsRegex(MESSAGE));
 
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in logs ==> expected: not equal but was: <0> within 500 milliseconds."));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 500 milliseconds"));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package logs;
 
 import net.bugreaper.modules.filehelper.LogHelper;
-import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ class LogHelperExtendTest extends LogHelper {
         super(LOG_FILE);
     }
 
-    LogHelper logTime = new LogHelper(LOG_FILE).withAwaitMs(400);
+    LogHelper logTime = new LogHelper(LOG_FILE).setAwaitMs(400);
 
 
     @Test
@@ -64,27 +63,27 @@ class LogHelperExtendTest extends LogHelper {
     }
 
     @Test
-    void testExistLogsFailedWithAwaitMs() {
+    void testExistLogsFailedSetAwaitMs() {
         cleanLogs();
-        Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 seeLogsContainsRegex(MESSAGE));
 
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in logs ==> expected: not equal but was: <0> within 2 seconds."));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 2 seconds"));
     }
 
     @Test
     void testExistLogsFailedWithSpecificAwait() {
         cleanLogs();
-        Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 logTime.seeLogsContainsRegex(MESSAGE));
 
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in logs ==> expected: not equal but was: <0> within 400 milliseconds."));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 400 milliseconds"));
     }
 
     @Test
@@ -117,7 +116,7 @@ class LogHelperExtendTest extends LogHelper {
         MatcherAssert.assertThat(
                 "Failed message when message exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("\nSearch: <<" + MESSAGE + ">> not exist in logs"));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> unexpected present in logs"));
     }
 
 

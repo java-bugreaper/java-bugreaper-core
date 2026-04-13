@@ -9,6 +9,7 @@ import static net.bugreaper.core.assertions.JsonAsserts.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("java:S5976")
 class AssertionsCatchTests {
 
     @Test
@@ -47,6 +48,99 @@ class AssertionsCatchTests {
                 "Exception on failed assert Booleans",
                 exception.getMessage(),
                 StringContains.containsString("expected: <true> but was: <false>"));
+    }
+
+    @Test
+    void testAssertJsonContainsSubsetArrayActualHasExtensibleFailed() {
+        String actual = """
+                {
+                  "id": 1,
+                  "array": [1,3]
+                }""";
+
+        String expected = """
+                {
+                  "id": 1,
+                  "array": [1,2]
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJsonSubset(expected, actual));
+
+        assertEquals("""
+                        JSON subset assertion failed:
+                         - array.[]: missing element 2
+                        """,
+                exception.getMessage());
+    }
+
+    @Test
+    void testAssertJsonContainsSubsetArrayActualHasExtensibleFailed2() {
+        String actual = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email2@mail.com", "Name": "Alex" },
+                        { "Address": "email@mail.com", "Name": "John" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        String expected = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email_wrong@mail.com" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJsonSubset(expected, actual));
+
+        assertEquals("""
+                        JSON subset assertion failed:
+                         - messages.[]: missing element {"To":[{"Address":"email_wrong@mail.com"}]}
+                        """,
+                exception.getMessage());
+    }
+
+    @Test
+    void testAssertJsonContainsSubsetArrayActualHasExtensibleFailed3() {
+        String actual = """
+                {
+                  "messages": [
+                    {
+                      "Cc": [
+                        { "Address": "email@mail.com" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        String expected = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email@mail.com" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJsonSubset(expected, actual));
+
+        assertEquals("""
+                        JSON subset assertion failed:
+                         - messages.[]: missing element {"To":[{"Address":"email@mail.com"}]}
+                        """,
+                exception.getMessage());
     }
 
     @Test

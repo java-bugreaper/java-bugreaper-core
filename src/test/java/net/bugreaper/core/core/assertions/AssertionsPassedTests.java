@@ -45,6 +45,51 @@ class AssertionsPassedTests {
     }
 
     @Test
+    void testAssertJsonContainsExtraArrayPass() {
+        String actual = """
+                {
+                  "id": 1,
+                  "array": [1,2,3]
+                }""";
+
+        String expected = """
+                {
+                  "id": 1,
+                  "array": [1,2]
+                }""";
+
+        containsJsonSubset(expected, actual);
+    }
+
+    @Test
+    void testAssertJsonContainsExtraArrayObjPass() {
+        String actual = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email2@mail.com", "Name": "Alex" },
+                        { "Address": "email@mail.com", "Name": "John" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        String expected = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email@mail.com" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        containsJsonSubset(expected, actual);
+    }
+
+    @Test
     void testAssertJsonContainsArrayPass() {
         String actual = """
                 {

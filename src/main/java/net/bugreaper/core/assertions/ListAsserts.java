@@ -3,6 +3,7 @@ package net.bugreaper.core.assertions;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import org.hamcrest.Matcher;
+import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
@@ -13,9 +14,9 @@ import java.util.List;
 
 import static net.bugreaper.core.mappers.StringMappers.listToString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public final class ListAsserts {
 
@@ -47,6 +48,10 @@ public final class ListAsserts {
         if (trace != null) {
             assertionMessage(trace, expect, actualList, "equals to string");
         }
+    }
+
+    public static void notEqualsStringInList(String notExpect, List<String> actualList) {
+        listNotAsserterBuilder(not(equalTo(notExpect)), actualList);
     }
 
     public static void containsStringInList(String expectedPart, List<String> actualList) {
@@ -94,6 +99,18 @@ public final class ListAsserts {
 
     }
 
+    public static void containsJsonSubsetInList(String expectedJsonPart, List<String> actualList) {
+
+        JsonAsserts.assertValidJson(expectedJsonPart);
+
+        StringBuilder trace = listJsonSubsetAsserterBuilder(expectedJsonPart, actualList);
+
+        if (trace != null) {
+            assertionMessage(trace, expectedJsonPart, actualList, "contains JSON(ignoring extensive array elements)");
+        }
+
+    }
+
     public static void jsonSchemaCheckInList(String expectedSchema, List<String> actualBodiesList) {
 
         JsonAsserts.assertValidJson(expectedSchema);
@@ -126,6 +143,26 @@ public final class ListAsserts {
         );
     }
 
+    public static void assertListSizeGreaterThan(int minSize, List<String> actualList) {
+        try {
+            Assertions.assertTrue(
+                    actualList.size() > minSize);
+        } catch (AssertionFailedError e) {
+            fail(MessageFormat.format("List size expected to be greater <{0}> bytes but got <{1}>",
+                     minSize, actualList.size()));
+        }
+    }
+
+    public static void assertListSizeLessThan(int maxSize, List<String> actualList) {
+        try {
+            Assertions.assertTrue(
+                    actualList.size() < maxSize);
+        } catch (AssertionFailedError e) {
+            fail(MessageFormat.format("List size expected to be less <{0}> bytes but got <{1}>",
+                    maxSize, actualList.size()));
+        }
+    }
+
     // List builders
 
     private static StringBuilder listAsserterBuilder(Matcher<String> matcher, List<String> actualList) {
@@ -143,6 +180,18 @@ public final class ListAsserts {
         return trace;
     }
 
+    private static void listNotAsserterBuilder(Matcher<String> matcher, List<String> actualList) {
+
+        for (String actual : actualList) {
+            try {
+                assertThat(actual, matcher);
+            } catch (AssertionError e) {
+                fail(MessageFormat.format("There is not expected elements in the list:\n{0}",
+                                matcher));
+            }
+        }
+    }
+
     private static StringBuilder listJsonTypeBuilder(List<String> actualList) {
 
         StringBuilder trace = traceInit(actualList);
@@ -158,6 +207,23 @@ public final class ListAsserts {
 
         return trace;
     }
+
+    private static StringBuilder listJsonSubsetAsserterBuilder(String expectedAct, List<String> actualList) {
+
+        StringBuilder trace = traceInit(actualList);
+
+        for (String actual : actualList) {
+            try {
+                JsonAsserts.containsJsonSubset(expectedAct, actual);
+                return null;
+            } catch (AssertionError | IllegalArgumentException ex) {
+                trace = traceBuilder(trace, ex.getMessage());
+            }
+        }
+
+        return trace;
+    }
+
 
     private static StringBuilder listJsonAsserterBuilder(String expectedAct, List<String> actualList, JSONCompareMode compareMode) {
 

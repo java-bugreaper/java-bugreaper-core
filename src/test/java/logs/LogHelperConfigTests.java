@@ -3,7 +3,6 @@ package logs;
 import net.bugreaper.core.config.YamlUtils;
 import net.bugreaper.core.exceptions.ConfigException;
 import net.bugreaper.modules.filehelper.LogHelper;
-import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,13 +59,13 @@ class LogHelperConfigTests {
         logs.cleanLogs();
         logs.getConfigSummary();
 
-        Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 logs.seeLogsContainString(MESSAGE));
 
         MatcherAssert.assertThat(
                 "Await for assert from yml",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in logs ==> expected: not equal but was: <0> within 600 milliseconds."));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 600 milliseconds"));
     }
 
     @Test
@@ -106,13 +105,13 @@ class LogHelperConfigTests {
 
         logs.cleanLogs();
 
-        Throwable exception = assertThrows(ConditionTimeoutException.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 logs.seeLogsContainString(MESSAGE));
 
         MatcherAssert.assertThat(
                 "Await for assert from yml",
                 exception.getMessage(),
-                StringContains.containsString("Search: <<" + MESSAGE + ">> in logs ==> expected: not equal but was: <0> within 200 milliseconds."));
+                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 200 milliseconds"));
     }
 
     @Test

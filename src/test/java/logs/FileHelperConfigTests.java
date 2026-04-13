@@ -2,6 +2,8 @@ package logs;
 
 import net.bugreaper.core.config.YamlUtils;
 import net.bugreaper.modules.filehelper.FileHelper;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +26,13 @@ class FileHelperConfigTests {
 
         assertEquals(550, fileHelper.getAwait(), "Await from default config");
         fileHelper.getConfigSummary();
+
+        MatcherAssert.assertThat(
+                "Info summary",
+                fileHelper.getConfigSummary(),
+                StringContains.containsString("""
+                        FileHelper:
+                            await=550"""));
     }
 
     @Test
