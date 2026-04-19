@@ -2,7 +2,6 @@ package net.bugreaper.modules.filehelper.interfaces;
 
 
 import net.bugreaper.modules.filehelper.LogHelper;
-import org.awaitility.core.ConditionTimeoutException;
 
 public interface LogHelperInt {
 
@@ -13,7 +12,7 @@ public interface LogHelperInt {
      * @return this
      * @throws IllegalArgumentException on invalid setup
      */
-    LogHelper withAwaitMs(int awaitMs);
+    LogHelper setAwaitMs(int awaitMs);
 
     /**
      * Configure log file for interaction
@@ -22,7 +21,7 @@ public interface LogHelperInt {
      * @return this
      * @throws IllegalArgumentException on invalid setup
      */
-    LogHelper withLogfile(String logFilePath);
+    LogHelper setLogfile(String logFilePath);
 
     /**
      * Truncate file with logs
@@ -52,18 +51,20 @@ public interface LogHelperInt {
     int countInLogs( String expectedText, boolean regex);
 
     /**
-     * Assert that log file contains expected text(by regex) with await
+     * Assert that log file contains expected text(by regex)
+     * <p><b>with await</b>
      *
      * @param expectedText expected text with regex
-     * @throws ConditionTimeoutException on assert fail
+     * @throws AssertionError on assert fail
      */
     void seeLogsContainsRegex(String expectedText);
 
     /**
-     * Assert that log file contains expected text(exactly - not regex) with await
+     * Assert that log file contains expected text(exactly - not regex)
+     * <p><b>with await</b>
      *
      * @param expectedText expected text
-     * @throws ConditionTimeoutException on assert fail
+     * @throws AssertionError on assert fail
      */
     void seeLogsContainString(String expectedText);
 
@@ -71,8 +72,21 @@ public interface LogHelperInt {
      * Assert that log file not contains expected text(exactly)
      *
      * @param unexpectedText unexpected text
-     * @throws ConditionTimeoutException on assert fail
+     * @throws AssertionError on assert fail
      */
     void seeLogsDoesNotContainString(String unexpectedText);
+
+    /**
+     * Returns and logs (at INFO level) a human-readable summary of all resolved
+     * configuration values.
+     * <p>
+     * The summary includes values loaded from the YAML configuration file as well as
+     * any fields overridden programmatically after construction. Optional fields that
+     * were not present in the configuration and resolved via default values may also
+     * be included.
+     *
+     * @return String with summary
+     */
+    String getConfigSummary();
 
 }

@@ -24,6 +24,18 @@ class ListAssertionsPassedTests {
     }
 
     @Test
+    void testStringNotEqualInList4() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add("test1");
+        actualList.add("1test");
+
+        notEqualsStringInList("test", actualList);
+    }
+
+    @Test
     void testStringListCount() {
         ArrayList<String> actualList = new ArrayList<>();
 

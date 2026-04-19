@@ -1,6 +1,8 @@
 package net.bugreaper.core.assertable.stringlist;
 
 
+import java.util.List;
+
 public interface AssertableListGrab {
 
     /**
@@ -10,5 +12,12 @@ public interface AssertableListGrab {
      */
     String grabLastElement();
 
+
+    /**
+     * Grab all elements to list
+     *
+     * @return List(String) with all elements
+     */
+    List<String> grabLikeList();
 
 }

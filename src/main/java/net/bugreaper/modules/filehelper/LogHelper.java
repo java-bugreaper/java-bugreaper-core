@@ -5,6 +5,7 @@ import net.bugreaper.modules.filehelper.interfaces.LogHelperInt;
 import io.qameta.allure.Allure;
 import net.bugreaper.core.filereaders.ResourcesFileReader;
 import org.apache.commons.lang3.StringUtils;
+import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-import static java.time.Duration.ofMillis;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static net.bugreaper.core.mappers.StringMappers.formatMilliseconds;
+import static net.bugreaper.core.utils.AwaitUtils.awaitCustom;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("squid:S5960")
 public class LogHelper implements LogHelperInt {
@@ -55,12 +55,12 @@ public class LogHelper implements LogHelperInt {
 
         //required config fields
         String fileVal = YamlUtils.getStringValueByPath("modules.log-helper.logfile");
-        withLogfile(fileVal);
+        setLogfile(fileVal);
 
         //optional config fields
         Object awaitVal = YamlUtils.getValueByPath("modules.log-helper.await", true);
         if (awaitVal instanceof Number number) {
-            withAwaitMs(number.intValue());
+            setAwaitMs(number.intValue());
         }
 
     }
@@ -72,7 +72,8 @@ public class LogHelper implements LogHelperInt {
      * @param awaitMs await in MS
      * @throws IllegalArgumentException on invalid value (less 200)
      */
-    public LogHelper withAwaitMs(int awaitMs) {
+    @Override
+    public LogHelper setAwaitMs(int awaitMs) {
         if (awaitMs < 200) {
             throw new IllegalArgumentException("awaitMs too small (can`t bee less 200ms)");
         }
@@ -85,7 +86,8 @@ public class LogHelper implements LogHelperInt {
      * @param logFilePath path to logfile in test resources (example "logs/server/logs.log"
      * @throws IllegalArgumentException on invalid value
      */
-    public LogHelper withLogfile(String logFilePath) {
+    @Override
+    public LogHelper setLogfile(String logFilePath) {
         if (logFilePath == null || logFilePath.isEmpty()) {
             throw new IllegalArgumentException("logfile can`t bee empty or null");
         }
@@ -98,7 +100,7 @@ public class LogHelper implements LogHelperInt {
     public int getAwait() { return await; }
     public String getLogfilePath() { return logFilePath; }
 
-
+    @Override
     public String getConfigSummary() {
         String info = String.format("""
         %s:
@@ -158,37 +160,42 @@ public class LogHelper implements LogHelperInt {
 
     @Override
     public void seeLogsContainsRegex(String expectedText) {
-        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Search REGEX text in {0}: <{1}>", logFilePath, expectedText),
+        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Should have REGEX text in {0}: <{1}>", logFilePath, expectedText),
                 () -> seeLogsContainWithAwaitSetup(expectedText, true)
         );
     }
 
     @Override
     public void seeLogsContainString(String expectedText) {
-        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Search EQUAL text in {0}: <{1}>", logFilePath, expectedText),
+        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Should have text in {0}: <{1}>", logFilePath, expectedText),
                 () -> seeLogsContainWithAwaitSetup(expectedText, false)
         );
     }
 
     @Override
     public void seeLogsDoesNotContainString(String unexpectedText) {
-        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Search text NOT exist in {0}: <{1}>", logFilePath, unexpectedText),
+        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Should NOT have text {0}: <{1}>", logFilePath, unexpectedText),
                 () -> seeLogsDoesNotContainSetup(unexpectedText, false)
         );
     }
 
     private void seeLogsContainWithAwaitSetup(String expectedText, Boolean regex) {
-        await().pollDelay(ofMillis(0)).atMost(ofMillis(await)).untilAsserted(() ->
-                assertNotEquals(0,
-                        countInLogs(expectedText, regex),
-                        "\nSearch: <<" + expectedText + ">> in logs")
-        );
+        try {
+            awaitCustom(await).untilAsserted(() ->
+                    assertNotEquals(0,
+                            countInLogs(expectedText, regex)));
+        } catch (ConditionTimeoutException e) {
+            fail(
+                    MessageFormat.format(
+                            "\nFAILED: <<{0}>> expected to be present in logs within {1}",
+                            expectedText, formatMilliseconds(await)));
+        }
     }
 
     private void seeLogsDoesNotContainSetup(String expectedText, Boolean regex) {
         assertEquals(0,
                 countInLogs(expectedText, regex),
-                "\nSearch: <<" + expectedText + ">> not exist in logs");
+                "\nFAILED: <<" + expectedText + ">> unexpected present in logs");
     }
 
 }

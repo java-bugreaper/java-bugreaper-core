@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +46,37 @@ class AssertableListTests {
 
         assertEquals("test", er,
                 "Grab last element ");
+    }
+
+    @Test
+    void testListGrabAllList() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        var listForTest = new AssertableStringList(actualList);
+
+        List<String> er = listForTest
+                .seeListHasExactlyCount(2)
+                .grabLikeList();
+
+        assertEquals("dummy", er.get(0));
+        assertNull(er.get(1));
+    }
+
+    @Test
+    void testListGreaterAndLess() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add("test");
+        var listForTest = new AssertableStringList(actualList);
+
+        listForTest
+                .seeListHasExactlyCount(3)
+                .seeListSizeIsGreaterThan(2)
+                .seeListSizeIsLessThan(4);
     }
 
     @Test
@@ -100,6 +132,42 @@ class AssertableListTests {
                             }
                           }
                         }""")
+                .seeListAnyJsonType();
+
+    }
+
+    @Test
+    void testListAssertsJsonSubsetAsserts() {
+        String actual = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email2@mail.com", "Name": "Alex" },
+                        { "Address": "email@mail.com", "Name": "John" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add(actual);
+        var listForTest = new AssertableStringList(actualList);
+
+        listForTest
+                .seeListAnyContainsJsonSubset("""
+                  {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email@mail.com" }
+                      ]
+                    }
+                  ]
+                }""")
                 .seeListAnyJsonType();
 
     }

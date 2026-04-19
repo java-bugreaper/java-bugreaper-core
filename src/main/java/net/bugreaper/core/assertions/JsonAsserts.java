@@ -13,9 +13,11 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class JsonAsserts {
@@ -34,9 +36,29 @@ public class JsonAsserts {
 
     /**
      * Assertion without strict array ordering
-     * <p> extensible fields will be skipped
+     * <p> extensible fields and elements in array will be skipped
      *
-     * @param expectedPart expected part of JSON with arrays (can be not ordered)
+     * @param expectedPart expected part of JSON with arrays
+     * @param actualJson actual JSON
+     */
+    public static void containsJsonSubset(String expectedPart, String actualJson) {
+        JsonNode expected = getJson(expectedPart);
+        JsonNode actual = getJson(actualJson);
+
+        List<String> errors = new ArrayList<>();
+
+        compareJson(expected, actual, "", errors);
+
+        if (!errors.isEmpty()) {
+            fail(formatErrors(errors));
+        }
+    }
+
+    /**
+     * Assertion without strict array ordering
+     * <p> extensible fields will be skipped. But extensible elements in array cause AssertionError
+     *
+     * @param expectedPart expected part of JSON with arrays (can be not ordered but must have same count of elements)
      * @param actualJson actual JSON
      */
     public static void containsJson(String expectedPart, String actualJson) {
@@ -92,7 +114,6 @@ public class JsonAsserts {
             throw new IllegalArgumentException(e);
         }
     }
-
 
     //if no assert error will be null
     public static String validationJsonSchemaMethod(String expectedSchema, String actualJson, JsonSchemaFactory factory, boolean returnReport) {
@@ -174,5 +195,90 @@ public class JsonAsserts {
                     "Invalid " + mode + " JSON/JSONArray: " + e.getOriginalMessage(), e);
         }
     }
+
+    // JSON Subset
+
+    private static JsonNode getJson(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Unparsable JSON string: " + json, e);
+        }
+    }
+
+    private static void compareJson(JsonNode expected, JsonNode actual, String path, List<String> errors) {
+
+        if (expected.isObject()) {
+            compareObject(expected, actual, path, errors);
+            return;
+        }
+
+        if (expected.isArray()) {
+            compareArray(expected, actual, path, errors);
+            return;
+        }
+
+        compareValue(expected, actual, path, errors);
+    }
+
+    private static void compareObject(JsonNode expected, JsonNode actual, String path, List<String> errors) {
+        expected.fieldNames().forEachRemaining(field -> {
+            JsonNode expectedChild = expected.get(field);
+            JsonNode actualChild = actual.get(field);
+
+            if (actualChild == null) {
+                errors.add(path + field + ": missing field");
+            } else {
+                compareJson(expectedChild, actualChild, path + field + ".", errors);
+            }
+        });
+    }
+
+    private static void compareArray(JsonNode expected, JsonNode actual, String path, List<String> errors) {
+        if (!actual.isArray()) {
+            errors.add(path + ": expected array but was " + actual.getNodeType());
+            return;
+        }
+
+        for (JsonNode expectedItem : expected) {
+            if (!contains(expectedItem, actual)) {
+                errors.add(path + "[]: missing element " + expectedItem);
+            }
+        }
+    }
+
+    private static void compareValue(JsonNode expected, JsonNode actual, String path, List<String> errors) {
+        if (!expected.equals(actual)) {
+            errors.add(path + ": expected <" + expected + "> but was <" + actual + ">");
+        }
+    }
+
+    private static boolean contains(JsonNode expectedItem, JsonNode actualArray) {
+        for (JsonNode actualItem : actualArray) {
+            if (matches(expectedItem, actualItem)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean matches(JsonNode expected, JsonNode actual) {
+        List<String> tmp = new ArrayList<>();
+        compareJson(expected, actual, "", tmp);
+        return tmp.isEmpty();
+    }
+
+    private static String formatErrors(List<String> errors) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("JSON subset assertion failed:\n");
+
+        for (String err : errors) {
+            sb.append(" - ").append(err).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 
 }

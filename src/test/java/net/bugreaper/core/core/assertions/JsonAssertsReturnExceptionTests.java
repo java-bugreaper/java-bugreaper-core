@@ -5,6 +5,7 @@ import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 
 import static net.bugreaper.core.assertions.JsonAsserts.assertJsonNotContains;
+import static net.bugreaper.core.assertions.JsonAsserts.containsJsonSubset;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -25,6 +26,23 @@ class JsonAssertsReturnExceptionTests {
 
         MatcherAssert.assertThat(
                 "Exception on failed JSON type on not contains",
+                exception.getMessage(),
+                StringContains.containsString("Unparsable JSON string: string_text"));
+    }
+
+    @Test
+    void testAssertJsonContainsSubsetrongType() {
+
+        String actual = """
+                {
+                  "id": 1,
+                  "test": 2
+                }""";
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                containsJsonSubset("string_text", actual));
+
+        MatcherAssert.assertThat(
                 exception.getMessage(),
                 StringContains.containsString("Unparsable JSON string: string_text"));
     }

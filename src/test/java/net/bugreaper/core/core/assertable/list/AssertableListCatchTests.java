@@ -119,6 +119,48 @@ class AssertableListCatchTests {
                 StringContains.containsString("There is no elements in the list with valid JSON Schema:"));
     }
 
+    @Test
+    void testListAssertsJsonSubsetAssertsCatch() {
+        String actual = """
+                {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email1@mail.com", "Name": "Alex" },
+                        { "Address": "email2@mail.com", "Name": "John" }
+                      ]
+                    }
+                  ]
+                }""";
+
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add(actual);
+        var listForTest = new AssertableStringList(actualList);
+
+
+        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+                listForTest
+                        .seeListAnyContainsJsonSubset("""
+                  {
+                  "messages": [
+                    {
+                      "To": [
+                        { "Address": "email@mail.com" }
+                      ]
+                    }
+                  ]
+                }""")
+                        .seeListAnyJsonType());
+
+        MatcherAssert.assertThat(
+                "Exception on failed validation JSON Schema",
+                exception.getMessage(),
+                StringContains.containsString("There is no elements in the list contains JSON(ignoring extensive array elements):"));
+    }
+
 
     @Test
     void testListAssertsJsonContainsCatchInput() {
@@ -141,6 +183,26 @@ class AssertableListCatchTests {
 
     }
 
+    @Test
+    void testListAssertsJsonContainsSubsetCatchInput() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add(json);
+        var listForTest = new AssertableStringList(actualList);
+
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                listForTest
+                        .seeListAnyContainsJsonSubset("not json"));
+
+        MatcherAssert.assertThat(
+                "Exception on failed validation JSON contains input",
+                exception.getMessage(),
+                StringContains.containsString("Invalid strict JSON/JSONArray"));
+
+    }
     @Test
     void testListAssertsJsonEqualCatchInput() {
         ArrayList<String> actualList = new ArrayList<>();

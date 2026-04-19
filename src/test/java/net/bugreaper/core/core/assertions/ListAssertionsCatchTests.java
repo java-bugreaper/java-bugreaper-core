@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static net.bugreaper.core.assertions.ListAsserts.*;
-import static org.hamcrest.Matchers.startsWithIgnoringCase;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
+@SuppressWarnings("java:S5976")
 class ListAssertionsCatchTests {
 
     @Test
@@ -26,6 +28,36 @@ class ListAssertionsCatchTests {
                 "Exception on failed assert count in list",
                 exception.getMessage(),
                 StringContains.containsString("Count of elements in list not equal: 3"));
+    }
+
+    @Test
+    void testStringListGreaterException() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                assertListSizeGreaterThan(1, actualList));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("List size expected to be greater <1> bytes but got <1>"));
+    }
+
+    @Test
+    void testStringListLessException() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add("dummy");
+        actualList.add("dummy");
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                assertListSizeLessThan(3, actualList));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("List size expected to be less <3> bytes but got <3>"));
     }
 
     @Test
@@ -84,6 +116,27 @@ class ListAssertionsCatchTests {
                 StringContains.containsString("""
                         Expected: is "test"
                              but: was "dummy2\""""));
+    }
+
+    @Test
+    void testStringNotEqualInListFailed() {
+
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy1");
+        actualList.add("test2");
+        actualList.add("test");
+        actualList.add("test3");
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                notEqualsStringInList("test", actualList));
+
+        MatcherAssert.assertThat(
+                "Exception on failed equal String in list assertion main message",
+                exception.getMessage(),
+                StringContains.containsString("""
+                        There is not expected elements in the list:
+                        not "test\""""));
     }
 
     @Test

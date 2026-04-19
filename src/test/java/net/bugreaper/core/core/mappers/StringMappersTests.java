@@ -132,6 +132,8 @@ class StringMappersTests {
                 "List null beautify for attach");
     }
 
+    // formatMilliseconds
+
     @Test
     void testFormatMillisecondsOnly(){
         assertEquals("105 milliseconds",
@@ -165,6 +167,44 @@ class StringMappersTests {
         assertEquals("1 second 330 milliseconds",
                 formatMilliseconds(1330),
                 "message with seconds");
+    }
+
+    // formatBytes
+
+    @Test
+    void testFormatZeroBytes(){
+        assertEquals("0 bytes",
+                formatBytes(0));
+    }
+
+    @Test
+    void testFormatBytesOnly(){
+        assertEquals("202 bytes",
+                formatBytes(202));
+    }
+
+    @Test
+    void testFormatByteOnly(){
+        assertEquals("1 byte",
+                formatBytes(1));
+    }
+
+    @Test
+    void testFormatBytesAll(){
+        assertEquals("1Gb 1Mb 1Kb 6 bytes",
+                formatBytes( (1024*1024*1024) + (1024*1024) + 1024 + 6) );
+    }
+
+    @Test
+    void testFormatBytesGbB(){
+        assertEquals("1Gb 1 byte",
+                formatBytes( (1024*1024*1024) + 1 ) );
+    }
+
+    @Test
+    void testFormatBytesMore(){
+        assertEquals("1024Gb",
+                formatBytes(1024L *1024*1024*1024));
     }
 
 }

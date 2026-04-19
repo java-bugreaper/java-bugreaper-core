@@ -47,6 +47,16 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
+    @Step("(Assert) List have JSON CONTAINS part(ignoring extensive array elements):")
+    public AssertableStringList seeListAnyContainsJsonSubset(String expectedJsonPart) {
+
+        AllureReporter.attachJson("expected json part",  expectedJsonPart);
+        ListAsserts.containsJsonSubsetInList(expectedJsonPart, arrayList);
+
+        return this;
+    }
+
+    @Override
     @Step("(Assert) List have JSON CONTAINS part:")
     public AssertableStringList seeListAnyContainsJson(String expectedJsonPart) {
 
@@ -117,6 +127,20 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
         return this;
     }
 
+    @Step("(Assert) List size greater: <{minSize}>")
+    public AssertableStringList seeListSizeIsGreaterThan(int minSize) {
+        ListAsserts.assertListSizeGreaterThan(minSize, arrayList);
+
+        return this;
+    }
+
+    @Step("(Assert) List size less: <{maxSize}>")
+    public AssertableStringList seeListSizeIsLessThan(int maxSize) {
+        ListAsserts.assertListSizeLessThan(maxSize, arrayList);
+
+        return this;
+    }
+
     @Override
     @Step("(Assert) List should have element with JSON type")
     public AssertableStringList seeListAnyJsonType() {
@@ -139,6 +163,12 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
         AllureReporter.attachCanBeNull("Last element:", result);
 
         return result;
+    }
+
+    @Override
+    @Step("(Grab) Like list")
+    public List<String> grabLikeList() {
+        return arrayList;
     }
 
 }
