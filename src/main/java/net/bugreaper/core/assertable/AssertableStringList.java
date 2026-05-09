@@ -67,6 +67,16 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
+    @Step("(Assert) List have JSON CONTAINS (EXTENDED) part:")
+    public AssertableStringList seeListAnyContainsExtendedJson(String expectedJsonPart) {
+
+        AllureReporter.attachJson("expected json with options",  expectedJsonPart);
+        ListAsserts.containsJsonExtendedInList(expectedJsonPart, arrayList);
+
+        return this;
+    }
+
+    @Override
     @Step("(Assert) List should have JSON EQUAL to:")
     public AssertableStringList seeListAnyEqualsJson(String expectedJson) {
 

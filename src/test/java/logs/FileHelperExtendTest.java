@@ -19,7 +19,20 @@ class FileHelperExtendTest extends FileHelper {
     public static final String HASH_FILE = "files/test_hash.txt";
     public static final String MESSAGE = "some message";
 
-    FileHelper fileTime = new FileHelper().setAwaitMs(400);
+    FileHelper fileTime = new FileHelper().setAwaitMs(400).setMaxFileSize(99999999);
+
+    @Test
+    void testNoOptionalAwaitConfig() {
+
+        MatcherAssert.assertThat(
+                "Info summary",
+                fileTime.getConfigSummary(),
+                StringContains.containsString("""
+                        FileHelper:
+                            await=400
+                            maxFileSize=99999999"""));
+    }
+
 
     @Test
     void testLogMessageAddAndCount() {
@@ -191,4 +204,125 @@ class FileHelperExtendTest extends FileHelper {
                 exception.getMessage(),
                 StringContains.containsString("Not supported algorithm: MY-ALG"));
     }
+
+    @Test
+    void testFileSizeCheckPass() {
+        String filePath = "temp/sizeCheckPass.txt";
+        fileTime.deleteFile(filePath);
+
+        fileTime.createFileWithSize(filePath, 180);
+
+        fileTime.seeFileSizeExactly(filePath, 180);
+        fileTime.seeFileSizeGreaterThan(filePath, 179);
+        fileTime.seeFileSizeLessThan(filePath, 181);
+
+       long size = fileTime.getFileSize(filePath);
+
+        assertEquals(180, size);
+    }
+
+    @Test
+    void testFileSizeCheckCatch() {
+        String filePath = "temp/sizeCheck.txt";
+        fileTime.deleteFile(filePath);
+
+
+        fileTime.createFileWithSize(filePath, 180);
+
+        Throwable exception1 = assertThrows(AssertionError.class, () ->
+                fileTime.seeFileSizeExactly(filePath, 170));
+
+        MatcherAssert.assertThat(
+                exception1.getMessage(),
+                StringContains.containsString("File <temp/sizeCheck.txt> size expected to be EXACTLY <170 bytes> but got <180 bytes> within 400 milliseconds"));
+
+        Throwable exception2 = assertThrows(AssertionError.class, () ->
+                fileTime.seeFileSizeGreaterThan(filePath, 181));
+
+        MatcherAssert.assertThat(
+                exception2.getMessage(),
+                StringContains.containsString("File <temp/sizeCheck.txt> size expected to be GREATER <181 bytes> but got <180 bytes> within 400 milliseconds"));
+
+        Throwable exception3 = assertThrows(AssertionError.class, () ->
+                fileTime.seeFileSizeLessThan(filePath, 180));
+
+        MatcherAssert.assertThat(
+                exception3.getMessage(),
+                StringContains.containsString("File <temp/sizeCheck.txt> size  expected to be LESS <180 bytes> but got <180 bytes> within 400 milliseconds"));
+
+    }
+
+    @Test
+    void testSeeFileContainStringCatch() {
+
+
+        String filePath = "temp/check.txt";
+
+
+        fileTime.createFileWithSize(filePath, 101);
+
+
+        Throwable exception1 = assertThrows(AssertionError.class, () ->
+                fileTime.seeFileContainString(filePath, "not exist"));
+
+
+        MatcherAssert.assertThat(
+                exception1.getMessage(),
+                StringContains.containsString("FAILED: <<not exist>> expected to be present in file within 400 milliseconds"));
+
+    }
+
+    @Test
+    void testFileSizePreCheckCatch() {
+        FileHelper file1 = new FileHelper().setMaxFileSize(100);
+        FileHelper file2 = new FileHelper().setMaxFileSize(101);
+
+        String filePath = "temp/sizePreCheck.txt";
+
+
+        file2.createFileWithSize(filePath, 101);
+
+
+        Throwable exception1 = assertThrows(FileReaderException.class, () ->
+                file1.createFileWithSize(filePath, 101));
+
+        MatcherAssert.assertThat(
+                exception1.getMessage(),
+                StringContains.containsString("Provided size 101 bytes more then provided #maxFileSize(100 bytes) (set or configure more if you need)"));
+
+        Throwable exception2 = assertThrows(FileReaderException.class, () ->
+                file1.showDataFromFile(filePath));
+
+        sizeCatch(exception2);
+
+        Throwable exception3 = assertThrows(FileReaderException.class, () ->
+                file1.countMatchesInFile(filePath, MESSAGE, false));
+
+        sizeCatch(exception3);
+
+        Throwable exception4 = assertThrows(FileReaderException.class, () ->
+                file1.seeFileContainsRegex(filePath, "some.1."));
+
+        sizeCatch(exception4);
+
+        Throwable exception5 = assertThrows(FileReaderException.class, () ->
+                file1.seeFileContainString(filePath, "some"));
+
+        sizeCatch(exception5);
+
+        Throwable exception6 = assertThrows(FileReaderException.class, () ->
+                file1.seeFileDoesNotContainString(filePath, "some"));
+
+        sizeCatch(exception6);
+
+    }
+
+    private void sizeCatch(Throwable ex){
+
+        MatcherAssert.assertThat(
+                ex.getMessage(),
+                StringContains.containsString("File <temp/sizePreCheck.txt> size(101 bytes) more then provided #maxFileSize(100 bytes) (set or configure more if you need)"));
+
+    }
+
 }

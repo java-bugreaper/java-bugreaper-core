@@ -26,6 +26,16 @@ class AssertableListTests {
                   ]
                 }""";
 
+    String jsonWr = """
+                {
+                  "status": 12,
+                  "name": "Anna",
+                  "array":[
+                    {"id": 1},
+                    {"id": 2}
+                  ]
+                }""";
+
 
     @Test
     void testListAssertsAndGrabLastCount() {
@@ -102,6 +112,7 @@ class AssertableListTests {
 
         actualList.add("dummy");
         actualList.add(null);
+        actualList.add(jsonWr);
         actualList.add(json);
         var listForTest = new AssertableStringList(actualList);
 
@@ -135,6 +146,34 @@ class AssertableListTests {
                 .seeListAnyJsonType();
 
     }
+
+    @Test
+    void testListAnyContainsExtendedJson() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add(jsonWr);
+        actualList.add(json);
+        var listForTest = new AssertableStringList(actualList);
+
+        listForTest
+                .seeListAnyEqualsJson(json)
+                .seeListAnyContainsJson("""
+                  {
+                    "status": 11
+                  }""")
+                .seeListAnyContainsExtendedJson("""
+                {
+                  "status": 11,
+                  "name": "Alex",
+                  "array":[
+                    {"id": 1},
+                    {"id": 2}
+                  ]
+                }""");
+    }
+
 
     @Test
     void testListAssertsJsonSubsetAsserts() {

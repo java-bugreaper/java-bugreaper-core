@@ -7,8 +7,6 @@ import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 
 class FileHelperConfigTests {
 
@@ -24,15 +22,14 @@ class FileHelperConfigTests {
     void testDefaultConfig() {
         FileHelper fileHelper = new FileHelper();
 
-        assertEquals(550, fileHelper.getAwait(), "Await from default config");
-        fileHelper.getConfigSummary();
 
         MatcherAssert.assertThat(
                 "Info summary",
                 fileHelper.getConfigSummary(),
                 StringContains.containsString("""
                         FileHelper:
-                            await=550"""));
+                            await=550
+                            maxFileSize=800"""));
     }
 
     @Test
@@ -40,7 +37,13 @@ class FileHelperConfigTests {
         System.setProperty(PROPERTY, "nooptional");
         FileHelper fileHelper = new FileHelper();
 
-        assertEquals(2000, fileHelper.getAwait(), "Default await used");
+        MatcherAssert.assertThat(
+                "Info summary",
+                fileHelper.getConfigSummary(),
+                StringContains.containsString("""
+                        FileHelper:
+                            await=2000
+                            maxFileSize=1048576"""));
     }
 
 }

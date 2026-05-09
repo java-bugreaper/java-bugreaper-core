@@ -1,6 +1,7 @@
 package net.bugreaper.core.assertable.stringlist;
 
 import net.bugreaper.core.assertable.AssertableStringList;
+import net.bugreaper.core.assertions.JsonAsserts;
 import org.hamcrest.Matcher;
 
 import java.nio.file.Path;
@@ -35,7 +36,7 @@ public interface AssertableListAsserts {
     AssertableStringList seeListAnyMatcher(Matcher<String> matcher);
 
     /**
-     * Assert that at least one element containsJson without strict array ordering
+     * Assert that at least one element contains Json without strict array ordering
      * <p> extensible fields and <b>elements in array</b> will be skipped
      *
      * @param expectedJsonPart expected part of JSON (arrays can be not ordered and have different count)
@@ -46,7 +47,18 @@ public interface AssertableListAsserts {
     AssertableStringList seeListAnyContainsJsonSubset(String expectedJsonPart);
 
     /**
-     * Assert that at least one element containsJson without strict array ordering
+     * Assert that at least one element contains Json and/or optional checks
+     * <p>Same behavior as {@link JsonAsserts#assertJsonsExtended(String, String)}.
+     *
+     * @param expectedJsonExtended expected part of JSON and/or optional checks
+     * @return this instance for method chaining
+     * @throws AssertionError on assert fail
+     * @throws IllegalArgumentException on not Json data provided
+     */
+    AssertableStringList seeListAnyContainsExtendedJson(String expectedJsonExtended);
+
+    /**
+     * Assert that at least one element contains Json without strict array ordering
      * <p> extensible fields will be skipped. <b>But extensible elements in array cause AssertionError</b>
      *
      * @param expectedJsonPart expected part of JSON (arrays can be not ordered but must have same count of elements)

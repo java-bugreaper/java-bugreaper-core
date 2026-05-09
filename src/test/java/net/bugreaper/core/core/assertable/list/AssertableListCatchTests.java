@@ -45,9 +45,40 @@ class AssertableListCatchTests {
                   }"""));
 
         MatcherAssert.assertThat(
-                "Exception on failed validation JSON Schema",
                 exception.getMessage(),
                 StringContains.containsString("There is no elements in the list contains JSON:"));
+
+    }
+
+    @Test
+    void testListAssertsJsonContainsExtendedCatch() {
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add("dummy");
+        actualList.add(null);
+        actualList.add(json);
+        var listForTest = new AssertableStringList(actualList);
+
+
+        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+                listForTest
+                        .seeListAnyContainsExtendedJson("""
+                  {
+                      "status:>": 12,
+                      "name:like": "nn"
+                  }"""));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("There is no elements in the list contains JSON (EXTENDED):"));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("""
+                        -----------
+                        JSON comparison failed:
+                        • status: expected >[12] but was [11]
+                        • name: expected like [nn] but was [Alex]"""));
 
     }
 
@@ -68,7 +99,6 @@ class AssertableListCatchTests {
                   }"""));
 
         MatcherAssert.assertThat(
-                "Exception on failed validation JSON type",
                 exception.getMessage(),
                 StringContains.containsString("There is no elements in the list equal to JSON:"));
 

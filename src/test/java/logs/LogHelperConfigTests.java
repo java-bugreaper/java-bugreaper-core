@@ -57,7 +57,6 @@ class LogHelperConfigTests {
         LogHelper logs = new LogHelper();
 
         logs.cleanLogs();
-        logs.getConfigSummary();
 
         Throwable exception = assertThrows(AssertionError.class, () ->
                 logs.seeLogsContainString(MESSAGE));
@@ -75,8 +74,13 @@ class LogHelperConfigTests {
 
         LogHelper logs = new LogHelper();
 
-        assertEquals(2000, logs.getAwait(), "Default await used");
-        assertEquals("logs/byyml/noop.log", logs.getLogfilePath(), "Required key used");
+        MatcherAssert.assertThat(
+                "Info summary",
+                logs.getConfigSummary(),
+                StringContains.containsString("""
+                        LogHelper:
+                            await=2000
+                            logfile=logs/byyml/noop.log"""));
     }
 
     @Test
