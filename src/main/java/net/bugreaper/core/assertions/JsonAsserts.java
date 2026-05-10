@@ -7,20 +7,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.ValidationMessage;
+import net.bugreaper.core.exceptions.JsonAssertExtendedException;
+import net.bugreaper.core.exceptions.JsonMappersException;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class JsonAsserts {
+public class JsonAsserts extends JsonAssertsAbstract{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonAsserts.class);
 
@@ -78,7 +78,7 @@ public class JsonAsserts {
 
     /**
      * Assertion with strict array ordering
-     * <p> extensible fields not expected
+     * <p> extensible fields and elements in arrays not expected
      *
      * @param expectedAct expected full JSON with strict ordered arrays
      * @param actualJson actual JSON
@@ -98,6 +98,12 @@ public class JsonAsserts {
         assertJsonMethod(expectedAct, actualJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
+    /**
+     * Assert that actual Json does not contains unexpected Json part
+     *
+     * @param unexpectedPart unexpected part of JSON
+     * @param actualJson actual JSON
+     */
     public static void assertJsonNotContains(String unexpectedPart, String actualJson) {
         try {
             assertJsonNotMethod(unexpectedPart, actualJson, false);
@@ -106,14 +112,6 @@ public class JsonAsserts {
         }
     }
 
-
-    public static void assertJsonMethod(String expectedAct, String actualJson, JSONCompareMode compareMode) {
-        try {
-            JSONAssert.assertEquals(expectedAct, actualJson, compareMode);
-        } catch (JSONException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
 
     //if no assert error will be null
     public static String validationJsonSchemaMethod(String expectedSchema, String actualJson, JsonSchemaFactory factory, boolean returnReport) {
@@ -152,14 +150,6 @@ public class JsonAsserts {
         }
     }
 
-    private static void assertJsonNotMethod(String unexpectedPart, String actualJson, Boolean strict) {
-        try {
-            JSONAssert.assertNotEquals(unexpectedPart, actualJson, strict);
-        } catch (JSONException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
     /**
      * Check is String Json/JsonArray type STRICT (even extra coma throw exception!)
      * @param jsonData String with data
@@ -178,107 +168,162 @@ public class JsonAsserts {
         validateJsonInternal(jsonData, lenientMapper, true);
     }
 
-
-    private static void validateJsonInternal(String jsonData, ObjectMapper mapper, boolean allowTrailingComma) {
-        if (jsonData == null || jsonData.trim().isEmpty()) {
-            throw new IllegalArgumentException("JSON string is null or empty");
-        }
-
+    //used in Rest
+    public static void assertJsonMethod(String expectedAct, String actualJson, JSONCompareMode compareMode) {
         try {
-            JsonNode node = mapper.readTree(jsonData);
-            if (!node.isObject() && !node.isArray()) {
-                throw new IllegalArgumentException("JSON must be an object or array at the root");
-            }
-        } catch (JsonProcessingException e) {
-            String mode = allowTrailingComma ? "lenient" : "strict";
-            throw new IllegalArgumentException(
-                    "Invalid " + mode + " JSON/JSONArray: " + e.getOriginalMessage(), e);
+            JSONAssert.assertEquals(expectedAct, actualJson, compareMode);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
-    // JSON Subset
-
-    private static JsonNode getJson(String json) {
-        ObjectMapper mapper = new ObjectMapper();
+    public static void assertJsonNotMethod(String unexpectedPart, String actualJson, Boolean strict) {
         try {
-            return mapper.readTree(json);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Unparsable JSON string: " + json, e);
+            JSONAssert.assertNotEquals(unexpectedPart, actualJson, strict);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
-    private static void compareJson(JsonNode expected, JsonNode actual, String path, List<String> errors) {
 
-        if (expected.isObject()) {
-            compareObject(expected, actual, path, errors);
-            return;
-        }
+    // Extended
 
-        if (expected.isArray()) {
-            compareArray(expected, actual, path, errors);
-            return;
-        }
 
-        compareValue(expected, actual, path, errors);
-    }
+    /**
+     * Asserts that the {@code actualJson} matches the {@code expectedJson}
+     * using a flexible, non-strict comparison.
+     *
+     * <p><b>Main features:</b></p>
+     * <ul>
+     *   <li>Non-strict object comparison:
+     *     extra fields in the actual JSON are ignored.</li>
+     *
+     *   <li>Recursive comparison of nested objects and arrays.</li>
+     *
+     *   <li>Default array comparison:
+     *     array order and size are ignored, and only checks that all expected
+     *     elements are contained in the actual array.</li>
+     *
+     *   <li>Supports comparison operators in expected JSON field names using
+     *     the syntax {@code field:operator}.</li>
+     *
+     *   <li>Supports multiple checks for one field</li>
+     *
+     *   <li>Produces detailed and human-readable diff messages for all mismatches.</li>
+     * </ul>
+     *
+     * <p><b>Supported operators:</b></p>
+     * <table border="1">
+     *   <caption>Supported comparison operators</caption>
+     *   <tr>
+     *     <th>Operator</th>
+     *     <th>Description</th>
+     *     <th>Example</th>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code =}</td>
+     *     <td>Equals comparison</td>
+     *     <td>{@code "age:=": 10}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code !=}</td>
+     *     <td>Not equals comparison</td>
+     *     <td>{@code "status:!=": "ERROR"}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code >, <, >=, <=}</td>
+     *     <td>Numeric comparison</td>
+     *     <td>{@code "age:>=": 18}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code in}</td>
+     *     <td>Actual value must exist in expected array</td>
+     *     <td>{@code "type:in": ["A", "B"]}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code regex}</td>
+     *     <td>Regular expression match</td>
+     *     <td>{@code "email:regex": ".*@gmail.com"}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code like}</td>
+     *     <td>Substring match using SQL-like '%' wildcards</td>
+     *     <td>{@code "name:like": "lex"}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code exists}</td>
+     *     <td>Checks field existence or absence</td>
+     *     <td>{@code "name:exists": true}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code size}</td>
+     *     <td>Checks exact array size</td>
+     *     <td>{@code "users:size": 3}</td>
+     *   </tr>
+     *   <tr>
+     *     <td>{@code distinct}</td>
+     *     <td>Checks whether array contains unique elements</td>
+     *     <td>{@code "users:distinct": true}</td>
+     *   </tr>
+     * </table>
+     *
+     * <p><b>Example:</b></p>
+     *
+     * <pre>{@code
+     * assertJsonsExtended("""
+     * {
+     *   "user": {
+     *     "name:like": "%lex%",
+     *     "age:>=": 18,
+     *     "roles:containsAll": ["ADMIN"],
+     *     "tags:distinct": [true]
+     *   }
+     * }
+     * """, actualJson);
+     * }</pre>
+     *
+     * <p><b>Example diff messages:</b></p>
+     * <ul>
+     *   <li>{@code • user.name: expected [Alex2] but was [Alex]}</li>
+     *   <li>{@code • user.age: expected >=[18] but was [15]}</li>
+     *   <li>{@code • user.email: field missing}</li>
+     *   <li>{@code • users: array size mismatch. expected 3 but was 2}</li>
+     * </ul>
+     *
+     * @param expectedJson JSON string containing the expected structure
+     *                     and optional operators in field names
+     * @param actualJson JSON string to validate against the expected JSON
+     *
+     * @throws AssertionError if JSON comparison fails
+     *                        (contains detailed diff information)
+     * @throws JsonMappersException if input JSON cannot be parsed
+     */
+    public static void assertJsonsExtended(String expectedJson, String actualJson) {
+        try {
 
-    private static void compareObject(JsonNode expected, JsonNode actual, String path, List<String> errors) {
-        expected.fieldNames().forEachRemaining(field -> {
-            JsonNode expectedChild = expected.get(field);
-            JsonNode actualChild = actual.get(field);
+            JsonNode expected = strictMapper.readTree(expectedJson);
+            JsonNode actual = strictMapper.readTree(actualJson);
 
-            if (actualChild == null) {
-                errors.add(path + field + ": missing field");
-            } else {
-                compareJson(expectedChild, actualChild, path + field + ".", errors);
+            List<String> errors = new ArrayList<>();
+
+            extendedJsonCompare("", expected, actual, errors);
+
+            if (!errors.isEmpty()) {
+                throw new AssertionError(
+                        "JSON comparison failed:\n" +
+                                String.join("\n", errors)
+                );
             }
-        });
-    }
 
-    private static void compareArray(JsonNode expected, JsonNode actual, String path, List<String> errors) {
-        if (!actual.isArray()) {
-            errors.add(path + ": expected array but was " + actual.getNodeType());
-            return;
-        }
-
-        for (JsonNode expectedItem : expected) {
-            if (!contains(expectedItem, actual)) {
-                errors.add(path + "[]: missing element " + expectedItem);
-            }
+        } catch (AssertionError e) {
+            fail(e.getMessage());
+        } catch (JsonAssertExtendedException e) {
+            throw new JsonMappersException("Invalid extend setup: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new JsonMappersException("Invalid JSON: " + e.getMessage(), e);
         }
     }
-
-    private static void compareValue(JsonNode expected, JsonNode actual, String path, List<String> errors) {
-        if (!expected.equals(actual)) {
-            errors.add(path + ": expected <" + expected + "> but was <" + actual + ">");
-        }
-    }
-
-    private static boolean contains(JsonNode expectedItem, JsonNode actualArray) {
-        for (JsonNode actualItem : actualArray) {
-            if (matches(expectedItem, actualItem)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean matches(JsonNode expected, JsonNode actual) {
-        List<String> tmp = new ArrayList<>();
-        compareJson(expected, actual, "", tmp);
-        return tmp.isEmpty();
-    }
-
-    private static String formatErrors(List<String> errors) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("JSON subset assertion failed:\n");
-
-        for (String err : errors) {
-            sb.append(" - ").append(err).append("\n");
-        }
-
-        return sb.toString();
-    }
-
 
 }
+
+

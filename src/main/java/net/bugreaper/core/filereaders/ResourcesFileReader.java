@@ -117,13 +117,12 @@ public final class ResourcesFileReader {
         File file = new File(getTestResourcesPath(), filePath);
         try {
             Files.delete(Path.of(getTestResourcesPath(), filePath));
+            LOGGER.info("File deleted successfully: {}", filePath);
         } catch (NoSuchFileException e) {
-            throw new FileReaderException("File for delete not exist: " + file, e);
+            LOGGER.warn("File for delete not exist: {}", file);
         }  catch (Exception e) {
             throw new FileReaderException("Failed to delete file: " + file, e);
         }
-
-        LOGGER.info("File deleted successfully: {}", filePath);
 
     }
 

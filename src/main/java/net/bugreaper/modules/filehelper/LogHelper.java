@@ -18,6 +18,17 @@ import static net.bugreaper.core.mappers.StringMappers.formatMilliseconds;
 import static net.bugreaper.core.utils.AwaitUtils.awaitCustom;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Class consists methods that operate with LOG files in src/test/resources (can be mounted from service)
+ *
+ * <p>Run with config options: {@code LogHelper file = new LogHelper();}</p>
+ *
+ *
+ * <p> Await for some asserts default: {@link #awaitMs}, can be changed by: {@link #setAwaitMs(int)}
+ *
+ * @author Oleksii Betin "ambu550"
+ * @since 1.0.0
+ */
 @SuppressWarnings("squid:S5960")
 public class LogHelper implements LogHelperInt {
 
@@ -26,7 +37,7 @@ public class LogHelper implements LogHelperInt {
     /**
      * default ms await in tests
      */
-    private int await = 2000;
+    private int awaitMs = 2000;
     private String logFilePath = "default/server.log";
 
 
@@ -42,10 +53,25 @@ public class LogHelper implements LogHelperInt {
     }
 
     /**
-     * Constructor with configurations
-     * <p> Loads configuration from YAML file.
-     * <p>Default: bugreaper.yml
-     * <p>Custom: -DbugreaperEnv=test loads bugreaper-test.yml
+     * Constructs a FileHelper client configuration.
+     *
+     * <p>Loads configuration values from a YAML file.</p>
+     *
+     * <p><b>Default file:</b> {@code bugreaper.yml}</p>
+     * <p><b>Custom file:</b> using {@code -DbugreaperEnv=test} loads {@code bugreaper-test.yml}</p>
+     *
+     * <p><b>Required configuration keys:</b></p>
+     * <ul>
+     *     <li>{@code modules.log-helper.logfile} pth to file in src/test/resources</li>
+     * </ul>
+     *
+     * <p><b>Optional configuration keys:</b></p>
+     * <ul>
+     *     <li>{@code modules.log-helper.await}</li>
+     * </ul>
+     *
+     * <p>Missing required keys will result in configuration errors.
+     * Missing optional keys will fall back to predefined defaults.</p>
      */
     public LogHelper() {
         loadFromYaml();
@@ -77,7 +103,7 @@ public class LogHelper implements LogHelperInt {
         if (awaitMs < 200) {
             throw new IllegalArgumentException("awaitMs too small (can`t bee less 200ms)");
         }
-        this.await = awaitMs;
+        this.awaitMs = awaitMs;
         return this;
     }
 
@@ -97,15 +123,12 @@ public class LogHelper implements LogHelperInt {
 
     // getters
 
-    public int getAwait() { return await; }
-    public String getLogfilePath() { return logFilePath; }
-
     @Override
     public String getConfigSummary() {
         String info = String.format("""
         %s:
             await=%d
-            logfile=%s%n""", this.getClass().getSimpleName(), await, logFilePath);
+            logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
 
         LOGGER.info(info);
         return info;
@@ -181,14 +204,14 @@ public class LogHelper implements LogHelperInt {
 
     private void seeLogsContainWithAwaitSetup(String expectedText, Boolean regex) {
         try {
-            awaitCustom(await).untilAsserted(() ->
+            awaitCustom(awaitMs).untilAsserted(() ->
                     assertNotEquals(0,
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             fail(
                     MessageFormat.format(
                             "\nFAILED: <<{0}>> expected to be present in logs within {1}",
-                            expectedText, formatMilliseconds(await)));
+                            expectedText, formatMilliseconds(awaitMs)));
         }
     }
 

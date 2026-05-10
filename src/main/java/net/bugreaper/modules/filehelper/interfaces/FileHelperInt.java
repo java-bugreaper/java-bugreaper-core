@@ -5,14 +5,6 @@ import net.bugreaper.modules.filehelper.FileHelper;
 
 public interface FileHelperInt {
 
-    /**
-     * Configure await in asserts with await
-     *
-     * @param awaitMs ms await
-     * @return this
-     * @throws IllegalArgumentException on invalid setup
-     */
-    FileHelper setAwaitMs(int awaitMs);
 
     /**
      * Truncate file
@@ -20,6 +12,13 @@ public interface FileHelperInt {
      * @param filePath file path/name in test resources
      */
     void cleanFile(String filePath);
+
+    /**
+     * Delete file
+     *
+     * @param filePath file path/name in test resources
+     */
+    void deleteFile(String filePath);
 
     /**
      * Add text to file
@@ -30,7 +29,27 @@ public interface FileHelperInt {
     void addToFile(String filePath, String message);
 
     /**
+     * create file in test resources with specified size (dummy data)
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
+     *
+     * @param filePath file path/name in test resources
+     * @param sizeInBytes  size in bites
+     */
+    void createFileWithSize(String filePath, long sizeInBytes);
+
+    //get data
+
+    /**
+     * Get file size in bytes
+     *
+     * @param filePath file path/name in test resources
+     * @return long with bytes
+     */
+    long getFileSize(String filePath);
+
+    /**
      * Show all data from file in Allure attach
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath file path/name in test resources
      */
@@ -38,6 +57,7 @@ public interface FileHelperInt {
 
     /**
      * Get expected text count from file
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath     file path and name in test resources
      * @param expectedText expected text
@@ -45,8 +65,41 @@ public interface FileHelperInt {
      */
     int countMatchesInFile(String filePath, String expectedText, boolean regex);
 
+    //asserts
+
+    /**
+     * Assert size of file in test resources exactly as expected
+     * <p><b>with await</b>
+     *
+     * @param filePath file path and name in test resources
+     * @param expectedSize  expected size in bytes
+     * @throws AssertionError on assert fail
+     */
+    void seeFileSizeExactly(String filePath, long expectedSize);
+
+    /**
+     * Assert size of file in test resources greater than minSize
+     * <p><b>with await</b>
+     *
+     * @param filePath file path and name in test resources
+     * @param minSize  minimum size in bytes
+     * @throws AssertionError on assert fail
+     */
+    void seeFileSizeGreaterThan(String filePath, long minSize);
+
+    /**
+     * Assert size of file in test resources less than maxSize
+     * <p><b>with await</b>
+     *
+     * @param filePath file path and name in test resources
+     * @param maxSize  maximum size in bytes
+     * @throws AssertionError on assert fail
+     */
+    void seeFileSizeLessThan(String filePath, long maxSize);
+
     /**
      * Assert that file contains expected text(by regex)
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      * <p><b>with await</b>
      *
      * @param filePath     file path/name in test resources
@@ -57,6 +110,7 @@ public interface FileHelperInt {
 
     /**
      * Assert that file contains expected text(exactly - not regex)
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      * <p><b>with await</b>
      *
      * @param filePath     file path/name in test resources
@@ -67,6 +121,7 @@ public interface FileHelperInt {
 
     /**
      * Assert that file not contains expected text(exactly)
+     * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath       file path/name in test resources
      * @param unexpectedText unexpected text
@@ -109,6 +164,17 @@ public interface FileHelperInt {
      * @throws AssertionError on assert fail
      */
     void seeFileHashSha512Equal(String filePath, String expectedHash);
+
+    //configs
+
+    /**
+     * Configure await in asserts with await
+     *
+     * @param awaitMs ms await
+     * @return this
+     * @throws IllegalArgumentException on invalid setup
+     */
+    FileHelper setAwaitMs(int awaitMs);
 
     /**
      * Returns and logs (at INFO level) a human-readable summary of all resolved

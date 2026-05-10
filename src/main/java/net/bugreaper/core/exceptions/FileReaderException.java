@@ -6,4 +6,8 @@ public class FileReaderException extends RuntimeException {
         super(message, cause);
     }
 
+    public FileReaderException(String message) {
+        super(message);
+    }
+
 }

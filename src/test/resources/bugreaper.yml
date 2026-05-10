@@ -1,6 +1,7 @@
 modules:
   file-helper:
-    await: 550
+    await: 550 #optional
+    maxFileSize: 800 #optional
   log-helper:
-    await: 600
+    await: 600 #optional
     logfile: 'logs/byyml/config.log'

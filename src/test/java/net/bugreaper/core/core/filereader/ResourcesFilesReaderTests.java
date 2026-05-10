@@ -7,9 +7,9 @@ import org.opentest4j.AssertionFailedError;
 import java.text.MessageFormat;
 
 import static net.bugreaper.core.filereaders.ResourcesFileReader.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("squid:S2699")
 class ResourcesFilesReaderTests {
 
     @Test
@@ -56,6 +56,15 @@ class ResourcesFilesReaderTests {
 
         assertEquals(text1 + text2, ar, "File write multiple times and read successful");
     }
+
+    @Test
+    void testNoFileExistDeleteNoError() {
+        var file = "temp/no-error" + System.currentTimeMillis();
+
+        deleteResourceFile(file);
+    }
+
+
     @Test
     void testResourceWriteAndReadTextWrongDir() {
 
@@ -161,20 +170,6 @@ class ResourcesFilesReaderTests {
         deleteResourceFile(fileName);
 
         seeResourceFileNotExists(fileName);
-    }
-
-    @Test
-    void testDeleteResourceFileFailed() {
-        String fileName = "temp/not_exists.txt";
-
-
-        Throwable exception = assertThrows(FileReaderException.class, () ->
-                deleteResourceFile(fileName));
-
-        assertEquals(
-               "File for delete not exist: "+ System.getProperty("user.dir") + "/src/test/resources/" + fileName,
-                exception.getMessage(),
-                "Error on delete not existing file");
     }
 
     @Test

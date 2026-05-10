@@ -2,6 +2,7 @@ package net.bugreaper.core.assertions;
 
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
+import net.bugreaper.core.exceptions.JsonMappersException;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static net.bugreaper.core.assertions.JsonAsserts.*;
+import static net.bugreaper.core.assertions.JsonAsserts.assertJsonMethod;
 import static net.bugreaper.core.mappers.StringMappers.listToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -77,7 +80,7 @@ public final class ListAsserts {
 
     public static void equalsJsonInList(String expectedJson, List<String> actualList) {
 
-        JsonAsserts.assertValidJson(expectedJson);
+        assertValidJson(expectedJson);
         
         StringBuilder trace = listJsonAsserterBuilder(expectedJson, actualList, JSONCompareMode.STRICT);
 
@@ -86,10 +89,20 @@ public final class ListAsserts {
         }
 
     }
+    public static void containsJsonExtendedInList(String expectedJson, List<String> actualList) {
 
+        assertValidJson(expectedJson);
+
+        StringBuilder trace = listJsonExtendAsserterBuilder(expectedJson, actualList);
+
+        if (trace != null) {
+            assertionMessage(trace, expectedJson, actualList, "contains JSON (EXTENDED)");//TOD
+        }
+
+    }
     public static void containsJsonInList(String expectedJsonPart, List<String> actualList) {
 
-        JsonAsserts.assertValidJson(expectedJsonPart);
+        assertValidJson(expectedJsonPart);
 
         StringBuilder trace = listJsonAsserterBuilder(expectedJsonPart, actualList, JSONCompareMode.LENIENT);
 
@@ -101,7 +114,7 @@ public final class ListAsserts {
 
     public static void containsJsonSubsetInList(String expectedJsonPart, List<String> actualList) {
 
-        JsonAsserts.assertValidJson(expectedJsonPart);
+        assertValidJson(expectedJsonPart);
 
         StringBuilder trace = listJsonSubsetAsserterBuilder(expectedJsonPart, actualList);
 
@@ -113,7 +126,7 @@ public final class ListAsserts {
 
     public static void jsonSchemaCheckInList(String expectedSchema, List<String> actualBodiesList) {
 
-        JsonAsserts.assertValidJson(expectedSchema);
+        assertValidJson(expectedSchema);
 
         StringBuilder trace = listJsonSchemaBuilder(expectedSchema, actualBodiesList);
 
@@ -126,7 +139,7 @@ public final class ListAsserts {
     private static void assertionMessage(StringBuilder trace, String expectedObject, List<String> actualList, String modifier){
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Actual list:\n{}", listToString(actualList));
+            LOGGER.info("Actual list {}:\n{}", actualList.size(), listToString(actualList));
         }
 
         throw new AssertionFailedError(
@@ -198,7 +211,7 @@ public final class ListAsserts {
 
         for (String actual : actualList) {
             try {
-                JsonAsserts.assertValidJson(actual);
+                assertValidJson(actual);
                 return null;
             } catch (AssertionError | IllegalArgumentException ex) {
                 trace = traceBuilder(trace, ex.getMessage());
@@ -214,7 +227,7 @@ public final class ListAsserts {
 
         for (String actual : actualList) {
             try {
-                JsonAsserts.containsJsonSubset(expectedAct, actual);
+                containsJsonSubset(expectedAct, actual);
                 return null;
             } catch (AssertionError | IllegalArgumentException ex) {
                 trace = traceBuilder(trace, ex.getMessage());
@@ -231,9 +244,25 @@ public final class ListAsserts {
 
         for (String actual : actualList) {
             try {
-                JsonAsserts.assertJsonMethod(expectedAct, actual, compareMode);
+                assertJsonMethod(expectedAct, actual, compareMode);
                 return null;
             } catch (AssertionError | IllegalArgumentException ex) {
+                trace = traceBuilder(trace, ex.getMessage());
+            }
+        }
+
+        return trace;
+    }
+
+    private static StringBuilder listJsonExtendAsserterBuilder(String expectedAct, List<String> actualList) {
+
+        StringBuilder trace = traceInit(actualList);
+
+        for (String actual : actualList) {
+            try {
+                assertJsonsExtended(expectedAct, actual);
+                return null;
+            } catch (AssertionError | JsonMappersException ex) {
                 trace = traceBuilder(trace, ex.getMessage());
             }
         }
@@ -250,7 +279,7 @@ public final class ListAsserts {
         int num = 0;
         for (String actual : actualList) {
             try {
-                JsonAsserts.validationJsonSchemaMethod(expectedSchema, actual, factory, false);
+                validationJsonSchemaMethod(expectedSchema, actual, factory, false);
                 return null;
             } catch (AssertionError | IllegalArgumentException ex) {
                 num = num + 1;
