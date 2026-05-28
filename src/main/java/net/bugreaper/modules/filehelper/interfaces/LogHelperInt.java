@@ -24,7 +24,7 @@ public interface LogHelperInt {
     LogHelper setLogfile(String logFilePath);
 
     /**
-     * Truncate file with logs
+     * Delete all data from file
      *
      */
     void cleanLogs();
@@ -34,7 +34,7 @@ public interface LogHelperInt {
      *
      * @param message text to add
      */
-    void addToLogs( String message);
+    void addToLogs(String message);
 
     /**
      * Show all data from log file in Allure attach
@@ -46,9 +46,10 @@ public interface LogHelperInt {
      * Get expected text count from log file
      *
      * @param expectedText expected text
+     * @param regex true: use regex, false: strict string
      * @return int with count
      */
-    int countInLogs( String expectedText, boolean regex);
+    int countInLogs(String expectedText, boolean regex);
 
     /**
      * Assert that log file contains expected text(by regex)

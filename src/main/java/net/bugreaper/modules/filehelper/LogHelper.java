@@ -19,7 +19,7 @@ import static net.bugreaper.core.utils.AwaitUtils.awaitCustom;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Class consists methods that operate with LOG files in src/test/resources (can be mounted from service)
+ * Class consists methods that operate with LOG files in <b>src/test/resources</b> (can be mounted from service)
  *
  * <p>Run with config options: {@code LogHelper file = new LogHelper();}</p>
  *
@@ -93,11 +93,6 @@ public class LogHelper implements LogHelperInt {
 
     //setters
 
-    /**
-     * Set await for asserts in MS
-     * @param awaitMs await in MS
-     * @throws IllegalArgumentException on invalid value (less 200)
-     */
     @Override
     public LogHelper setAwaitMs(int awaitMs) {
         if (awaitMs < 200) {
@@ -107,11 +102,6 @@ public class LogHelper implements LogHelperInt {
         return this;
     }
 
-    /**
-     * Set log file for interactions
-     * @param logFilePath path to logfile in test resources (example "logs/server/logs.log"
-     * @throws IllegalArgumentException on invalid value
-     */
     @Override
     public LogHelper setLogfile(String logFilePath) {
         if (logFilePath == null || logFilePath.isEmpty()) {

@@ -25,7 +25,7 @@ import static net.bugreaper.core.utils.AwaitUtils.awaitCustom;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Class consists methods that operate with files in src/test/resources
+ * Class consists methods that operate with files in <b>src/test/resources</b>
  *
  * <p>Run with config options: {@code FileHelper file = new FileHelper();}</p>
  *
@@ -89,12 +89,7 @@ public class FileHelper implements FileHelperInt {
 
     // setters
 
-    /**
-     * Set await for asserts in MS
-     *
-     * @param awaitMs await in MS
-     * @throws IllegalArgumentException on invalid value (less 200)
-     */
+    @Override
     public FileHelper setAwaitMs(int awaitMs) {
         if (awaitMs < 200) {
             throw new IllegalArgumentException("awaitMs too small (can`t bee less 200ms)");
@@ -103,12 +98,7 @@ public class FileHelper implements FileHelperInt {
         return this;
     }
 
-    /**
-     * Set max file size for some methods
-     *
-     * @param maxFileSize size in bytes
-     * @throws IllegalArgumentException on invalid value (less 200)
-     */
+    @Override
     public FileHelper setMaxFileSize(long maxFileSize) {
         if (awaitMs < 1) {
             throw new IllegalArgumentException("maxFileSize too small (can`t bee less 1)");

@@ -7,7 +7,8 @@ public interface FileHelperInt {
 
 
     /**
-     * Truncate file
+     * Delete all data from file
+     * <p>create file if not exist</p>
      *
      * @param filePath file path/name in test resources
      */
@@ -15,13 +16,15 @@ public interface FileHelperInt {
 
     /**
      * Delete file
+     * <p>not cause error if ile not exist, only WARN</p>
      *
      * @param filePath file path/name in test resources
      */
     void deleteFile(String filePath);
 
     /**
-     * Add text to file
+     * Add text to end of file
+     * <p>create file if not exist</p>
      *
      * @param filePath file path/name in test resources
      * @param message  text to add
@@ -29,7 +32,7 @@ public interface FileHelperInt {
     void addToFile(String filePath, String message);
 
     /**
-     * create file in test resources with specified size (dummy data)
+     * Create file with specified size (dummy data)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath file path/name in test resources
@@ -40,7 +43,7 @@ public interface FileHelperInt {
     //get data
 
     /**
-     * Get file size in bytes
+     * Return file size in bytes
      *
      * @param filePath file path/name in test resources
      * @return long with bytes
@@ -56,7 +59,7 @@ public interface FileHelperInt {
     void showDataFromFile(String filePath);
 
     /**
-     * Get expected text count from file
+     * Return how many times the text occurs in the file
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath     file path and name in test resources
@@ -68,7 +71,7 @@ public interface FileHelperInt {
     //asserts
 
     /**
-     * Assert size of file in test resources exactly as expected
+     * Assert size of file exactly as expected
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
@@ -78,7 +81,7 @@ public interface FileHelperInt {
     void seeFileSizeExactly(String filePath, long expectedSize);
 
     /**
-     * Assert size of file in test resources greater than minSize
+     * Assert size of file greater than minSize
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
@@ -88,7 +91,7 @@ public interface FileHelperInt {
     void seeFileSizeGreaterThan(String filePath, long minSize);
 
     /**
-     * Assert size of file in test resources less than maxSize
+     * Assert size of file less than maxSize
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
@@ -109,7 +112,7 @@ public interface FileHelperInt {
     void seeFileContainsRegex(String filePath, String expectedText);
 
     /**
-     * Assert that file contains expected text(exactly - not regex)
+     * Assert that file contains expected text(not regex)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      * <p><b>with await</b>
      *
@@ -120,7 +123,7 @@ public interface FileHelperInt {
     void seeFileContainString(String filePath, String expectedText);
 
     /**
-     * Assert that file not contains expected text(exactly)
+     * Assert that file not contains text(not regex)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath       file path/name in test resources
@@ -175,6 +178,15 @@ public interface FileHelperInt {
      * @throws IllegalArgumentException on invalid setup
      */
     FileHelper setAwaitMs(int awaitMs);
+
+    /**
+     * Set max file size for some methods
+     *
+     * @param maxFileSize size in bytes
+     * @return this
+     * @throws IllegalArgumentException on invalid value (less 200)
+     */
+    FileHelper setMaxFileSize(long maxFileSize);
 
     /**
      * Returns and logs (at INFO level) a human-readable summary of all resolved

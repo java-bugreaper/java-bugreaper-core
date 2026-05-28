@@ -70,7 +70,7 @@ public interface AssertableListAsserts {
 
     /**
      * Assert that at least one element contains Json without strict array ordering
-     * <p> extensible fields will be skipped
+     * <p> extensible fields will be skipped, <b>But extensible elements in array cause AssertionError</b>
      *
      * @param filePath path to file in resources with expected part of JSON  (arrays can be not ordered)
      * @return this instance for method chaining
@@ -81,7 +81,7 @@ public interface AssertableListAsserts {
 
     /**
      * Assert that at least one element equal to Json with strict array ordering
-     * <p> extensible fields not expected
+     * <p> extensible fields and extensible elements in array not expected
      *
      * @param expectedJson expected full JSON with strict ordered arrays
      * @return this instance for method chaining
