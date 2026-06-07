@@ -275,8 +275,8 @@ public class JsonAsserts extends JsonAssertsAbstract{
      *   "user": {
      *     "name:like": "%lex%",
      *     "age:>=": 18,
-     *     "roles:containsAll": ["ADMIN"],
-     *     "tags:distinct": [true]
+     *     "roles:size": 2,
+     *     "tags:distinct": true
      *   }
      * }
      * """, actualJson);

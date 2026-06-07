@@ -20,7 +20,7 @@ public class DataGenerator {
     /**
      * Generates a random int with exactly `count` digits.
      * First digit is never 0.
-     * Maximum count for long is 9 digits.
+     * Maximum count for int is 9 digits.
      *
      * @param count number of digits (1-9)
      * @return random int

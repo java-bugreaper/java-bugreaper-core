@@ -77,11 +77,12 @@ public class DateTimeGenerator extends DateTimeGeneratorAbstract {
      *
      * <p>Examples</p>
      * <pre>{@code
+     * generateDateTime(""); // now
      * generateDateTime("-1y");
      * generateDateTime("+2M10d");
      * generateDateTime("-1y2M4d5H1m12s");
      * generateDateTime("-5H+10m");
-     * generateDateTime("+1y2M3d 10H:11m:10s"));
+     * generateDateTime("+1y2M3d 10H:11m:10s");
      * }</pre>
      *
      * <p>Separators such as ':' are ignored. Missing units are treated as zero.</p>
