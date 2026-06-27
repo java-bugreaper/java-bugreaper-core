@@ -1,6 +1,7 @@
 package net.bugreaper.modules.filehelper;
 
 import net.bugreaper.core.config.YamlUtils;
+import net.bugreaper.core.exceptions.ConfigException;
 import net.bugreaper.core.exceptions.FileReaderException;
 import net.bugreaper.modules.filehelper.interfaces.FileHelperInt;
 import io.qameta.allure.Allure;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Class consists methods that operate with files in <b>src/test/resources</b>
  *
- * <p>Run with config options: {@code FileHelper file = new FileHelper();}</p>
+ * <p>For one instance run recommended: {@code FileHelper fh = FileHelper.getInstance();}</p>
  *
  *
  * <p> Await for some asserts default: {@link #awaitMs}, can be changed by: {@link #setAwaitMs(int)} or config
@@ -38,6 +39,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SuppressWarnings("squid:S5960")
 public class FileHelper implements FileHelperInt {
+
+    private static FileHelper instance;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
 
@@ -52,6 +55,20 @@ public class FileHelper implements FileHelperInt {
      */
     private long maxFileSize = 1_024L*1024; // 1MB
 
+    /**
+     * Returns the instance of {@link FileHelper} with config builder {@link #FileHelper()}.
+     * <p>
+     * This implementation is thread-safe using method-level synchronization.
+     *
+     * @return the singleton instance of {@link FileHelper}
+     */
+    public static synchronized FileHelper getInstance() {
+        if (instance == null) {
+            instance = new FileHelper();
+        }
+
+        return instance;
+    }
 
     /**
      * Constructs a FileHelper client configuration.
@@ -61,11 +78,12 @@ public class FileHelper implements FileHelperInt {
      * <p><b>Default file:</b> {@code bugreaper.yml}</p>
      * <p><b>Custom file:</b> using {@code -DbugreaperEnv=test} loads {@code bugreaper-test.yml}</p>
      *
-     * <p><b>Optional configuration keys:</b></p>
-     * <ul>
-     *     <li>{@code modules.file-helper.await}</li>
-     *     <li>{@code modules.file-helper.maxFileSize}</li>
-     * </ul>
+     * <pre>
+     * modules:
+     *   file-helper:
+     *     await: 500   # optional
+     *     maxFileSize: 2048  # optional
+     * </pre>
      *
      * <p>Missing optional keys will fall back to predefined defaults.</p>
      */
@@ -75,14 +93,18 @@ public class FileHelper implements FileHelperInt {
 
     private void loadFromYaml() {
 
-        //optional config fields
-        Object awaitVal = YamlUtils.getValueByPath("modules.file-helper.await", true);
-        if (awaitVal instanceof Number number) {
-            setAwaitMs(number.intValue());
-        }
-        Object fileSizeVal = YamlUtils.getValueByPath("modules.file-helper.maxFileSize", true);
-        if (fileSizeVal instanceof Number size) {
-            setMaxFileSize(size.longValue());
+        try {
+            //optional config fields
+            Object awaitVal = YamlUtils.getValueByPath("modules.file-helper.await", true);
+            if (awaitVal instanceof Number number) {
+                setAwaitMs(number.intValue());
+            }
+            Object fileSizeVal = YamlUtils.getValueByPath("modules.file-helper.maxFileSize", true);
+            if (fileSizeVal instanceof Number size) {
+                setMaxFileSize(size.longValue());
+            }
+        } catch (ConfigException e){
+            LOGGER.warn("Config file error, but {} is not expected required keys: {}", this.getClass().getSimpleName(), e.getMessage());
         }
 
     }
@@ -100,7 +122,7 @@ public class FileHelper implements FileHelperInt {
 
     @Override
     public FileHelper setMaxFileSize(long maxFileSize) {
-        if (awaitMs < 1) {
+        if (maxFileSize < 1) {
             throw new IllegalArgumentException("maxFileSize too small (can`t bee less 1)");
         }
         this.maxFileSize = maxFileSize;

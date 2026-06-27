@@ -138,8 +138,8 @@ public final class ListAsserts {
 
     private static void assertionMessage(StringBuilder trace, String expectedObject, List<String> actualList, String modifier){
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Actual list {}:\n{}", actualList.size(), listToString(actualList));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Actual list {}:\n{}", actualList.size(), listToString(actualList));
         }
 
         throw new AssertionFailedError(

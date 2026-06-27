@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -36,6 +37,40 @@ public class AllureResultLoader {
                     .orElseThrow();
         } catch (Exception e) {
             throw new AllureValidatorException(e);
+        }
+    }
+
+    /**
+     * Removes all files from the Allure results directory.
+     * If the directory does not exist, it will be created.
+     */
+    public static void cleanResultsDir() {
+        File dir = resultsDir();
+
+        try {
+            if (dir.exists()) {
+                try (var paths = Files.walk(dir.toPath())) {
+                    paths.sorted(Comparator.reverseOrder())
+                            .filter(path -> !path.equals(dir.toPath()))
+                            .forEach(path -> {
+                                try {
+                                    Files.delete(path);
+                                } catch (IOException e) {
+                                    throw new AllureValidatorException(
+                                            "Failed to delete: " + path, e);
+                                }
+                            });
+                }
+            }
+
+            Files.createDirectories(dir.toPath());
+
+        } catch (IOException e) {
+            throw new AllureValidatorException(
+                    "Failed to clean Allure results directory: "
+                            + dir.getAbsolutePath(),
+                    e
+            );
         }
     }
 

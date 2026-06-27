@@ -29,7 +29,7 @@ class LogHelperConfigTests {
 
     @Test
     void testLogMessageAddAndCountByConfig() {
-        LogHelper logs = new LogHelper();
+        LogHelper logs = LogHelper.getInstance();
 
         logs.cleanLogs();
         logs.addToLogs(MESSAGE);

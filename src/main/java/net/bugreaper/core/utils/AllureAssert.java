@@ -1,4 +1,5 @@
 package net.bugreaper.core.utils;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import net.bugreaper.core.exceptions.AllureValidatorException;
 
@@ -23,6 +24,14 @@ public class AllureAssert {
 
     // STEP
 
+    /**
+     * Check allure @Step()
+     *
+     * @param stepName String with step name
+     * @throws AssertionError if step not found
+     *
+     * @return AllureAssert for chain (next sub-Steps and attachments will be checked for THIS step)
+     */
     public AllureAssert hasStep(String stepName) {
         JsonNode step = findStep(root.get(STEPS), stepName);
 
@@ -35,16 +44,24 @@ public class AllureAssert {
         return this;
     }
 
-    public AllureAssert hasSubStep(String stepName) {
+    /**
+     * Check allure sub @Step()
+     *
+     * @param subStepName String with sub-step name
+     * @throws AssertionError if sub-step not found
+     *
+     * @return AllureAssert for chain (next sub-Steps and attachments will be checked for THIS sub-step)
+     */
+    public AllureAssert hasSubStep(String subStepName) {
 
         assertNotNull(currentStep,
                 "No current step selected. Call hasStep() first.");
 
-        JsonNode step = findStep(currentStep.get(STEPS), stepName);
+        JsonNode step = findStep(currentStep.get(STEPS), subStepName);
 
         assertNotNull(
                 step,
-                "Sub-step not found: '" + stepName + "'\nAvailable sub-steps:\n"
+                "Sub-step not found: '" + subStepName + "'\nAvailable sub-steps:\n"
                         + getSubStepsTree(currentStep)
         );
 
@@ -52,8 +69,41 @@ public class AllureAssert {
         return this;
     }
 
+    /**
+     * Check allure sub @Step()
+     *
+     * @param subStepName String with sub-step name
+     * @throws AssertionError if sub-step not found
+     *
+     * @return AllureAssert for chain (next sub-Steps and attachments will be checked for PARENT step or sub-step)
+     */
+    public AllureAssert hasSubStepLeft(String subStepName) {
+
+        assertNotNull(currentStep,
+                "No current step selected. Call hasStep() first.");
+
+        JsonNode step = findStep(currentStep.get(STEPS), subStepName);
+
+        assertNotNull(
+                step,
+                "Sub-step not found: '" + subStepName + "'\nAvailable sub-steps:\n"
+                        + getSubStepsTree(currentStep)
+        );
+
+        return this;
+    }
+
     // ATTACHMENT
 
+
+    /**
+     * Check allure attachment name
+     *
+     * @param attachmentName String with attachment name
+     * @throws AssertionError if attachment not found
+     *
+     * @return AllureAssert for chain
+     */
     public AllureAssert hasAttachment(String attachmentName) {
         assertNotNull(currentStep, "No current step selected.");
 
@@ -75,7 +125,16 @@ public class AllureAssert {
         return this;
     }
 
-    public AllureAssert hasAttachment(String name, String expectedContent) {
+    /**
+     * Check allure attachment name and content
+     *
+     * @param attachmentName String with attachment name
+     * @param expectedContent String with expected content
+     * @throws AssertionError if attachment not found or content mismatch
+     *
+     * @return AllureAssert for chain
+     */
+    public AllureAssert hasAttachment(String attachmentName, String expectedContent) {
         assertNotNull(currentStep, "No current step selected.");
 
         JsonNode attachments = currentStep.get("attachments");
@@ -85,20 +144,20 @@ public class AllureAssert {
 
             String attName = att.get("name").asText();
 
-            if (name.equals(attName)) {
+            if (attachmentName.equals(attName)) {
 
                 String source = att.get("source").asText();
 
                 String actualContent = readAttachment(source);
 
                 assertEquals(expectedContent, actualContent,
-                        "Attachment content mismatch for: " + name);
+                        "Attachment content mismatch for: " + attachmentName);
 
                 return this;
             }
         }
 
-        fail("Attachment not found: " + name);
+        fail("Attachment not found: " + attachmentName);
         return this;
     }
 
