@@ -12,14 +12,14 @@
     <url>https://www.bugreaper.net/</url>
 
     <packaging>jar</packaging>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
 
 
     <developers>
         <developer>
             <id>ambu550</id>
             <name>Oleksii Betin</name>
-            <email>ambulance003@ukr.net</email>
+            <email>javabugreaper@gmail.com</email>
             <url>https://www.linkedin.com/in/ambu550/</url>
 
             <roles>
@@ -56,8 +56,8 @@
 
         <java.version>17</java.version>
 
-        <junitVersion>5.12.1</junitVersion>
-        <junitLauncherVersion>1.12.2</junitLauncherVersion>
+        <junitVersion>6.1.0</junitVersion>
+        <junitLauncherVersion>6.1.0</junitLauncherVersion>
         <hamcrest>3.0</hamcrest>
         <aspectj>1.9.22.1</aspectj>
 
@@ -65,8 +65,8 @@
         <awaitility>4.3.0</awaitility>
         <snakeyaml>2.2</snakeyaml>
 
-        <apache.commons-text>1.13.0</apache.commons-text>
-        <jackson-databind>2.18.3</jackson-databind>
+        <apache.commons-text>1.15.0</apache.commons-text>
+        <jackson-databind>2.21.4</jackson-databind>
 
         <jsonassert>1.5.1</jsonassert>
         <jsonobject>20250517</jsonobject>
@@ -74,7 +74,7 @@
         <schema-validator>1.0.76</schema-validator>
         <!--        1.5.9-->
 
-        <logback>1.5.18</logback>
+        <logback>1.5.36</logback>
 
         <maven-surefire-plugin>3.0.0</maven-surefire-plugin>
         <jacoco-maven-plugin>0.8.11</jacoco-maven-plugin>

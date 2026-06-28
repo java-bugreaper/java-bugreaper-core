@@ -5,8 +5,10 @@ import net.bugreaper.core.utils.AllureAssert;
 import net.bugreaper.core.utils.AllureResultLoader;
 import net.bugreaper.modules.filehelper.LogHelper;
 import org.hamcrest.core.StringContains;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static net.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("java:S2699")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LogHelperExtendTest extends LogHelper {
 
     public static final String LOG_FILE = "logs/test/test.log";

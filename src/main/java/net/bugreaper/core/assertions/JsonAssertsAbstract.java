@@ -157,13 +157,9 @@ public abstract class JsonAssertsAbstract {
             return;
         }
 
-        Iterator<Map.Entry<String, JsonNode>> fields = expected.fields();
+        for (Map.Entry<String, JsonNode> field : expected.properties()) {
 
-        while (fields.hasNext()) {
-
-            Map.Entry<String, JsonNode> entry = fields.next();
-
-            handleField(path, actual, entry, errors);
+            handleField(path, actual, field, errors);
         }
     }
 

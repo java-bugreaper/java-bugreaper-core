@@ -6,6 +6,7 @@ import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogHelperTest {
@@ -40,6 +41,40 @@ class LogHelperTest {
                 "Logs not found message",
                 exception.getMessage(),
                 stringContainsInOrder("Failed to read file:", "/src/test/resources/logs/test/wrong.log"));
+    }
+
+    @Test
+    void configLogHelperAwaitMsTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                logReaderV2.setAwaitMs(50));
+
+        assertEquals(
+                "awaitMs too small (can`t bee less 200ms)",
+                exception.getMessage(),
+                "Error on config .setAwaitMs validation");
+    }
+
+    @Test
+    void configLogHelperLogfileEmptyTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                logReaderV2.setLogfile(""));
+
+        assertEquals(
+                "logfile can`t bee empty or null",
+                exception.getMessage());
+    }
+
+    @Test
+    void configLogHelperLogfileNullTest() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                logReaderV2.setLogfile(null));
+
+        assertEquals(
+                "logfile can`t bee empty or null",
+                exception.getMessage());
     }
 
 }

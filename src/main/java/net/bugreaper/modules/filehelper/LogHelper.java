@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Class consists methods that operate with LOG files in <b>src/test/resources</b> (can be mounted from service)
  *
- * <p>Run with config options: {@code LogHelper file = new LogHelper();}</p>
+ * <p>For one instance run recommended: {@code LogHelper lh = LogHelper.getInstance();}</p>
  *
  *
  * <p> Await for some asserts default: {@link #awaitMs}, can be changed by: {@link #setAwaitMs(int)}
@@ -31,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SuppressWarnings("squid:S5960")
 public class LogHelper implements LogHelperInt {
+
+    private static LogHelper instance;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogHelper.class);
 
@@ -53,6 +55,21 @@ public class LogHelper implements LogHelperInt {
     }
 
     /**
+     * Returns the instance of {@link LogHelper} with config builder {@link #LogHelper()}.
+     * <p>
+     * This implementation is thread-safe using method-level synchronization.
+     *
+     * @return the singleton instance of {@link LogHelper}
+     */
+    public static synchronized LogHelper getInstance() {
+        if (instance == null) {
+            instance = new LogHelper();
+        }
+
+        return instance;
+    }
+
+    /**
      * Constructs a FileHelper client configuration.
      *
      * <p>Loads configuration values from a YAML file.</p>
@@ -60,15 +77,12 @@ public class LogHelper implements LogHelperInt {
      * <p><b>Default file:</b> {@code bugreaper.yml}</p>
      * <p><b>Custom file:</b> using {@code -DbugreaperEnv=test} loads {@code bugreaper-test.yml}</p>
      *
-     * <p><b>Required configuration keys:</b></p>
-     * <ul>
-     *     <li>{@code modules.log-helper.logfile} pth to file in src/test/resources</li>
-     * </ul>
-     *
-     * <p><b>Optional configuration keys:</b></p>
-     * <ul>
-     *     <li>{@code modules.log-helper.await}</li>
-     * </ul>
+     * <pre>
+     * modules:
+     *   log-helper:
+     *     logfile: 'logs/byyml/config.log'
+     *     await: 500   # optional
+     * </pre>
      *
      * <p>Missing required keys will result in configuration errors.
      * Missing optional keys will fall back to predefined defaults.</p>
