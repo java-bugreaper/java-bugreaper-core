@@ -18,7 +18,7 @@ Contains packages and wrapped methods for testing with pre-prepared steps and at
 
     JAVA >= 17
     Allure server >= 2.15 (only if push reports)
-    IntelliJ IDEA >= 2025.x (For run tests from IDE UI)
+    IntelliJ IDEA >= 2025.x (for run tests from IDE UI)
 
 ### Logging:
 
