@@ -47,13 +47,13 @@ public class FileHelper implements FileHelperInt {
     /**
      * default ms await in tests
      */
-    private int awaitMs = 2000;
+    private volatile int awaitMs = 2000;
 
     /**
      * default max file size in bytes for:
      * <p>{@link #createFileWithSize}, {@link #showDataFromFile}
      */
-    private long maxFileSize = 1_024L*1024; // 1MB
+    private volatile long maxFileSize = 1_024L*1024; // 1MB
 
     /**
      * Returns the instance of {@link FileHelper} with config builder {@link #FileHelper()}.
@@ -61,6 +61,7 @@ public class FileHelper implements FileHelperInt {
      * This implementation is thread-safe using method-level synchronization.
      *
      * @return the singleton instance of {@link FileHelper}
+     * @see #FileHelper() config setup
      */
     public static synchronized FileHelper getInstance() {
         if (instance == null) {

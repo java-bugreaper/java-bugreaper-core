@@ -39,8 +39,8 @@ public class LogHelper implements LogHelperInt {
     /**
      * default ms await in tests
      */
-    private int awaitMs = 2000;
-    private String logFilePath = "default/server.log";
+    private volatile int awaitMs = 2000;
+    private volatile String logFilePath = "default/server.log";
 
 
     /**
@@ -60,6 +60,7 @@ public class LogHelper implements LogHelperInt {
      * This implementation is thread-safe using method-level synchronization.
      *
      * @return the singleton instance of {@link LogHelper}
+     * @see #LogHelper() config setup
      */
     public static synchronized LogHelper getInstance() {
         if (instance == null) {
