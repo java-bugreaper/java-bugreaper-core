@@ -5,7 +5,6 @@ import net.bugreaper.core.exceptions.FileReaderException;
 import net.bugreaper.core.utils.LogWatcher;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import java.text.MessageFormat;
 
@@ -188,7 +187,7 @@ class ResourcesFilesReaderTests {
 
         createResourceFileWithSize(fileName, 0);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 seeResourceFileNotEmpty(fileName));
 
         assertEquals(
@@ -201,7 +200,7 @@ class ResourcesFilesReaderTests {
     void testSeeResourceFileExists() {
         String fileName = "temp/not_exist_file.txt";
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 seeResourceFileExists(fileName));
 
         assertEquals(
@@ -214,7 +213,7 @@ class ResourcesFilesReaderTests {
     void testSeeResourceFileNotExists() {
         String fileName = "files/test1.json";
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 seeResourceFileNotExists(fileName));
 
         assertEquals(
@@ -230,7 +229,7 @@ class ResourcesFilesReaderTests {
 
         createResourceFileWithSize(fileName, 0);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 seeResourceFileNotEmpty(fileName));
 
         assertEquals(

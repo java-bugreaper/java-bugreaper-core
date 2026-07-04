@@ -250,8 +250,8 @@ class AssertableListTests {
 
         AllureAssert.assertThat(result)
                 .hasStep("Create list")
-                .hasStep("(Assert) List should have element with JSON type")
-                .hasStep("(Assert) List have JSON CONTAINS part:")
+                .hasStep("↑(Assert) List should have element with JSON type")
+                .hasStep("↑(Assert) List have JSON CONTAINS part:")
                 .hasAttachment("testdata/json/json_contains.json", """
                         {
                           "name": "Alex",
@@ -260,9 +260,9 @@ class AssertableListTests {
                             {"id": 1}
                           ]
                         }""")
-                .hasStep("(Assert) List should have JSON MATCH SCHEMA")
+                .hasStep("↑(Assert) List should have JSON MATCH SCHEMA")
                 .hasAttachment("testdata/json/schema_1.json")
-                .hasStep("(Assert) List should have JSON EQUAL to:");
+                .hasStep("↑(Assert) List should have JSON EQUAL to:");
 
     }
 

@@ -3,7 +3,6 @@ package net.bugreaper.core.assertions;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import java.util.ArrayList;
 
@@ -62,7 +61,7 @@ class JsonSchemaAssertsReturnExceptionsTests {
 
         actualList.add(actual);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 jsonSchemaCheckInList(jsonValidation, actualList));
 
         MatcherAssert.assertThat(
@@ -86,7 +85,7 @@ class JsonSchemaAssertsReturnExceptionsTests {
         actualList.add(actual);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 jsonSchemaCheckInList(jsonValidation, actualList));
 
         MatcherAssert.assertThat(
@@ -114,7 +113,7 @@ class JsonSchemaAssertsReturnExceptionsTests {
         actualList.add(actual);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 jsonSchemaCheckInList(jsonValidation, actualList));
 
         MatcherAssert.assertThat(
@@ -139,7 +138,7 @@ class JsonSchemaAssertsReturnExceptionsTests {
 
         actualList.add(actual);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 isJsonTypeInList(actualList));
 
         MatcherAssert.assertThat(

@@ -8,6 +8,8 @@ import io.qameta.allure.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.bugreaper.core.filereaders.FileReader.readTextFromFile;
@@ -87,6 +89,52 @@ public class AllureReporter {
      */
     public static void attachFromCsv(String name, String filePath) {
         AllureBuilder.reportHtmlCsvCases(name, FileReader.readCsvToArray(filePath));
+    }
+
+    public static void attachObject(String attachName, Object value) {
+
+        String type = "";
+        String attach;
+
+        if (value == null) {
+            attach = "null";
+        }
+        else if (value instanceof String string) {
+            type = " type=String";
+            attach = string;
+        }
+        else if (value instanceof ArrayList<?> array) {
+            type = " type=Array";
+            attach = String.valueOf(array);
+        }
+        else if (value instanceof Boolean bool) {
+            type = " type=Boolean";
+            attach =  (Boolean.TRUE.equals(bool)) ? "true" : "false";
+        }
+        else if (value instanceof Integer) {
+            type = " type=Integer";
+            attach =  value.toString();
+
+        }
+        else if (value instanceof Long) {
+            type = " type=Long";
+            attach = value.toString();
+        }
+        else if (value instanceof Float) {
+            type = " type=Float";
+            attach = String.valueOf(value);
+        }
+        else {
+            type = " type=Other";
+            attach = String.valueOf(value);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Data <{}>{}: {}", attachName, type, attach);
+        }
+
+        Allure.addAttachment(MessageFormat.format("{0}{1}:", attachName, type),
+                TYPE_JSON, attach);
     }
 
 }

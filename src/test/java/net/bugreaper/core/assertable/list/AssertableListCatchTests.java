@@ -5,7 +5,6 @@ import net.bugreaper.core.assertable.AssertableStringList;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ class AssertableListCatchTests {
         var listForTest = new AssertableStringList(actualList);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyContainsJson("""
                   {
@@ -60,7 +59,7 @@ class AssertableListCatchTests {
         var listForTest = new AssertableStringList(actualList);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyContainsExtendedJson("""
                   {
@@ -91,7 +90,7 @@ class AssertableListCatchTests {
         actualList.add(json);
         var listForTest = new AssertableStringList(actualList);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyEqualsJson("""
                   {
@@ -114,7 +113,7 @@ class AssertableListCatchTests {
         var listForTest = new AssertableStringList(actualList);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, listForTest::seeListAnyJsonType);
+        Throwable exception = assertThrows(AssertionError.class, listForTest::seeListAnyJsonType);
 
         MatcherAssert.assertThat(
                 "Exception on failed validation JSON type",
@@ -131,7 +130,7 @@ class AssertableListCatchTests {
         actualList.add(json);
         var listForTest = new AssertableStringList(actualList);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyJsonMatchSchema("""
                         {
@@ -171,7 +170,7 @@ class AssertableListCatchTests {
         var listForTest = new AssertableStringList(actualList);
 
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyContainsJsonSubset("""
                   {
@@ -281,7 +280,7 @@ class AssertableListCatchTests {
         actualList.add(json);
         var listForTest = new AssertableStringList(actualList);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListHasExactlyCount(1));
 
@@ -298,7 +297,7 @@ class AssertableListCatchTests {
         actualList.add("dummy");
         var listForTest = new AssertableStringList(actualList);
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 listForTest
                         .seeListAnyMatcher(startsWithIgnoringCase("SU")));
 

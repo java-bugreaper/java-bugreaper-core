@@ -213,7 +213,7 @@ public class LogHelper implements LogHelperInt {
                     assertNotEquals(0,
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
-            fail(
+            throw new AssertionError(
                     MessageFormat.format(
                             "\nFAILED: <<{0}>> expected to be present in logs within {1}",
                             expectedText, formatMilliseconds(awaitMs)));
