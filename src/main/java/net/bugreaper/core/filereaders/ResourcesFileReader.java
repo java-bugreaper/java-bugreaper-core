@@ -1,7 +1,6 @@
 package net.bugreaper.core.filereaders;
 
 import net.bugreaper.core.exceptions.FileReaderException;
-import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +12,6 @@ import java.nio.file.*;
 import java.text.MessageFormat;
 
 import static net.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestResourcesPath;
-import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -186,12 +184,12 @@ public final class ResourcesFileReader {
      * Check is file(in resources) exists
      *
      * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionFailedError on failed
+     * @throws AssertionError on failed
      */
     public static void seeResourceFileExists(String fileName) {
 
         if(!resourceFileExistsStatus(fileName)) {
-            fail(MessageFormat.format("File {0}{1} not exists", getTestResourcesPath(), fileName));
+            throw new AssertionError(MessageFormat.format("File {0}{1} not exists", getTestResourcesPath(), fileName));
         }
     }
 
@@ -199,12 +197,12 @@ public final class ResourcesFileReader {
      * Check is file(in resources) NOT exists
      *
      * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionFailedError on failed
+     * @throws AssertionError on failed
      */
     public static void seeResourceFileNotExists(String fileName) {
 
         if(resourceFileExistsStatus(fileName)) {
-            fail(MessageFormat.format("File {0}{1} exists", getTestResourcesPath(), fileName));
+            throw new AssertionError(MessageFormat.format("File {0}{1} exists", getTestResourcesPath(), fileName));
         }
     }
 
@@ -212,12 +210,12 @@ public final class ResourcesFileReader {
      * Check is file(in resources) NOT empty
      *
      * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionFailedError on failed
+     * @throws AssertionError on failed
      */
     public static void seeResourceFileNotEmpty(String fileName) {
 
         if(getResourceFileSize(fileName) == 0) {
-            fail(MessageFormat.format("File {0}{1} is empty", getTestResourcesPath(), fileName));
+            throw new AssertionError(MessageFormat.format("File {0}{1} is empty", getTestResourcesPath(), fileName));
         }
     }
 }

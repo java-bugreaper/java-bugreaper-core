@@ -2,15 +2,12 @@ package net.bugreaper.core.utils;
 
 import net.bugreaper.core.exceptions.AllureValidatorException;
 import io.qameta.allure.Step;
-import org.opentest4j.AssertionFailedError;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 
 @SuppressWarnings("squid:S5960")
@@ -25,7 +22,7 @@ public class AllureStepsValidator {
      *
      * @param className String with full class name example: "net.bugreaper.modules.minio.Minio"
      * @throws AllureValidatorException if Class not fount
-     * @throws AssertionFailedError     if step parameters not same as in method
+     * @throws AssertionError     if step parameters not same as in method
      */
     public static void validateAllSteps(String className) {
         Class<?> clazz;
@@ -64,14 +61,14 @@ public class AllureStepsValidator {
 
         for (String placeholder : placeholders) {
             if (placeholder.isEmpty()) {
-                fail(String.format("""
+                throw new AssertionError(String.format("""
                                         Method %s
                                         in class %s
                                         has @Step placeholder {} with no name. All placeholders must have a valid parameter name.""",
                         method.getName(), clazz.getName()));
             } else if (!paramNames.contains(placeholder)) {
 
-                fail(String.format("""
+                throw new AssertionError(String.format("""
                                         Method %s
                                         in class %s
                                         has @Step placeholder {"%s"} which does not match any method parameter:%s""",

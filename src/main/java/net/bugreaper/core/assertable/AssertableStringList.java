@@ -20,7 +20,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have STRING CONTAINS: <{expectedSubString}>")
+    @Step("↑(Assert) List should have STRING CONTAINS: <{expectedSubString}>")
     public AssertableStringList seeListAnyContains(String expectedSubString) {
 
         ListAsserts.containsStringInList(expectedSubString, arrayList);
@@ -29,7 +29,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have STRING EQUAL to: <{expectedString}>")
+    @Step("↑(Assert) List should have STRING EQUAL to: <{expectedString}>")
     public AssertableStringList seeListAnyEquals(String expectedString) {
 
         ListAsserts.equalsStringInList(expectedString, arrayList);
@@ -38,7 +38,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have STRING match to <{matcher}>")
+    @Step("↑(Assert) List should have STRING match to <{matcher}>")
     public AssertableStringList seeListAnyMatcher(Matcher<String> matcher) {
 
         ListAsserts.customStringMatcherInList(matcher, arrayList);
@@ -47,7 +47,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List have JSON CONTAINS part(ignoring extensive array elements):")
+    @Step("↑(Assert) List have JSON CONTAINS part(ignoring extensive array elements):")
     public AssertableStringList seeListAnyContainsJsonSubset(String expectedJsonPart) {
 
         AllureReporter.attachJson("expected json part",  expectedJsonPart);
@@ -57,7 +57,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List have JSON CONTAINS part:")
+    @Step("↑(Assert) List have JSON CONTAINS part:")
     public AssertableStringList seeListAnyContainsJson(String expectedJsonPart) {
 
         AllureReporter.attachJson("expected json part",  expectedJsonPart);
@@ -67,7 +67,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List have JSON CONTAINS (EXTENDED) part:")
+    @Step("↑(Assert) List have JSON CONTAINS (EXTENDED) part:")
     public AssertableStringList seeListAnyContainsExtendedJson(String expectedJsonPart) {
 
         AllureReporter.attachJson("expected json with options",  expectedJsonPart);
@@ -77,7 +77,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have JSON EQUAL to:")
+    @Step("↑(Assert) List should have JSON EQUAL to:")
     public AssertableStringList seeListAnyEqualsJson(String expectedJson) {
 
         AllureReporter.attachJson("expected json", expectedJson);
@@ -87,7 +87,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List have JSON CONTAINS part:")
+    @Step("↑(Assert) List have JSON CONTAINS part:")
     public AssertableStringList seeListAnyContainsJson(Path filePath) {
         String path = String.valueOf(filePath);
 
@@ -98,7 +98,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have JSON EQUAL to:")
+    @Step("↑(Assert) List should have JSON EQUAL to:")
     public AssertableStringList seeListAnyEqualsJson(Path filePath) {
         String path = String.valueOf(filePath);
 
@@ -109,7 +109,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have JSON MATCH SCHEMA")
+    @Step("↑(Assert) List should have JSON MATCH SCHEMA")
     public AssertableStringList seeListAnyJsonMatchSchema(String expectedSchema) {
 
         AllureReporter.attachJson("expected json", expectedSchema);
@@ -119,7 +119,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have JSON MATCH SCHEMA")
+    @Step("↑(Assert) List should have JSON MATCH SCHEMA")
     public AssertableStringList seeListAnyJsonMatchSchema(Path filePath) {
         String path = String.valueOf(filePath);
 
@@ -130,21 +130,21 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have count EQUAL to: <{cnt}>")
+    @Step("↑(Assert) List should have count EQUAL to: <{cnt}>")
     public AssertableStringList seeListHasExactlyCount(int cnt) {
         ListAsserts.assertCountElementsInList(cnt, arrayList);
 
         return this;
     }
 
-    @Step("(Assert) List size greater: <{minSize}>")
+    @Step("↑(Assert) List size greater: <{minSize}>")
     public AssertableStringList seeListSizeIsGreaterThan(int minSize) {
         ListAsserts.assertListSizeGreaterThan(minSize, arrayList);
 
         return this;
     }
 
-    @Step("(Assert) List size less: <{maxSize}>")
+    @Step("↑(Assert) List size less: <{maxSize}>")
     public AssertableStringList seeListSizeIsLessThan(int maxSize) {
         ListAsserts.assertListSizeLessThan(maxSize, arrayList);
 
@@ -152,7 +152,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Assert) List should have element with JSON type")
+    @Step("↑(Assert) List should have element with JSON type")
     public AssertableStringList seeListAnyJsonType() {
 
         ListAsserts.isJsonTypeInList(arrayList);
@@ -161,7 +161,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
 
 
     @Override
-    @Step("(Grab) Last element from list")
+    @Step("↑(Grab) Last element from list")
     public String grabLastElement() {
 
         if (arrayList.isEmpty()){
@@ -176,7 +176,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     }
 
     @Override
-    @Step("(Grab) Like list")
+    @Step("↑(Grab) Like list")
     public List<String> grabLikeList() {
         return arrayList;
     }

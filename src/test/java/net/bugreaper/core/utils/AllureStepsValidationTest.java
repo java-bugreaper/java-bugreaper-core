@@ -4,7 +4,6 @@ import net.bugreaper.core.exceptions.AllureValidatorException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import static net.bugreaper.core.utils.AllureStepsValidator.validateAllSteps;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,7 +14,7 @@ class AllureStepsValidationTest {
     @Test
     void testStepsAbsentEnvCatch() {
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 validateAllSteps("net.bugreaper.core.TestStepNoEnv"));
 
         MatcherAssert.assertThat(
@@ -30,7 +29,7 @@ class AllureStepsValidationTest {
     @Test
     void testStepsWrongEnvCatch() {
 
-        Throwable exception = assertThrows(AssertionFailedError.class, () ->
+        Throwable exception = assertThrows(AssertionError.class, () ->
                 validateAllSteps("net.bugreaper.core.TestStepWrongEnv"));
 
         MatcherAssert.assertThat(

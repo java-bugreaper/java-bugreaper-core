@@ -162,7 +162,7 @@ class AllureUtilsTests {
         AllureAssert.assertThat(result)
                 .hasStep("Step1");
 
-        var test1 =AllureAssert.assertThat(result);
+        var test1 = AllureAssert.assertThat(result);
         Throwable exception = assertThrows(AssertionError.class, () ->
                 test1.hasStep("Step2"));
 

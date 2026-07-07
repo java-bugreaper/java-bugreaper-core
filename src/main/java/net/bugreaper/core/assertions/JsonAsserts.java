@@ -17,8 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 public class JsonAsserts extends JsonAssertsAbstract{
 
@@ -50,7 +48,7 @@ public class JsonAsserts extends JsonAssertsAbstract{
         compareJson(expected, actual, "", errors);
 
         if (!errors.isEmpty()) {
-            fail(formatErrors(errors));
+            throw new AssertionError(formatErrors(errors));
         }
     }
 
@@ -108,7 +106,7 @@ public class JsonAsserts extends JsonAssertsAbstract{
         try {
             assertJsonNotMethod(unexpectedPart, actualJson, false);
         }catch (AssertionError e) {
-            fail("Actual Json contains unexpected Json part:\n" + unexpectedPart);
+            throw new AssertionError("Actual Json contains unexpected Json part:\n" + unexpectedPart);
         }
     }
 
@@ -316,7 +314,7 @@ public class JsonAsserts extends JsonAssertsAbstract{
             }
 
         } catch (AssertionError e) {
-            fail(e.getMessage());
+            throw new AssertionError(e.getMessage());
         } catch (JsonAssertExtendedException e) {
             throw new JsonMappersException("Invalid extend setup: " + e.getMessage(), e);
         } catch (Exception e) {

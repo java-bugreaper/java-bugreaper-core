@@ -157,8 +157,7 @@ public class AllureAssert {
             }
         }
 
-        fail("Attachment not found: " + attachmentName);
-        return this;
+        throw new AssertionError("Attachment not found: " + attachmentName);
     }
 
     // INTERNAL

@@ -5,7 +5,6 @@ import com.networknt.schema.SpecVersion;
 import net.bugreaper.core.exceptions.JsonMappersException;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Assertions;
-import org.opentest4j.AssertionFailedError;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import static net.bugreaper.core.mappers.StringMappers.listToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public final class ListAsserts {
 
@@ -142,7 +140,7 @@ public final class ListAsserts {
             LOGGER.debug("Actual list {}:\n{}", actualList.size(), listToString(actualList));
         }
 
-        throw new AssertionFailedError(
+        throw new AssertionError(
                 MessageFormat.format("There is no elements in the list {0}:\n{1}\n{2}",
                         modifier, expectedObject, trace));
     }
@@ -160,8 +158,8 @@ public final class ListAsserts {
         try {
             Assertions.assertTrue(
                     actualList.size() > minSize);
-        } catch (AssertionFailedError e) {
-            fail(MessageFormat.format("List size expected to be greater <{0}> bytes but got <{1}>",
+        } catch (AssertionError e) {
+            throw new AssertionError(MessageFormat.format("List size expected to be greater <{0}> bytes but got <{1}>",
                      minSize, actualList.size()));
         }
     }
@@ -170,8 +168,8 @@ public final class ListAsserts {
         try {
             Assertions.assertTrue(
                     actualList.size() < maxSize);
-        } catch (AssertionFailedError e) {
-            fail(MessageFormat.format("List size expected to be less <{0}> bytes but got <{1}>",
+        } catch (AssertionError e) {
+            throw new AssertionError(MessageFormat.format("List size expected to be less <{0}> bytes but got <{1}>",
                     maxSize, actualList.size()));
         }
     }
@@ -199,7 +197,7 @@ public final class ListAsserts {
             try {
                 assertThat(actual, matcher);
             } catch (AssertionError e) {
-                fail(MessageFormat.format("There is not expected elements in the list:\n{0}",
+                throw new AssertionError(MessageFormat.format("There is not expected elements in the list:\n{0}",
                                 matcher));
             }
         }

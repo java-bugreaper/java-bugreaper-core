@@ -238,7 +238,7 @@ public class FileHelper implements FileHelperInt {
                     assertEquals(expectedSize, getResourceFileSize(filePath)));
         } catch (ConditionTimeoutException e) {
 
-            fail(MessageFormat.format("File <{0}> size expected to be EXACTLY <{1}> but got <{2}> within {3}",
+            throw new AssertionError(MessageFormat.format("File <{0}> size expected to be EXACTLY <{1}> but got <{2}> within {3}",
                     filePath, formatBytes(expectedSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
@@ -251,7 +251,7 @@ public class FileHelper implements FileHelperInt {
                     Assertions.assertTrue(
                             getResourceFileSize(filePath) > minSize));
         } catch (ConditionTimeoutException e) {
-            fail(MessageFormat.format("File <{0}> size expected to be GREATER <{1}> but got <{2}> within {3}",
+            throw new AssertionError(MessageFormat.format("File <{0}> size expected to be GREATER <{1}> but got <{2}> within {3}",
                     filePath, formatBytes(minSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
@@ -265,7 +265,7 @@ public class FileHelper implements FileHelperInt {
                     Assertions.assertTrue(
                             getResourceFileSize(filePath) < maxSize));
         } catch (ConditionTimeoutException e) {
-            fail(MessageFormat.format("File <{0}> size  expected to be LESS <{1}> but got <{2}> within {3}",
+            throw new AssertionError(MessageFormat.format("File <{0}> size  expected to be LESS <{1}> but got <{2}> within {3}",
                     filePath, formatBytes(maxSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
@@ -297,7 +297,7 @@ public class FileHelper implements FileHelperInt {
                     assertNotEquals(0,
                             countMatchesInFile(filePath, expectedText, regex)));
         } catch (ConditionTimeoutException e) {
-            fail(
+            throw new AssertionError(
                     MessageFormat.format(
                             "\nFAILED: <<{0}>> expected to be present in file within {1}",
                             expectedText, formatMilliseconds(awaitMs)));
