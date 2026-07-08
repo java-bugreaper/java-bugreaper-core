@@ -9,10 +9,11 @@
     <artifactId>core</artifactId>
     <name>BugReaper Core</name>
     <description>Core module for the BugReaper components</description>
-    <url>https://www.bugreaper.net/</url>
+    <url>https://bugreaper.net/</url>
 
     <packaging>jar</packaging>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
+
 
 
     <developers>
@@ -56,6 +57,8 @@
 
         <java.version>17</java.version>
 
+        <user.name>Oleksii Betin</user.name>
+
         <junitVersion>6.1.0</junitVersion>
         <junitLauncherVersion>6.1.0</junitLauncherVersion>
         <hamcrest>3.0</hamcrest>
@@ -77,6 +80,7 @@
         <logback>1.5.36</logback>
 
         <maven-surefire-plugin>3.0.0</maven-surefire-plugin>
+        <maven-resources-plugin>3.0.0</maven-resources-plugin>
         <jacoco-maven-plugin>0.8.11</jacoco-maven-plugin>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -289,6 +293,54 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>copy-license-and-notice</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                        <include>NOTICE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-URL>${scm.url}</Implementation-URL>
+                            <Bundle-License>https://apache.org</Bundle-License>
+                            <Built-By>${user.name}</Built-By>
+
+                            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                            <Bundle-License>https://apache.org</Bundle-License>
+                            <Bundle-DocURL>${project.url}</Bundle-DocURL>
+                            <Bundle-Vendor>${user.name}</Bundle-Vendor>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

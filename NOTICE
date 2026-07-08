@@ -1,0 +1,82 @@
+========================================================================
+THIRD-PARTY NOTICES AND LICENSES
+========================================================================
+
+This project is licensed under the Apache License, Version 2.0.
+The core project code is independent, but it relies on third-party
+libraries listed below. Each library retains its original copyright
+and is distributed under its own license terms.
+
+------------------------------------------------------------------------
+1. Apache License, Version 2.0 Dependencies
+------------------------------------------------------------------------
+The following components are licensed under the Apache License, Version 2.0.
+A copy of this license is available in the primary LICENSE file of this
+project or at https://apache.org
+
+* com.fasterxml.jackson.core : jackson-databind
+  Copyright (c) FasterXML, LLC. All rights reserved.
+* com.networknt : json-schema-validator
+  Copyright (c) Network New Technologies Inc. All rights reserved.
+* io.qameta.allure : allure-attachments
+  Copyright (c) Qameta Software. All rights reserved.
+* org.apache.commons : commons-text
+  Copyright (c) The Apache Software Foundation. All rights reserved.
+* org.awaitility : awaitility
+  Copyright (c) Awaitility Authors. All rights reserved.
+* org.skyscreamer : jsonassert
+  Copyright (c) SkyScreamer. All rights reserved.
+* org.yaml : snakeyaml
+  Copyright (c) SnakeYAML Authors. All rights reserved.
+
+------------------------------------------------------------------------
+2. BSD 3-Clause License Dependencies
+------------------------------------------------------------------------
+The following component is licensed under the BSD 3-Clause License.
+License text: https://opensource.org
+
+* org.hamcrest : hamcrest
+  Copyright (c) 2000-2024, Joe Walnes, Marc Williams, Nat Pryce.
+  All rights reserved.
+
+------------------------------------------------------------------------
+3. Public Domain / Unlicense Dependencies
+------------------------------------------------------------------------
+The following component has been dedicated to the public domain.
+It is free of copyright restrictions.
+
+* org.json : json
+  Originally created by Douglas Crockford.
+
+------------------------------------------------------------------------
+4. Eclipse Public License - v 2.0 Dependencies
+------------------------------------------------------------------------
+The following components are licensed under the Eclipse Public License v2.0.
+Source code for these components can be obtained from their respective
+official repositories. No modifications were made to these libraries.
+License text: https://eclipse.org
+
+* org.aspectj : aspectjweaver
+  Copyright (c) Eclipse Contributors. All rights reserved.
+* org.junit.jupiter : junit-jupiter-api
+  Copyright (c) 2015-2026 JUnit 5 Team. All rights reserved.
+* org.junit.jupiter : junit-jupiter-engine
+  Copyright (c) 2015-2026 JUnit 5 Team. All rights reserved.
+* org.junit.jupiter : junit-jupiter-params
+  Copyright (c) 2015-2026 JUnit 5 Team. All rights reserved.
+* org.junit.platform : junit-platform-launcher
+  Copyright (c) 2015-2026 JUnit 5 Team. All rights reserved.
+
+------------------------------------------------------------------------
+5. Dual-Licensed Dependencies (EPL-2.0 / LGPL-2.1)
+------------------------------------------------------------------------
+The following component is dual-licensed under both the Eclipse Public
+License v2.0 and the GNU Lesser General Public License v2.1.
+For the purposes of this project, it is utilized as an external
+dependency via dynamic linking under the terms of the Eclipse Public
+License v2.0. No modifications were made to this library.
+
+* ch.qos.logback : logback-classic
+  Copyright (c) 1999-2024, QOS.ch. All rights reserved.
+  EPL-2.0 Text: https://eclipse.org
+  LGPL-2.1 Text: https://gnu.org
