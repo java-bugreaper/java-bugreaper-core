@@ -12,7 +12,7 @@
     <url>https://bugreaper.net/</url>
 
     <packaging>jar</packaging>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
 
 
 
@@ -59,25 +59,25 @@
 
         <user.name>Oleksii Betin</user.name>
 
-        <junitVersion>6.1.0</junitVersion>
-        <junitLauncherVersion>6.1.0</junitLauncherVersion>
+        <junitVersion>6.1.1</junitVersion>
+        <junitLauncherVersion>6.1.1</junitLauncherVersion>
         <hamcrest>3.0</hamcrest>
-        <aspectj>1.9.22.1</aspectj>
+        <aspectj>1.9.25.1</aspectj>
 
-        <allureVersion>2.27.0</allureVersion>
+        <allureVersion>2.35.3</allureVersion>
         <awaitility>4.3.0</awaitility>
-        <snakeyaml>2.2</snakeyaml>
+        <snakeyaml>2.6</snakeyaml>
 
         <apache.commons-text>1.15.0</apache.commons-text>
-        <jackson-databind>2.21.4</jackson-databind>
+        <jackson-databind>2.22.1</jackson-databind>
 
-        <jsonassert>1.5.1</jsonassert>
-        <jsonobject>20250517</jsonobject>
+        <jsonassert>1.5.3</jsonassert>
+        <jsonobject>20260522</jsonobject>
 
         <schema-validator>1.0.76</schema-validator>
         <!--        1.5.9-->
 
-        <logback>1.5.36</logback>
+        <logback>1.5.38</logback>
 
         <maven-surefire-plugin>3.0.0</maven-surefire-plugin>
         <maven-resources-plugin>3.0.0</maven-resources-plugin>

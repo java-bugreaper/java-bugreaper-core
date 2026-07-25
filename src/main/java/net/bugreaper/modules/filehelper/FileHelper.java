@@ -231,8 +231,8 @@ public class FileHelper implements FileHelperInt {
     }
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size exactly: {expectedSize} bytes")
-    public void seeFileSizeExactly(String filePath, long expectedSize) {
+    @Step("(FILE)[ASSERT] File: {filePath} size is exactly: {expectedSize} bytes")
+    public void seeFileSizeIsExactly(String filePath, long expectedSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     assertEquals(expectedSize, getResourceFileSize(filePath)));
@@ -244,8 +244,8 @@ public class FileHelper implements FileHelperInt {
     }
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size greater: {minSize} bytes")
-    public void seeFileSizeGreaterThan(String filePath, long minSize) {
+    @Step("(FILE)[ASSERT] File: {filePath} size is greater: {minSize} bytes")
+    public void seeFileSizeIsGreaterThan(String filePath, long minSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     Assertions.assertTrue(
@@ -258,8 +258,8 @@ public class FileHelper implements FileHelperInt {
 
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size less: {maxSize} bytes")
-    public void seeFileSizeLessThan(String filePath, long maxSize) {
+    @Step("(FILE)[ASSERT] File: {filePath} size is less: {maxSize} bytes")
+    public void seeFileSizeIsLessThan(String filePath, long maxSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     Assertions.assertTrue(
@@ -299,8 +299,8 @@ public class FileHelper implements FileHelperInt {
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
                     MessageFormat.format(
-                            "\nFAILED: <<{0}>> expected to be present in file within {1}",
-                            expectedText, formatMilliseconds(awaitMs)));
+                            "\nFAILED: <<{0}>> expected to be present in file <{1}> within {2}",
+                            expectedText, filePath, formatMilliseconds(awaitMs)));
         }
     }
 

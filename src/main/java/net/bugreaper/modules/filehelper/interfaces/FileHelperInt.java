@@ -78,7 +78,7 @@ public interface FileHelperInt {
      * @param expectedSize  expected size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeExactly(String filePath, long expectedSize);
+    void seeFileSizeIsExactly(String filePath, long expectedSize);
 
     /**
      * Assert size of file greater than minSize
@@ -88,7 +88,7 @@ public interface FileHelperInt {
      * @param minSize  minimum size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeGreaterThan(String filePath, long minSize);
+    void seeFileSizeIsGreaterThan(String filePath, long minSize);
 
     /**
      * Assert size of file less than maxSize
@@ -98,7 +98,7 @@ public interface FileHelperInt {
      * @param maxSize  maximum size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeLessThan(String filePath, long maxSize);
+    void seeFileSizeIsLessThan(String filePath, long maxSize);
 
     /**
      * Assert that file contains expected text(by regex)
