@@ -72,7 +72,33 @@ class JsonSchemaAssertsReturnExceptionsTests {
         MatcherAssert.assertThat(
                 "Exception text on failed schema",
                 exception.getMessage(),
-                StringContains.containsString("$.id: is not defined in the schema and the schema does not allow additional properties"));
+                StringContains.containsString("$: property 'id' is not defined in the schema and the schema does not allow additional properties"));
+    }
+
+    @Test
+    void testAssertJsonSchemaFailed2() {
+
+        String actual = """
+                {
+                  "id_wrong": "test"
+                }""";
+
+        ArrayList<String> actualList = new ArrayList<>();
+
+        actualList.add(actual);
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                jsonSchemaCheckInList(jsonValidation, actualList));
+
+        MatcherAssert.assertThat(
+                "Exception on failed schema",
+                exception.getMessage(),
+                StringContains.containsString("There is no elements in the list with valid JSON Schema"));
+
+        MatcherAssert.assertThat(
+                "Exception text on failed schema",
+                exception.getMessage(),
+                StringContains.containsString("$.id_wrong: string found, integer expected"));
     }
 
     @Test

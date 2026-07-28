@@ -53,5 +53,5 @@ providing reusable functionality that is used across all other BugReaper modules
 | [Jackson Databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) | 2.22.1   | for JSON features                              |
 | [JSONAssert](https://mvnrepository.com/artifact/org.skyscreamer/jsonassert)                        | 1.5.3    | for JSON asserts                               |
 | [JSONObject](https://mvnrepository.com/artifact/org.json/json)                                     | 20260522 | for JSON parse                                 |
-| [JsonSchemaValidator](https://mvnrepository.com/artifact/com.networknt/json-schema-validator)      | 1.0.76   | for JSON Schema validate                       |
+| [JsonSchemaValidator](https://mvnrepository.com/artifact/com.networknt/json-schema-validator)      | 1.5.9    | for JSON Schema validate                       |
 | [SnakeYAML](https://mvnrepository.com/artifact/org.yaml/snakeyaml)                                 | 2.6      | for YML config parse                           |

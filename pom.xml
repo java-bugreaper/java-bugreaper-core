@@ -74,8 +74,7 @@
         <jsonassert>1.5.3</jsonassert>
         <jsonobject>20260522</jsonobject>
 
-        <schema-validator>1.0.76</schema-validator>
-        <!--        1.5.9-->
+        <schema-validator>1.5.9</schema-validator>
 
         <logback>1.5.38</logback>
 
