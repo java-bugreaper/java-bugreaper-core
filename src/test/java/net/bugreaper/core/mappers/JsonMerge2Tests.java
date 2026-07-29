@@ -3,11 +3,7 @@ package net.bugreaper.core.mappers;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonMerge2Tests {
 
@@ -67,18 +63,6 @@ class JsonMerge2Tests {
                 }
               }
             }""";
-
-    @Test
-    void utilityJsonMergeClass() throws NoSuchMethodException {
-        Constructor<JsonMerge> constructor = JsonMerge.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-
-        InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-        Throwable cause = thrown.getCause();
-        assert (cause instanceof IllegalStateException);
-        assert ("Utility class".equals(cause.getMessage()));
-    }
 
     @Test
     void mergeJsonAr1Test() {

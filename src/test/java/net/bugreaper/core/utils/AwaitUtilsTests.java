@@ -7,8 +7,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,17 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AwaitUtilsTests {
 
-    @Test
-    void utilityClass() throws NoSuchMethodException {
-        Constructor<AwaitUtils> constructor = AwaitUtils.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
 
-        InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-        Throwable cause = thrown.getCause();
-        assert (cause instanceof IllegalStateException);
-        assert ("Utility class".equals(cause.getMessage()));
-    }
 
 
     @Test

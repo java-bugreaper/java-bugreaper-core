@@ -22,6 +22,8 @@ class FileHelperConfigTests {
     @BeforeEach
     void setup() {
         logWatcher = new LogWatcher("net.bugreaper.modules.filehelper.FileHelper", Level.DEBUG);
+        System.clearProperty(PROPERTY);
+        YamlUtils.clearCache();
     }
 
     @AfterEach
@@ -29,11 +31,6 @@ class FileHelperConfigTests {
         logWatcher.detach();
     }
 
-    @BeforeEach
-    void copyConfig() {
-        System.clearProperty(PROPERTY);
-        YamlUtils.clearCache();
-    }
 
     @Test
     void testDefaultConfig() {

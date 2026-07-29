@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.text.MessageFormat;
 
 import static net.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestResourcesPath;
 
@@ -28,7 +27,7 @@ public final class ResourcesFileReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesFileReader.class);
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
-    private static final String FAILED_WRITE_MESSAGE = "Failed to write file {} is directory exists?";
+    private static final String FAILED_WRITE_MESSAGE = "Failed to write file '{}' is directory exists?";
 
 
     /**
@@ -144,11 +143,11 @@ public final class ResourcesFileReader {
                 bytesWritten += bytesToWrite;
             }
         } catch (IOException e){
-            LOGGER.error("Failed to write file {}, is directory exists in recourses?", fileName);
+            LOGGER.error("Failed to write file '{}', is directory exists in recourses?", fileName);
             throw new FileReaderException("Failed to create file: " + getTestResourcesPath() + fileName, e);
         }
 
-        LOGGER.debug("File with size {} bytes created {}{}", sizeInBytes, getTestResourcesPath(),fileName);
+        LOGGER.debug("File with size {} bytes created: {}{}", sizeInBytes, getTestResourcesPath(),fileName);
     }
 
     /**
@@ -164,7 +163,7 @@ public final class ResourcesFileReader {
         try {
             return Files.size(path);
         } catch (IOException e) {
-            LOGGER.error("Failed read file {}, is directory exists in recourses?", fileName);
+            LOGGER.error("Failed read file '{}', is directory exists in recourses?", fileName);
             throw new FileReaderException(FAILED_READ_MESSAGE + getTestResourcesPath() + fileName, e);
         }
     }
@@ -189,7 +188,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileExists(String fileName) {
 
         if(!resourceFileExistsStatus(fileName)) {
-            throw new AssertionError(MessageFormat.format("File {0}{1} not exists", getTestResourcesPath(), fileName));
+            throw new AssertionError("File '%s%s' not exists".formatted(getTestResourcesPath(), fileName));
         }
     }
 
@@ -202,7 +201,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileNotExists(String fileName) {
 
         if(resourceFileExistsStatus(fileName)) {
-            throw new AssertionError(MessageFormat.format("File {0}{1} exists", getTestResourcesPath(), fileName));
+            throw new AssertionError("File '%s%s' expected to not exist, but exists".formatted(getTestResourcesPath(), fileName));
         }
     }
 
@@ -215,7 +214,7 @@ public final class ResourcesFileReader {
     public static void seeResourceFileNotEmpty(String fileName) {
 
         if(getResourceFileSize(fileName) == 0) {
-            throw new AssertionError(MessageFormat.format("File {0}{1} is empty", getTestResourcesPath(), fileName));
+            throw new AssertionError("File '%s%s' expected to not be empty".formatted(getTestResourcesPath(), fileName));
         }
     }
 }

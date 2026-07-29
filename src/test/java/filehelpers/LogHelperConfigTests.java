@@ -64,7 +64,7 @@ class LogHelperConfigTests {
         MatcherAssert.assertThat(
                 "Await for assert from yml",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 600 milliseconds"));
+                StringContains.containsString("Log file 'logs/byyml/config.log' does not contain expected text <<some message2>> within 600 milliseconds"));
     }
 
     @Test
@@ -115,7 +115,7 @@ class LogHelperConfigTests {
         MatcherAssert.assertThat(
                 "Await for assert from yml",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in logs within 200 milliseconds"));
+                StringContains.containsString("Log file 'logs/byyml/config-test.log' does not contain expected text <<some message2>> within 200 milliseconds"));
     }
 
     @Test

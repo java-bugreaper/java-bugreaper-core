@@ -191,7 +191,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileNotEmpty(fileName));
 
         assertEquals(
-                MessageFormat.format("File {0} is empty", System.getProperty("user.dir") + "/src/test/resources/" + fileName),
+                MessageFormat.format("File ''{0}'' expected to not be empty", System.getProperty("user.dir") + "/src/test/resources/" + fileName),
                 exception.getMessage(),
                 "Error on file not empty check");
     }
@@ -204,7 +204,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileExists(fileName));
 
         assertEquals(
-                MessageFormat.format("File {0}{1}{2} not exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' not exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file exists");
     }
@@ -217,7 +217,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileNotExists(fileName));
 
         assertEquals(
-                MessageFormat.format("File {0}{1}{2} exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' expected to not exist, but exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file not exists");
     }
@@ -233,7 +233,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileNotEmpty(fileName));
 
         assertEquals(
-                MessageFormat.format("File {0}{1}{2} is empty",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' expected to not be empty",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file not exists");
     }

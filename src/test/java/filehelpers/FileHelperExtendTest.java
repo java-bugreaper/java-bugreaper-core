@@ -91,7 +91,7 @@ class FileHelperExtendTest extends FileHelper {
         MatcherAssert.assertThat(
                 "Failed message when message not exist in file",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in file <logs/test/test.log> within 400 milliseconds"));
+                StringContains.containsString("File 'logs/test/test.log' does not contain expected text <<some message>> within 400 milliseconds"));
     }
 
     @Test
@@ -103,7 +103,7 @@ class FileHelperExtendTest extends FileHelper {
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in file <logs/test/test.log> within 400 milliseconds"));
+                StringContains.containsString("File 'logs/test/test.log' does not contain expected text <<some message>> within 400 milliseconds"));
     }
 
     @Test
@@ -133,7 +133,7 @@ class FileHelperExtendTest extends FileHelper {
         MatcherAssert.assertThat(
                 "Failed message when message exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> unexpected present in file"));
+                StringContains.containsString("Text <<some message>> should not be present in file: logs/test/test.log"));
     }
 
 
@@ -234,21 +234,21 @@ class FileHelperExtendTest extends FileHelper {
 
         MatcherAssert.assertThat(
                 exception1.getMessage(),
-                StringContains.containsString("File <temp/sizeCheck.txt> size expected to be EXACTLY <170 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be EXACTLY <170 bytes> but got <180 bytes> within 400 milliseconds"));
 
         Throwable exception2 = assertThrows(AssertionError.class, () ->
                 fileTime.seeFileSizeIsGreaterThan(filePath, 181));
 
         MatcherAssert.assertThat(
                 exception2.getMessage(),
-                StringContains.containsString("File <temp/sizeCheck.txt> size expected to be GREATER <181 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be GREATER <181 bytes> but got <180 bytes> within 400 milliseconds"));
 
         Throwable exception3 = assertThrows(AssertionError.class, () ->
                 fileTime.seeFileSizeIsLessThan(filePath, 180));
 
         MatcherAssert.assertThat(
                 exception3.getMessage(),
-                StringContains.containsString("File <temp/sizeCheck.txt> size  expected to be LESS <180 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be LESS <180 bytes> but got <180 bytes> within 400 milliseconds"));
 
     }
 
@@ -268,7 +268,7 @@ class FileHelperExtendTest extends FileHelper {
 
         MatcherAssert.assertThat(
                 exception1.getMessage(),
-                StringContains.containsString("FAILED: <<not exist>> expected to be present in file <temp/check.txt> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/check.txt' does not contain expected text <<not exist>> within 400 milliseconds"));
 
     }
 
@@ -288,7 +288,7 @@ class FileHelperExtendTest extends FileHelper {
 
         MatcherAssert.assertThat(
                 exception1.getMessage(),
-                StringContains.containsString("Provided size 101 bytes more then provided #maxFileSize(100 bytes) (set or configure more if you need)"));
+                StringContains.containsString("Provided size 101 bytes for file 'temp/sizePreCheck.txt' more then #maxFileSize(100 bytes) (set or configure more if you need)"));
 
         Throwable exception2 = assertThrows(FileReaderException.class, () ->
                 file1.showDataFromFile(filePath));
@@ -321,7 +321,7 @@ class FileHelperExtendTest extends FileHelper {
 
         MatcherAssert.assertThat(
                 ex.getMessage(),
-                StringContains.containsString("File <temp/sizePreCheck.txt> size(101 bytes) more then provided #maxFileSize(100 bytes) (set or configure more if you need)"));
+                StringContains.containsString("File 'temp/sizePreCheck.txt' size(101 bytes) more then provided #maxFileSize(100 bytes) (set or configure more if you need)"));
 
     }
 

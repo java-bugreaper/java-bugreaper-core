@@ -9,6 +9,20 @@ import org.json.JSONObject;
 import java.text.MessageFormat;
 
 
+/**
+ * Utility class providing helper methods for working with JSON objects using
+ * {@link JSONObject} from the org.json library.
+ *
+ * <p>This class simplifies common JSON operations such as creating, reading,
+ * updating, merging, and validating JSON objects represented by
+ * {@link JSONObject}.</p>
+ *
+ * <p>It provides a convenient wrapper around org.json functionality to make
+ * JSON processing easier to use in test automation scenarios.</p>
+ *
+ *
+ * <p>This utility class contains only static methods and should not be instantiated.</p>
+ */
 public final class JsonMappers {
 
     private JsonMappers() {

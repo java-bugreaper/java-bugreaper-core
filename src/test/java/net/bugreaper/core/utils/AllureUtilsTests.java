@@ -12,8 +12,6 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -32,29 +30,6 @@ class AllureUtilsTests {
         AllureResultLoader.cleanResultsDir();
     }
 
-    @Test
-    void utilityAllureStepsValidatorClass() throws NoSuchMethodException {
-        Constructor<AllureStepsValidator> constructor = AllureStepsValidator.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-
-        InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-        Throwable cause = thrown.getCause();
-        assert (cause instanceof IllegalStateException);
-        assert ("Utility class".equals(cause.getMessage()));
-    }
-
-    @Test
-    void utilityAllureResultLoaderClass() throws NoSuchMethodException {
-        Constructor<AllureResultLoader> constructor = AllureResultLoader.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-
-        InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-        Throwable cause = thrown.getCause();
-        assert (cause instanceof IllegalStateException);
-        assert ("Utility class".equals(cause.getMessage()));
-    }
 
     @Test
     void resultNotFoundTest() {

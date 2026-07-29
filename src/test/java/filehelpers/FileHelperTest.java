@@ -24,7 +24,7 @@ class FileHelperTest {
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("FAILED: <<" + MESSAGE + ">> expected to be present in file <logs/test/test.log> within 500 milliseconds"));
+                StringContains.containsString("File 'logs/test/test.log' does not contain expected text <<some message>> within 500 milliseconds"));
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("squid:S5852")
+@SuppressWarnings("java:S8786")
 public abstract class DateTimeGeneratorAbstract {
 
     protected DateTimeGeneratorAbstract() {

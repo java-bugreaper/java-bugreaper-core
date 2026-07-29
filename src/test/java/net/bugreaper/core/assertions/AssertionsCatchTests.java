@@ -420,7 +420,7 @@ class AssertionsCatchTests {
         Throwable exception = assertThrows(AssertionError.class, () ->
                 assertJsonNotContains(unexpected, actual));
 
-        assertEquals("Actual Json contains unexpected Json part:\n" + unexpected,
+        assertEquals("Actual JSON contains unexpected JSON part:\n" + unexpected,
                 exception.getMessage(),
                 "Exception for assert JSON not contains assert");
     }
