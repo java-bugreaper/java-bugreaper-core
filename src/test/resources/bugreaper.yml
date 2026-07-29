@@ -4,4 +4,4 @@ modules:
     maxFileSize: 800 #optional
   log-helper:
     await: 600 #optional
-    logfile: 'logs/byyml/config.log'
+    logfile: null

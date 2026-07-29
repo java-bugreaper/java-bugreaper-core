@@ -77,7 +77,7 @@ class AllureReporterCsvTest {
         }
 
         assertEquals(
-                "File not exist in resources: " + file,
+                "File does not exist in resources: " + file,
                 errorMessage,
                 "File not found error: " + errorMessage);
     }

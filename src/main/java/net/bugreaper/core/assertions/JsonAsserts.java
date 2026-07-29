@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 
-public class JsonAsserts extends JsonAssertsAbstract{
+public class JsonAsserts extends JsonAssertsAbstract {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonAsserts.class);
 
@@ -33,11 +33,12 @@ public class JsonAsserts extends JsonAssertsAbstract{
             .configure(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature(), true);
 
     /**
-     * Assertion without strict array ordering
-     * <p> extensible fields and elements in array will be skipped
+     * Asserts that the actual JSON contains the expected JSON subset without strict array ordering.
      *
-     * @param expectedPart expected part of JSON with arrays
-     * @param actualJson actual JSON
+     * <p>Extra object fields and additional array elements are ignored.</p>
+     *
+     * @param expectedPart expected JSON subset
+     * @param actualJson   actual JSON
      */
     public static void containsJsonSubset(String expectedPart, String actualJson) {
         JsonNode expected = getJson(expectedPart);
@@ -53,59 +54,64 @@ public class JsonAsserts extends JsonAssertsAbstract{
     }
 
     /**
-     * Assertion without strict array ordering
-     * <p> extensible fields will be skipped. But extensible elements in array cause AssertionError
+     * Asserts that the actual JSON contains the expected JSON subset without strict array ordering.
      *
-     * @param expectedPart expected part of JSON with arrays (can be not ordered but must have same count of elements)
-     * @param actualJson actual JSON
+     * <p>Extra object fields are ignored, but additional array elements cause an
+     * {@link AssertionError}.</p>
+     *
+     * @param expectedPart expected JSON subset with arrays (array order is ignored, but the number of elements must match)
+     * @param actualJson   actual JSON
      */
     public static void containsJson(String expectedPart, String actualJson) {
         assertJsonMethod(expectedPart, actualJson, JSONCompareMode.LENIENT);
     }
 
     /**
-     * Assertion with strict array ordering
-     * <p> extensible fields will be skipped
+     * Asserts that the actual JSON contains the expected JSON subset with strict array ordering.
      *
-     * @param expectedPart expected part of JSON with strict ordered arrays
-     * @param actualJson actual JSON
+     * <p>Extra object fields are ignored.</p>
+     *
+     * @param expectedPart expected JSON subset with strict array ordering
+     * @param actualJson   actual JSON
      */
     public static void containsStrictOrderJson(String expectedPart, String actualJson) {
         assertJsonMethod(expectedPart, actualJson, JSONCompareMode.STRICT_ORDER);
     }
 
     /**
-     * Assertion with strict array ordering
-     * <p> extensible fields and elements in arrays not expected
+     * Asserts that the actual JSON matches the expected JSON with strict array ordering.
      *
-     * @param expectedAct expected full JSON with strict ordered arrays
-     * @param actualJson actual JSON
+     * <p>Extra object fields and additional array elements are not allowed.</p>
+     *
+     * @param expectedAct expected full JSON with strict array ordering
+     * @param actualJson  actual JSON
      */
     public static void assertJson(String expectedAct, String actualJson) {
         assertJsonMethod(expectedAct, actualJson, JSONCompareMode.STRICT);
     }
 
     /**
-     * Assertion without strict array ordering
-     * <p> extensible fields not expected
+     * Asserts that the actual JSON matches the expected JSON without strict array ordering.
      *
-     * @param expectedAct expected full JSON with arrays (can be not ordered)
-     * @param actualJson actual JSON
+     * <p>Extra object fields are not allowed.</p>
+     *
+     * @param expectedAct expected full JSON with arrays (array order is ignored)
+     * @param actualJson  actual JSON
      */
     public static void assertNoStrictOrderJson(String expectedAct, String actualJson) {
         assertJsonMethod(expectedAct, actualJson, JSONCompareMode.NON_EXTENSIBLE);
     }
 
     /**
-     * Asserts that actual JSON does not contains unexpected JSON part
+     * Asserts that the actual JSON does not contain the unexpected JSON subset.
      *
-     * @param unexpectedPart unexpected part of JSON
-     * @param actualJson actual JSON
+     * @param unexpectedPart unexpected JSON subset
+     * @param actualJson     actual JSON
      */
     public static void assertJsonNotContains(String unexpectedPart, String actualJson) {
         try {
             assertJsonNotMethod(unexpectedPart, actualJson, false);
-        }catch (AssertionError e) {
+        } catch (AssertionError e) {
             throw new AssertionError("Actual JSON contains unexpected JSON part:\n" + unexpectedPart);
         }
     }
@@ -122,25 +128,25 @@ public class JsonAsserts extends JsonAssertsAbstract{
             jsonNode = objectMapper.readTree(actualJson);
         } catch (JsonProcessingException e) {
             String notJsonMessage = "Schema assert failed (Actual body not JSON)";
-            if(returnReport){
+            if (returnReport) {
                 return notJsonMessage;
             }
             throw new AssertionError(notJsonMessage);
         }
 
-        Set<ValidationMessage> errors =  jsonSchema.validate(jsonNode);
+        Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
 
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             LOGGER.debug("Schema passed");
             return null;
-        }else{
+        } else {
             StringBuilder message = new StringBuilder();
 
             for (ValidationMessage oneAssert : errors) {
                 message.append(oneAssert).append("\n");
             }
 
-            if(returnReport){
+            if (returnReport) {
                 return message.toString();
             }
             throw new AssertionError(message);
@@ -149,18 +155,24 @@ public class JsonAsserts extends JsonAssertsAbstract{
     }
 
     /**
-     * Check is String Json/JsonArray type STRICT (even extra coma throw exception!)
-     * @param jsonData String with data
-     * @exception IllegalArgumentException if not Json/JsonArray type
+     * Validates that the provided string is a valid JSON object or JSON array using STRICT parsing.
+     *
+     * <p>Strict parsing does not allow invalid JSON syntax, including trailing commas.</p>
+     *
+     * @param jsonData string containing JSON data
+     * @throws IllegalArgumentException if the provided data is not a valid JSON object or JSON array
      */
     public static void assertValidJson(String jsonData) {
         validateJsonInternal(jsonData, strictMapper, false);
     }
 
     /**
-     * Check is String Json/JsonArray type (extra coma throw passed)
-     * @param jsonData String with data
-     * @exception IllegalArgumentException if not Json/JsonArray type
+     * Validates that the provided string is a valid JSON object or JSON array using LENIENT parsing.
+     *
+     * <p>Lenient parsing allows some non-standard JSON syntax, including trailing commas.</p>
+     *
+     * @param jsonData string containing JSON data
+     * @throws IllegalArgumentException if the provided data is not a valid JSON object or JSON array
      */
     public static void assertLenientValidJson(String jsonData) {
         validateJsonInternal(jsonData, lenientMapper, true);
@@ -290,10 +302,9 @@ public class JsonAsserts extends JsonAssertsAbstract{
      *
      * @param expectedJson JSON string containing the expected structure
      *                     and optional operators in field names
-     * @param actualJson JSON string to validate against the expected JSON
-     *
-     * @throws AssertionError if JSON comparison fails
-     *                        (contains detailed diff information)
+     * @param actualJson   JSON string to validate against the expected JSON
+     * @throws AssertionError       if JSON comparison fails
+     *                              (contains detailed diff information)
      * @throws JsonMappersException if input JSON cannot be parsed
      */
     public static void assertJsonsExtended(String expectedJson, String actualJson) {

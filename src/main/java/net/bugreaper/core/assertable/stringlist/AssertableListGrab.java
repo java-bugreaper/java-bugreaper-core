@@ -6,17 +6,17 @@ import java.util.List;
 public interface AssertableListGrab {
 
     /**
-     * Grab last element from AssertableStringList
+     * Returns the last element from the AssertableStringList.
      *
-     * @return String with last element
+     * @return last element as a String
      */
     String grabLastElement();
 
 
     /**
-     * Grab all elements to list
+     * Returns all elements from the AssertableStringList converted to a list.
      *
-     * @return List(String) with all elements
+     * @return list containing all elements
      */
     List<String> grabLikeList();
 

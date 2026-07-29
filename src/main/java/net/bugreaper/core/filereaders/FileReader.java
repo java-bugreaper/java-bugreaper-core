@@ -35,7 +35,7 @@ public final class FileReader {
     // From resources classPath
 
     /**
-     * Read static(from ClassPath) resource file (any type)
+     * Read static(from ClassPath) resource file (any type) //TODO
      *
      * @param filePath path to file in resources
      * @return String with data
@@ -68,10 +68,10 @@ public final class FileReader {
             return result;
         } catch (IllegalArgumentException e) {
             logFullPath();
-            throw new FileReaderException("File not JSON type: " + filePath, e);
+            throw new FileReaderException("File is not a valid JSON file: " + filePath, e);
         } catch (Exception e) {
             logFullPath();
-            throw new FileReaderException("Can't find file in resources: " + filePath, e);
+            throw new FileReaderException("Failed to read resource file: " + filePath, e);
         }
     }
 
@@ -113,7 +113,7 @@ public final class FileReader {
             return Path.of(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath());
         }catch (NullPointerException e) {
             logFullPath();
-            throw new FileReaderException("File not exist in resources: " + filePath, e);
+            throw new FileReaderException("File does not exist in resources: " + filePath, e);
         }
 
     }

@@ -205,10 +205,10 @@ class AssertableListCatchTests {
                 listForTest
                         .seeListAnyContainsJson("not json"));
 
-        MatcherAssert.assertThat(
-                "Exception on failed validation JSON contains input",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        not json""",
+                exception.getMessage());
 
     }
 
@@ -226,10 +226,10 @@ class AssertableListCatchTests {
                 listForTest
                         .seeListAnyContainsJsonSubset("not json"));
 
-        MatcherAssert.assertThat(
-                "Exception on failed validation JSON contains input",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        not json""",
+                exception.getMessage());
 
     }
     @Test
@@ -245,10 +245,10 @@ class AssertableListCatchTests {
                 listForTest
                         .seeListAnyEqualsJson("not json"));
 
-        MatcherAssert.assertThat(
-                "Exception on failed validation JSON equal input",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        not json""",
+                exception.getMessage());
 
 
     }
@@ -266,10 +266,10 @@ class AssertableListCatchTests {
                 listForTest
                         .seeListAnyJsonMatchSchema("not json"));
 
-        MatcherAssert.assertThat(
-                "Exception on failed validation JSON Schema input",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        not json""",
+                exception.getMessage());
     }
 
     @Test
@@ -317,10 +317,8 @@ class AssertableListCatchTests {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, listForTest::grabLastElement);
 
-        MatcherAssert.assertThat(
-                "Exception on failed grab last element",
-                exception.getMessage(),
-                StringContains.containsString("List is empty"));
+        assertEquals("List is empty",
+                exception.getMessage());
     }
 
 }

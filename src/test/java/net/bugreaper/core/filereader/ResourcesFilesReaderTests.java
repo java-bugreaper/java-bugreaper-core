@@ -3,17 +3,29 @@ package net.bugreaper.core.filereader;
 import ch.qos.logback.classic.Level;
 import net.bugreaper.core.exceptions.FileReaderException;
 import net.bugreaper.core.utils.LogWatcher;
-import org.hamcrest.core.StringContains;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.MessageFormat;
 
 import static net.bugreaper.core.filereaders.ResourcesFileReader.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("squid:S2699")
 class ResourcesFilesReaderTests {
+
+    private LogWatcher logWatcher;
+
+    @AfterEach
+    void tearDown() {
+        logWatcher.detach();
+    }
+
+    @BeforeEach
+    void clean() {
+        logWatcher = new LogWatcher("net.bugreaper.core", Level.DEBUG);
+    }
 
     @Test
     void testResourceWriteAndReadText() {
@@ -62,36 +74,38 @@ class ResourcesFilesReaderTests {
 
     @Test
     void testNoFileExistDeleteNoError() {
-        LogWatcher logWatcher = new LogWatcher("net.bugreaper.core", Level.WARN);
 
         var file = "temp/no-error" + System.currentTimeMillis();
 
         deleteResourceFile(file);
 
-        assertThat(
-                logWatcher.getLoggedEvents(Level.WARN).toString(),
-                StringContains.containsString("File for delete not exist:"));
+        assertEquals(
+                "[[WARN] File to delete does not exist, skipping: %s]"
+                        .formatted(System.getProperty("user.dir")+ "/src/test/resources/" + file),
+                logWatcher.getLoggedEvents(Level.WARN).toString());
     }
 
 
     @Test
     void testResourceWriteAndReadTextWrongDir() {
 
-        String errorMessage = null;
         var file = "wrong/write_test.tmp";
         var text = "logs/test";
 
 
-        try {
-            overwriteTextToResourceFile(file, text);
-        } catch (Exception e) {
-            errorMessage = e.getMessage();
-        }
+        String exceptionMessage = assertThrows(FileReaderException.class, () ->
+                overwriteTextToResourceFile(file, text)).getMessage();
 
         assertEquals(
                 "Failed to write file: " + System.getProperty("user.dir") + "/src/test/resources/" + file,
-                errorMessage,
-                "File write problem exception message: " + errorMessage);
+                exceptionMessage,
+                "File write problem exception message: " + exceptionMessage);
+
+        //check error log
+        assertEquals(
+                "[[ERROR] Failed to write file '%s'. Check that the path is valid and the test resource directory exists.]"
+                        .formatted(System.getProperty("user.dir")+ "/src/test/resources/" + file),
+                logWatcher.getLoggedEvents(Level.ERROR).toString());
     }
 
     @Test
@@ -138,8 +152,7 @@ class ResourcesFilesReaderTests {
 
         assertEquals(
                 "Failed to create file: " + System.getProperty("user.dir") + "/src/test/resources/" + fileName,
-                exception.getMessage(),
-                "Error on get size from not existing file");
+                exception.getMessage());
     }
 
     @Test
@@ -162,7 +175,7 @@ class ResourcesFilesReaderTests {
         assertEquals(
                 expectedBytesNew,
                 getResourceFileSize(fileName),
-                "File created with right size");
+                "File overrides with new size");
     }
 
     @Test

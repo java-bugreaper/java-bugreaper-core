@@ -28,11 +28,17 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Class consists methods that operate with files in <b>src/test/resources</b>
  *
- * <p>For one instance run recommended: {@code FileHelper fh = FileHelper.getInstance();}</p>
+ * <p>Supports reading and managing dynamic files created during test execution.</p>
  *
+ * Recommended to use one instance:
+ * {@code FileHelper fh = FileHelper.getInstance();}
+ * </p>
  *
- * <p> Await for some asserts default: {@link #awaitMs}, can be changed by: {@link #setAwaitMs(int)} or config
- * <p> AMax file size for some methods: {@link #maxFileSize}, can be changed by: {@link #setMaxFileSize(long)} or config
+ * <p>Default await timeout for assertions with await is configured by {@link #awaitMs}.
+ * It can be changed using {@link #setAwaitMs(int)} or configuration.</p>
+ *
+ * <p>Maximum file size for operations that limit file size is configured by
+ * {@link #maxFileSize}. It can be changed using {@link #setMaxFileSize(long)} or configuration.</p>
  *
  * @author Oleksii Betin "ambu550"
  * @since 1.0.0
@@ -72,7 +78,7 @@ public class FileHelper implements FileHelperInt {
     }
 
     /**
-     * Constructs a FileHelper client configuration.
+     * Constructs a FileHelper client using YAML configuration.
      *
      * <p>Loads configuration values from a YAML file.</p>
      *
@@ -82,11 +88,12 @@ public class FileHelper implements FileHelperInt {
      * <pre>
      * modules:
      *   file-helper:
-     *     await: 500   # optional
-     *     maxFileSize: 2048  # optional
+     *     await: 500   # optional await timeout in milliseconds
+     *     maxFileSize: 2048  # optional maximum file size in bytes
      * </pre>
      *
      * <p>Missing optional keys will fall back to predefined defaults.</p>
+     * @throws IllegalArgumentException if the configuration contains invalid values
      */
     public FileHelper() {
         loadFromYaml();
@@ -213,9 +220,9 @@ public class FileHelper implements FileHelperInt {
     // assertions in file
 
     @Override
-    @Step("(FILE)[ASSERT] {filePath} should have regex: <{expectedText}>")
-    public void seeFileContainsRegex(String filePath, String expectedText) {
-        seeFileContainWithAwaitSetup(filePath, expectedText, true);
+    @Step("(FILE)[ASSERT] {filePath} should have regex: <{expectedTextPattern}>")
+    public void seeFileContainsRegex(String filePath, String expectedTextPattern) {
+        seeFileContainWithAwaitSetup(filePath, expectedTextPattern, true);
     }
 
     @Override

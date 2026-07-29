@@ -14,9 +14,9 @@ import static net.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestReso
 
 
 /**
- * Class for operation with files in test resources directory
+ * Utility class for reading files from the test resources directory.
  *
- * <p> Work with dynamic files (that recreates while running tests)
+ * <p>Supports reading dynamic files created during test execution.</p>
  */
 @SuppressWarnings("squid:S5960")
 public final class ResourcesFileReader {
@@ -27,14 +27,14 @@ public final class ResourcesFileReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesFileReader.class);
     private static final String FAILED_READ_MESSAGE = "Failed to read file: ";
-    private static final String FAILED_WRITE_MESSAGE = "Failed to write file '{}' is directory exists?";
+    private static final String FAILED_TO_LOG_MESSAGE = "Failed to {} file '{}'. Check that the path is valid and the test resource directory exists.";
 
 
     /**
-     * Read dynamic(from project) file in resources (any type)
+     * Reads the file content from <b>test</b> resources as a String.
      *
-     * @param filePath path to file in resources
-     * @return String with data
+     * @param filePath path to file in <b>test</b> resources
+     * @return file content as a String
      * @throws FileReaderException with a missing file
      */
     public static String readResourceFile(String filePath) {
@@ -44,16 +44,19 @@ public final class ResourcesFileReader {
         try {
             return Files.readString(path);
         } catch (Exception e) {
+            LOGGER.error(FAILED_TO_LOG_MESSAGE, "read", path);
             throw new FileReaderException(FAILED_READ_MESSAGE + path, e);
         }
     }
 
     /**
-     * Overwrite(truncate old data) dynamic(from project) file in resources (any type)
+     * Overwrites a dynamic file in <b>test</b> resources with the specified content.
      *
-     * @param filePath path to file in resources
+     * <p>Existing file content is truncated before writing.</p>
+     *
+     * @param filePath path to file in <b>test</b> resources
      * @param content  data to write
-     * @throws FileReaderException on write error
+     * @throws FileReaderException if writing the file fails
      */
     public static void overwriteTextToResourceFile(String filePath, String content) {
 
@@ -72,11 +75,13 @@ public final class ResourcesFileReader {
     }
 
     /**
-     * Write(add to old data) dynamic(from project) file in resources (any type)
+     * Appends content to a dynamic file in <b>test</b> resources.
      *
-     * @param filePath path to file in resources
-     * @param content  data to write
-     * @throws FileReaderException on write error
+     * <p>Existing file content is preserved.</p>
+     *
+     * @param filePath path to the file in <b>test</b> resources
+     * @param content data to append
+     * @throws FileReaderException if writing the file fails
      */
     public static void writeTextToResourceFile(String filePath, String content) {
 
@@ -94,7 +99,7 @@ public final class ResourcesFileReader {
     }
 
     private static void failedToWrite(Path path, Exception e) {
-        LOGGER.error(FAILED_WRITE_MESSAGE, path);
+        LOGGER.error(FAILED_TO_LOG_MESSAGE, "write", path);
         throw new FileReaderException("Failed to write file: " + path, e);
     }
 
@@ -104,10 +109,11 @@ public final class ResourcesFileReader {
     }
 
     /**
-     * Delete file in resources
+     * Deletes the file in <b>test</b> resources.
+     * <p>Does not throw an exception if the file does not exist. A warning is logged instead.</p>
      *
-     * @param filePath path to file in resources
-     * <p>no exception if file not exist
+     * @param filePath path to file in <b>test</b> resources
+     * @throws FileReaderException if deleting fails
      */
     public static void deleteResourceFile(String filePath) {
 
@@ -116,38 +122,39 @@ public final class ResourcesFileReader {
             Files.delete(Path.of(getTestResourcesPath(), filePath));
             LOGGER.info("File deleted successfully: {}", filePath);
         } catch (NoSuchFileException e) {
-            LOGGER.warn("File for delete not exist: {}", file);
-        }  catch (Exception e) {
+            LOGGER.warn("File to delete does not exist, skipping: {}", file);
+        } catch (Exception e) {
             throw new FileReaderException("Failed to delete file: " + file, e);
         }
 
     }
 
     /**
-     * Create file(in resources) with specific size (will override existing file)
+     * Creates a file in <b>test</b> resources with the specified size.
      *
-     * @param fileName name (or folder/name - folder must exist)
+     * <p>Overrides the existing file if it already exists.</p>
+     *
+     * @param filePath     path to file in <b>test</b> resources
      * @param sizeInBytes size in bytes
-     *
-     * @throws FileReaderException        on assert fail
+     * @throws FileReaderException if writing fails
      */
-    public static void createResourceFileWithSize(String fileName, long sizeInBytes) {
+    public static void createResourceFileWithSize(String filePath, long sizeInBytes) {
 
         byte[] pattern = "Abcdefg".getBytes();
 
-        try (FileOutputStream fos = new FileOutputStream(getTestResourcesPath() + fileName)) {
+        try (FileOutputStream fos = new FileOutputStream(getTestResourcesPath() + filePath)) {
             long bytesWritten = 0;
             while (bytesWritten < sizeInBytes) {
                 long bytesToWrite = Math.min(pattern.length, sizeInBytes - bytesWritten);
                 fos.write(pattern, 0, (int) bytesToWrite);
                 bytesWritten += bytesToWrite;
             }
-        } catch (IOException e){
-            LOGGER.error("Failed to write file '{}', is directory exists in recourses?", fileName);
-            throw new FileReaderException("Failed to create file: " + getTestResourcesPath() + fileName, e);
+        } catch (IOException e) {
+            LOGGER.error(FAILED_TO_LOG_MESSAGE, "create", filePath);
+            throw new FileReaderException("Failed to create file: " + getTestResourcesPath() + filePath, e);
         }
 
-        LOGGER.debug("File with size {} bytes created: {}{}", sizeInBytes, getTestResourcesPath(),fileName);
+        LOGGER.debug("File with size {} bytes created: {}{}", sizeInBytes, getTestResourcesPath(), filePath);
     }
 
     /**
@@ -163,7 +170,6 @@ public final class ResourcesFileReader {
         try {
             return Files.size(path);
         } catch (IOException e) {
-            LOGGER.error("Failed read file '{}', is directory exists in recourses?", fileName);
             throw new FileReaderException(FAILED_READ_MESSAGE + getTestResourcesPath() + fileName, e);
         }
     }
@@ -187,7 +193,7 @@ public final class ResourcesFileReader {
      */
     public static void seeResourceFileExists(String fileName) {
 
-        if(!resourceFileExistsStatus(fileName)) {
+        if (!resourceFileExistsStatus(fileName)) {
             throw new AssertionError("File '%s%s' not exists".formatted(getTestResourcesPath(), fileName));
         }
     }
@@ -200,7 +206,7 @@ public final class ResourcesFileReader {
      */
     public static void seeResourceFileNotExists(String fileName) {
 
-        if(resourceFileExistsStatus(fileName)) {
+        if (resourceFileExistsStatus(fileName)) {
             throw new AssertionError("File '%s%s' expected to not exist, but exists".formatted(getTestResourcesPath(), fileName));
         }
     }
@@ -213,7 +219,7 @@ public final class ResourcesFileReader {
      */
     public static void seeResourceFileNotEmpty(String fileName) {
 
-        if(getResourceFileSize(fileName) == 0) {
+        if (getResourceFileSize(fileName) == 0) {
             throw new AssertionError("File '%s%s' expected to not be empty".formatted(getTestResourcesPath(), fileName));
         }
     }

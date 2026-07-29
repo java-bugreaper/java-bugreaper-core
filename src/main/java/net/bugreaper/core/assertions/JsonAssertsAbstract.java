@@ -27,7 +27,7 @@ public abstract class JsonAssertsAbstract {
         } catch (JsonProcessingException e) {
             String mode = allowTrailingComma ? "lenient" : "strict";
             throw new IllegalArgumentException(
-                    "Invalid " + mode + " JSON/JSONArray: " + e.getOriginalMessage(), e);
+                    "Invalid JSON or JSON array format (%s):%n%s".formatted(mode, jsonData), e);
         }
     }
 
