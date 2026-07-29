@@ -71,37 +71,37 @@ public interface FileHelperInt {
     //asserts
 
     /**
-     * Assert size of file exactly as expected
+     * Asserts that the file size is exactly as expected
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
      * @param expectedSize  expected size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeExactly(String filePath, long expectedSize);
+    void seeFileSizeIsExactly(String filePath, long expectedSize);
 
     /**
-     * Assert size of file greater than minSize
+     * Asserts that the file size is greater than minSize
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
      * @param minSize  minimum size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeGreaterThan(String filePath, long minSize);
+    void seeFileSizeIsGreaterThan(String filePath, long minSize);
 
     /**
-     * Assert size of file less than maxSize
+     * Asserts that the file size is less than maxSize
      * <p><b>with await</b>
      *
      * @param filePath file path and name in test resources
      * @param maxSize  maximum size in bytes
      * @throws AssertionError on assert fail
      */
-    void seeFileSizeLessThan(String filePath, long maxSize);
+    void seeFileSizeIsLessThan(String filePath, long maxSize);
 
     /**
-     * Assert that file contains expected text(by regex)
+     * Asserts that the file contains expected text(by regex)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      * <p><b>with await</b>
      *
@@ -112,7 +112,7 @@ public interface FileHelperInt {
     void seeFileContainsRegex(String filePath, String expectedText);
 
     /**
-     * Assert that file contains expected text(not regex)
+     * Asserts that the file contains expected text(not regex)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      * <p><b>with await</b>
      *
@@ -123,7 +123,7 @@ public interface FileHelperInt {
     void seeFileContainString(String filePath, String expectedText);
 
     /**
-     * Assert that file not contains text(not regex)
+     * Asserts that the file contains text(not regex)
      * <p>Size is limited by {@link FileHelper#maxFileSize}</p>
      *
      * @param filePath       file path/name in test resources
@@ -133,7 +133,7 @@ public interface FileHelperInt {
     void seeFileDoesNotContainString(String filePath, String unexpectedText);
 
     /**
-     * Assert that file hash in MD5 equal to expected hash
+     * Asserts that the file's MD5 hash is equal to the expected hash
      *
      * @param filePath     file path/name in test resources
      * @param expectedHash expected hash in MD5
@@ -142,7 +142,7 @@ public interface FileHelperInt {
     void seeFileHashMd5Equal(String filePath, String expectedHash);
 
     /**
-     * Assert that file hash in SHA-1 equal to expected hash
+     * Asserts that the file's SHA-1 hash is equal to the expected hash
      *
      * @param filePath     file path/name in test resources
      * @param expectedHash expected hash in SHA-1
@@ -151,7 +151,7 @@ public interface FileHelperInt {
     void seeFileHashSha1Equal(String filePath, String expectedHash);
 
     /**
-     * Assert that file hash in SHA-256 equal to expected hash
+     * Asserts that the file's SHA-256 hash is equal to the expected hash
      *
      * @param filePath     file path/name in test resources
      * @param expectedHash expected hash in SHA-256
@@ -160,7 +160,7 @@ public interface FileHelperInt {
     void seeFileHashSha256Equal(String filePath, String expectedHash);
 
     /**
-     * Assert that file hash in SHA-512 equal to provided hash
+     * Asserts that the file's SHA-512 hash is equal to the expected hash
      *
      * @param filePath     file path/name in test resources
      * @param expectedHash expected hash in SHA-512

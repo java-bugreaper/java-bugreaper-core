@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+
 
 import static net.bugreaper.core.filereaders.pathfinder.ProjectPaths.getTestResourcesPath;
 
@@ -65,8 +66,13 @@ public class BaseUrl {
                     ? conn.getInputStream()
                     : conn.getErrorStream();
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-                String response = reader.lines().collect(Collectors.joining("\n"));
+            if (stream == null) {
+                throw new BaseUrlException("No response body, HTTP status: " + status);
+            }
+
+            try (InputStream in = stream) {
+
+                String response = new String(in.readAllBytes(), StandardCharsets.UTF_8);
 
                 if (status < 200 || status >= 300) {
                     throw new BaseUrlException("HTTP error " + status + ":\n" + response);
@@ -77,7 +83,6 @@ public class BaseUrl {
 
                 return response;
             }
-
 
         } catch (IOException e) {
             throw new BaseUrlException("BaseUrl error:\n" + e);

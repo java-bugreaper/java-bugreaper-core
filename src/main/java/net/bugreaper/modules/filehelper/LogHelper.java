@@ -202,7 +202,7 @@ public class LogHelper implements LogHelperInt {
 
     @Override
     public void seeLogsDoesNotContainString(String unexpectedText) {
-        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Should NOT have text {0}: <{1}>", logFilePath, unexpectedText),
+        Allure.step(MessageFormat.format("(LOGS)[ASSERT] Should NOT have text in {0}: <{1}>", logFilePath, unexpectedText),
                 () -> seeLogsDoesNotContainSetup(unexpectedText, false)
         );
     }
@@ -214,16 +214,14 @@ public class LogHelper implements LogHelperInt {
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                    MessageFormat.format(
-                            "\nFAILED: <<{0}>> expected to be present in logs within {1}",
-                            expectedText, formatMilliseconds(awaitMs)));
+                  "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
         }
     }
 
     private void seeLogsDoesNotContainSetup(String expectedText, Boolean regex) {
         assertEquals(0,
                 countInLogs(expectedText, regex),
-                "\nFAILED: <<" + expectedText + ">> unexpected present in logs");
+                "%nText <<%s>> should not be present in log file: %s".formatted(expectedText, logFilePath));
     }
 
 }

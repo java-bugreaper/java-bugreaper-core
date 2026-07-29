@@ -97,7 +97,7 @@ public class JsonAsserts extends JsonAssertsAbstract{
     }
 
     /**
-     * Assert that actual Json does not contains unexpected Json part
+     * Asserts that actual JSON does not contains unexpected JSON part
      *
      * @param unexpectedPart unexpected part of JSON
      * @param actualJson actual JSON
@@ -106,7 +106,7 @@ public class JsonAsserts extends JsonAssertsAbstract{
         try {
             assertJsonNotMethod(unexpectedPart, actualJson, false);
         }catch (AssertionError e) {
-            throw new AssertionError("Actual Json contains unexpected Json part:\n" + unexpectedPart);
+            throw new AssertionError("Actual JSON contains unexpected JSON part:\n" + unexpectedPart);
         }
     }
 

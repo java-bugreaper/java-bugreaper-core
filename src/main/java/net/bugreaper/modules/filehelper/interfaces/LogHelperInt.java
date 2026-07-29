@@ -52,7 +52,7 @@ public interface LogHelperInt {
     int countInLogs(String expectedText, boolean regex);
 
     /**
-     * Assert that log file contains expected text(by regex)
+     * Asserts that the log file contains expected text(by regex)
      * <p><b>with await</b>
      *
      * @param expectedText expected text with regex
@@ -61,7 +61,7 @@ public interface LogHelperInt {
     void seeLogsContainsRegex(String expectedText);
 
     /**
-     * Assert that log file contains expected text(exactly - not regex)
+     * Asserts that the log file contains expected text(exactly - not regex)
      * <p><b>with await</b>
      *
      * @param expectedText expected text
@@ -70,7 +70,7 @@ public interface LogHelperInt {
     void seeLogsContainString(String expectedText);
 
     /**
-     * Assert that log file not contains expected text(exactly)
+     * Asserts that the log file not contains expected text(exactly)
      *
      * @param unexpectedText unexpected text
      * @throws AssertionError on assert fail

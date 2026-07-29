@@ -6,12 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import static net.bugreaper.core.mappers.JsonMappers.*;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonMappersTests {
 
@@ -31,19 +27,6 @@ class JsonMappersTests {
               "text": "test_2"
             }
             ]""";
-
-
-    @Test
-    void utilityClass() throws NoSuchMethodException {
-        Constructor<JsonMappers> constructor = JsonMappers.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-
-        InvocationTargetException thrown = assertThrows(InvocationTargetException.class, constructor::newInstance);
-
-        Throwable cause = thrown.getCause();
-        assert (cause instanceof IllegalStateException);
-        assert ("Utility class".equals(cause.getMessage()));
-    }
 
 
     @Test

@@ -53,7 +53,7 @@ public class FileHelper implements FileHelperInt {
      * default max file size in bytes for:
      * <p>{@link #createFileWithSize}, {@link #showDataFromFile}
      */
-    private volatile long maxFileSize = 1_024L*1024; // 1MB
+    private volatile long maxFileSize = 1_024L * 1024; // 1MB
 
     /**
      * Returns the instance of {@link FileHelper} with config builder {@link #FileHelper()}.
@@ -104,7 +104,7 @@ public class FileHelper implements FileHelperInt {
             if (fileSizeVal instanceof Number size) {
                 setMaxFileSize(size.longValue());
             }
-        } catch (ConfigException e){
+        } catch (ConfigException e) {
             LOGGER.warn("Config file error, but {} is not expected required keys: {}", this.getClass().getSimpleName(), e.getMessage());
         }
 
@@ -171,8 +171,8 @@ public class FileHelper implements FileHelperInt {
         try {
             Assertions.assertTrue(sizeInBytes <= maxFileSize);
         } catch (AssertionError e) {
-            throw new FileReaderException(MessageFormat.format("Provided size {0} more then provided #maxFileSize({1}) (set or configure more if you need)",
-                    formatBytes(sizeInBytes), formatBytes(maxFileSize)));
+            throw new FileReaderException("Provided size %s for file '%s' more then #maxFileSize(%s) (set or configure more if you need)"
+                    .formatted(formatBytes(sizeInBytes), filePath, formatBytes(maxFileSize)));
 
         }
         createResourceFileWithSize(filePath, sizeInBytes);
@@ -231,42 +231,43 @@ public class FileHelper implements FileHelperInt {
     }
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size exactly: {expectedSize} bytes")
-    public void seeFileSizeExactly(String filePath, long expectedSize) {
+    @Step("(FILE)[ASSERT] {filePath} size is exactly: {expectedSize} bytes")
+    public void seeFileSizeIsExactly(String filePath, long expectedSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     assertEquals(expectedSize, getResourceFileSize(filePath)));
         } catch (ConditionTimeoutException e) {
 
-            throw new AssertionError(MessageFormat.format("File <{0}> size expected to be EXACTLY <{1}> but got <{2}> within {3}",
-                    filePath, formatBytes(expectedSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+            throw new AssertionError("File '%s' size expected to be EXACTLY <%s> but got <%s> within %s"
+                    .formatted(filePath, formatBytes(expectedSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size greater: {minSize} bytes")
-    public void seeFileSizeGreaterThan(String filePath, long minSize) {
+    @Step("(FILE)[ASSERT] {filePath} size is greater: {minSize} bytes")
+    public void seeFileSizeIsGreaterThan(String filePath, long minSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     Assertions.assertTrue(
                             getResourceFileSize(filePath) > minSize));
         } catch (ConditionTimeoutException e) {
-            throw new AssertionError(MessageFormat.format("File <{0}> size expected to be GREATER <{1}> but got <{2}> within {3}",
-                    filePath, formatBytes(minSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+
+            throw new AssertionError("File '%s' size expected to be GREATER <%s> but got <%s> within %s"
+                    .formatted(filePath, formatBytes(minSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
 
 
     @Override
-    @Step("(FILE)[ASSERT] File: {filePath} size less: {maxSize} bytes")
-    public void seeFileSizeLessThan(String filePath, long maxSize) {
+    @Step("(FILE)[ASSERT] {filePath} size is less: {maxSize} bytes")
+    public void seeFileSizeIsLessThan(String filePath, long maxSize) {
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
                     Assertions.assertTrue(
                             getResourceFileSize(filePath) < maxSize));
         } catch (ConditionTimeoutException e) {
-            throw new AssertionError(MessageFormat.format("File <{0}> size  expected to be LESS <{1}> but got <{2}> within {3}",
-                    filePath, formatBytes(maxSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+            throw new AssertionError("File '%s' size expected to be LESS <%s> but got <%s> within %s"
+                    .formatted(filePath, formatBytes(maxSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
         }
     }
 
@@ -298,16 +299,14 @@ public class FileHelper implements FileHelperInt {
                             countMatchesInFile(filePath, expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                    MessageFormat.format(
-                            "\nFAILED: <<{0}>> expected to be present in file within {1}",
-                            expectedText, formatMilliseconds(awaitMs)));
+                    "%nFile '%s' does not contain expected text <<%s>> within %s".formatted(filePath, expectedText, formatMilliseconds(awaitMs)));
         }
     }
 
     private void seeFileDoesNotContainSetup(String filePath, String expectedText, Boolean regex) {
         assertEquals(0,
                 countMatchesInFile(filePath, expectedText, regex),
-                "\nFAILED: <<" + expectedText + ">> unexpected present in file");
+                "%nText <<%s>> should not be present in file: %s".formatted(expectedText, filePath));
     }
 
     @Step("(FILE)[ASSERT] {filePath} equal to {algorithm} hash: <{expectedHash}>")
@@ -316,7 +315,7 @@ public class FileHelper implements FileHelperInt {
                 expectedHash,
                 hashFile(filePath, algorithm),
                 MessageFormat.format(
-                        "\nHash({0}) <<{1}>> not equal to file: {2}", algorithm, expectedHash, filePath)
+                        "%nHash({0}) <<{1}>> not equal to file: {2}", algorithm, expectedHash, filePath)
         );
     }
 
@@ -346,8 +345,8 @@ public class FileHelper implements FileHelperInt {
         try {
             Assertions.assertTrue(getResourceFileSize(filePath) <= maxFileSize);
         } catch (AssertionError e) {
-            throw new FileReaderException(MessageFormat.format("File <{0}> size({1}) more then provided #maxFileSize({2}) (set or configure more if you need)",
-                    filePath, formatBytes(getResourceFileSize(filePath)), formatBytes(maxFileSize)));
+            throw new FileReaderException("File '%s' size(%s) more then provided #maxFileSize(%s) (set or configure more if you need)"
+                    .formatted(filePath, formatBytes(getResourceFileSize(filePath)), formatBytes(maxFileSize)));
 
         }
     }

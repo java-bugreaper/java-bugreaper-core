@@ -59,6 +59,31 @@ class BaseUrlTests {
 
     }
 
+    @Test
+    void testReadFromUrlWithLines() {
+
+        String body = """
+        test message
+        
+        with lines
+        """;
+
+        client.when(
+                request()
+                        .withMethod("GET")
+                        .withPath("/download/1")
+        ).respond(
+                response()
+                        .withStatusCode(200)
+                        .withHeader("Content-Type", "application/octet-stream")
+                        .withHeader("Content-Disposition", "attachment; filename=\"test.txt\"")
+                        .withBody(body)
+        );
+
+        assertEquals(body, readBody("http://localhost:1080/download/1"));
+
+    }
+
     //download
 
     // custom file name
