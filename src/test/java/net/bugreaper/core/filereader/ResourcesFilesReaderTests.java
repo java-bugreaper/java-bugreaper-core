@@ -81,7 +81,7 @@ class ResourcesFilesReaderTests {
 
         assertEquals(
                 "[[WARN] File to delete does not exist, skipping: %s]"
-                        .formatted(System.getProperty("user.dir")+ "/src/test/resources/" + file),
+                        .formatted(System.getProperty("user.dir") + "/src/test/resources/" + file),
                 logWatcher.getLoggedEvents(Level.WARN).toString());
     }
 
@@ -104,7 +104,7 @@ class ResourcesFilesReaderTests {
         //check error log
         assertEquals(
                 "[[ERROR] Failed to write file '%s'. Check that the path is valid and the test resource directory exists.]"
-                        .formatted(System.getProperty("user.dir")+ "/src/test/resources/" + file),
+                        .formatted(System.getProperty("user.dir") + "/src/test/resources/" + file),
                 logWatcher.getLoggedEvents(Level.ERROR).toString());
     }
 
@@ -115,7 +115,7 @@ class ResourcesFilesReaderTests {
         final String path = "files/test_not_exist.txt";
 
         try {
-           readResourceFile(path);
+            readResourceFile(path);
         } catch (Exception e) {
             errorMessage = e.getMessage();
         }
@@ -217,7 +217,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileExists(fileName));
 
         assertEquals(
-                MessageFormat.format("File ''{0}{1}{2}'' not exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' does not exist", System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file exists");
     }
@@ -230,7 +230,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileNotExists(fileName));
 
         assertEquals(
-                MessageFormat.format("File ''{0}{1}{2}'' expected to not exist, but exists",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' expected to not exist, but exists", System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file not exists");
     }
@@ -246,7 +246,7 @@ class ResourcesFilesReaderTests {
                 seeResourceFileNotEmpty(fileName));
 
         assertEquals(
-                MessageFormat.format("File ''{0}{1}{2}'' expected to not be empty",  System.getProperty("user.dir"), "/src/test/resources/", fileName),
+                MessageFormat.format("File ''{0}{1}{2}'' expected to not be empty", System.getProperty("user.dir"), "/src/test/resources/", fileName),
                 exception.getMessage(),
                 "Assert catch on is file not exists");
     }

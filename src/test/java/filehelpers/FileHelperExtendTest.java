@@ -196,6 +196,18 @@ class FileHelperExtendTest extends FileHelper {
     }
 
     @Test
+    void testHashSha512NotExist() {
+
+
+        Throwable exception = assertThrows(FileReaderException.class, () ->
+                seeFileHashSha1Equal("test/not_exist.txt", "19fcae40ccca465227672dd2fb748bced923f3ca"));
+
+        assertEquals(
+                "Failed to read file: " + System.getProperty("user.dir") + "/src/test/resources/" + "test/not_exist.txt",
+                exception.getMessage());
+    }
+
+    @Test
     void testHashNotSupported() {
         Throwable exception = assertThrows(FileReaderException.class, () ->
                 seeFileHashAssertSetup(HASH_FILE, "hash123", "MY-ALG"));
@@ -216,7 +228,7 @@ class FileHelperExtendTest extends FileHelper {
         fileTime.seeFileSizeIsGreaterThan(filePath, 179);
         fileTime.seeFileSizeIsLessThan(filePath, 181);
 
-       long size = fileTime.getFileSize(filePath);
+        long size = fileTime.getFileSize(filePath);
 
         assertEquals(180, size);
     }
@@ -317,7 +329,7 @@ class FileHelperExtendTest extends FileHelper {
 
     }
 
-    private void sizeCatch(Throwable ex){
+    private void sizeCatch(Throwable ex) {
 
         MatcherAssert.assertThat(
                 ex.getMessage(),

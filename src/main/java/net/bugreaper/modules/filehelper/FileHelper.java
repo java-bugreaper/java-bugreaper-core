@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * <p>Supports reading and managing dynamic files created during test execution.</p>
  *
- * Recommended to use one instance:
+ * <p>Recommended to use one instance:
  * {@code FileHelper fh = FileHelper.getInstance();}
  * </p>
  *
@@ -88,11 +88,12 @@ public class FileHelper implements FileHelperInt {
      * <pre>
      * modules:
      *   file-helper:
-     *     await: 500   # optional await timeout in milliseconds
-     *     maxFileSize: 2048  # optional maximum file size in bytes
+     *     await: 500   # (optional) await timeout in milliseconds
+     *     maxFileSize: 2048  # (optional) maximum file size in bytes
      * </pre>
      *
      * <p>Missing optional keys will fall back to predefined defaults.</p>
+     *
      * @throws IllegalArgumentException if the configuration contains invalid values
      */
     public FileHelper() {

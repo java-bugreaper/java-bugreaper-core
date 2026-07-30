@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * <p>Supports reading and managing dynamic log files created during test execution.</p>
  *
- * Recommended to use one instance:
+ * <p>Recommended to use one instance:
  * {@code LogHelper lh = LogHelper.getInstance();}
  * </p>
  *
@@ -61,8 +61,8 @@ public class LogHelper implements LogHelperInt {
      * This implementation is thread-safe using method-level synchronization.
      *
      * @return the singleton instance of {@link LogHelper}
-     * @see #LogHelper() config setup
      * @throws ConfigException if the configuration contains invalid values
+     * @see #LogHelper() config setup
      */
     public static synchronized LogHelper getInstance() {
         if (instance == null) {
@@ -84,11 +84,12 @@ public class LogHelper implements LogHelperInt {
      * modules:
      *   log-helper:
      *     logfile: 'logs/server/logs.log'  # path in src/test/resources
-     *     await: 500   # optional await timeout in milliseconds
+     *     await: 500   # (optional) await timeout in milliseconds
      * </pre>
      *
      * <p>Missing required keys will result in configuration errors.
      * Missing optional keys will fall back to predefined defaults.</p>
+     *
      * @throws ConfigException if the configuration contains invalid values
      */
     public LogHelper() {
@@ -134,9 +135,9 @@ public class LogHelper implements LogHelperInt {
     @Override
     public String getConfigSummary() {
         String info = String.format("""
-        %s:
-            await=%d
-            logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
+                %s:
+                    await=%d
+                    logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
 
         LOGGER.info(info);
         return info;
@@ -217,7 +218,7 @@ public class LogHelper implements LogHelperInt {
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                  "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
+                    "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
         }
     }
 

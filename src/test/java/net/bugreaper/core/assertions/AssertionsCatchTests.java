@@ -405,6 +405,47 @@ class AssertionsCatchTests {
     }
 
     @Test
+    void testContainsJsonWrongActual2Type() {
+
+        String valid = """
+                {
+                  "id": 1010
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson(valid, "77"));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("Expected: a JSON object"));
+    }
+
+    @Test
+    void testContainsJsonWrongExpectedType() {
+
+        String valid = """
+                {
+                  "id": 1010
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson("77", valid));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("Expected: org.skyscreamer.jsonassert.JSONParser"));
+    }
+
+    @Test
+    void testContainsJsonWrongExpectedAndActualType() {
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson("77", "88"));
+
+        assertEquals("",
+                exception.getMessage());
+    }
+
+    @Test
     void testAssertJsonNotContains() {
 
         String actual = """

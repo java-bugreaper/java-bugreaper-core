@@ -80,7 +80,7 @@ public final class ResourcesFileReader {
      * <p>Existing file content is preserved.</p>
      *
      * @param filePath path to the file in <b>test</b> resources
-     * @param content data to append
+     * @param content  data to append
      * @throws FileReaderException if writing the file fails
      */
     public static void writeTextToResourceFile(String filePath, String content) {
@@ -134,9 +134,9 @@ public final class ResourcesFileReader {
      *
      * <p>Overrides the existing file if it already exists.</p>
      *
-     * @param filePath     path to file in <b>test</b> resources
+     * @param filePath    path to file in <b>test</b> resources
      * @param sizeInBytes size in bytes
-     * @throws FileReaderException if writing fails
+     * @throws FileReaderException if the file cannot be created or written
      */
     public static void createResourceFileWithSize(String filePath, long sizeInBytes) {
 
@@ -158,11 +158,11 @@ public final class ResourcesFileReader {
     }
 
     /**
-     * Get file(in resources) size
+     * Returns the size of the file in <b>test</b> resources in bytes.
      *
-     * @param fileName name (or folder/name - folder must exist) in resource directory
-     * @return long with bytes
-     * @throws FileReaderException on read fail
+     * @param fileName path to the file in <b>test</b> resources
+     * @return file size in bytes
+     * @throws FileReaderException if the file is missing or the size cannot be determined
      */
     public static long getResourceFileSize(String fileName) {
         Path path = Paths.get(getTestResourcesPath(), fileName);
@@ -175,52 +175,53 @@ public final class ResourcesFileReader {
     }
 
     /**
-     * Returns the file(in resources) existing flag
+     * Checks whether the file exists in <b>test</b> resources.
      *
-     * @param fileName name (or folder/name) in resource directory
-     * @return boolean
+     * @param filePath path to the file in <b>test</b> resources
+     * @return {@code true} if the file exists, otherwise {@code false}
      */
-    public static boolean resourceFileExistsStatus(String fileName) {
-        File file = new File(getTestResourcesPath(), fileName);
+    public static boolean resourceFileExistsStatus(String filePath) {
+        File file = new File(getTestResourcesPath(), filePath);
         return file.exists();
     }
 
     /**
-     * Check is file(in resources) exists
+     * Asserts that the file exists in <b>test</b> resources.
      *
-     * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionError on failed
+     * @param filePath path to the file in <b>test</b> resources
+     * @throws AssertionError if the assertion fails
      */
-    public static void seeResourceFileExists(String fileName) {
+    public static void seeResourceFileExists(String filePath) {
 
-        if (!resourceFileExistsStatus(fileName)) {
-            throw new AssertionError("File '%s%s' not exists".formatted(getTestResourcesPath(), fileName));
+        if (!resourceFileExistsStatus(filePath)) {
+            throw new AssertionError("File '%s%s' does not exist".formatted(getTestResourcesPath(), filePath));
         }
     }
 
     /**
-     * Check is file(in resources) NOT exists
+     * Asserts that the file does not exist in <b>test</b> resources.
      *
-     * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionError on failed
+     * @param filePath path to the file in <b>test</b> resources
+     * @throws AssertionError if the assertion fails
      */
-    public static void seeResourceFileNotExists(String fileName) {
+    public static void seeResourceFileNotExists(String filePath) {
 
-        if (resourceFileExistsStatus(fileName)) {
-            throw new AssertionError("File '%s%s' expected to not exist, but exists".formatted(getTestResourcesPath(), fileName));
+        if (resourceFileExistsStatus(filePath)) {
+            throw new AssertionError("File '%s%s' expected to not exist, but exists".formatted(getTestResourcesPath(), filePath));
         }
     }
 
     /**
-     * Check is file(in resources) NOT empty
+     * Asserts that the file in <b>test</b> resources is not empty.
      *
-     * @param fileName name (or folder/name) in resource directory
-     * @throws AssertionError on failed
+     * @param filePath path to the file in <b>test</b> resources
+     * @throws AssertionError      if the assertion fails
+     * @throws FileReaderException if the file is missing or the size cannot be determined
      */
-    public static void seeResourceFileNotEmpty(String fileName) {
+    public static void seeResourceFileNotEmpty(String filePath) {
 
-        if (getResourceFileSize(fileName) == 0) {
-            throw new AssertionError("File '%s%s' expected to not be empty".formatted(getTestResourcesPath(), fileName));
+        if (getResourceFileSize(filePath) == 0) {
+            throw new AssertionError("File '%s%s' expected to not be empty".formatted(getTestResourcesPath(), filePath));
         }
     }
 }

@@ -17,7 +17,7 @@ public interface LogHelperInt {
 
     /**
      * Creates a helper with the specified log file path.
-     *b
+     *
      * @param logFilePath path to the log file in <b>test</b> resources (example: {@code logs/server/logs.log})
      * @return this
      * @throws IllegalArgumentException if the log file path is null or empty

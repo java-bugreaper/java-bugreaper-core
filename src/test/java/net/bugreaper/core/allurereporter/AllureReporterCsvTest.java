@@ -1,5 +1,9 @@
 package net.bugreaper.core.allurereporter;
 
+import ch.qos.logback.classic.Level;
+import net.bugreaper.core.utils.LogWatcher;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static net.bugreaper.core.allurereporter.AllureBuilder.reportHtmlCsvCases;
@@ -8,7 +12,20 @@ import static net.bugreaper.core.filereaders.FileReader.readCsvToArray;
 import static net.bugreaper.core.filereaders.ResourcesFileReader.readResourceFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 class AllureReporterCsvTest {
+
+    private LogWatcher logWatcher;
+
+    @AfterEach
+    void tearDown() {
+        logWatcher.detach();
+    }
+
+    @BeforeEach
+    void clean() {
+        logWatcher = new LogWatcher("net.bugreaper.core", Level.DEBUG);
+    }
 
     @Test
     void testCsvReaderBasic() {
@@ -80,6 +97,33 @@ class AllureReporterCsvTest {
                 "File does not exist in resources: " + file,
                 errorMessage,
                 "File not found error: " + errorMessage);
+
+        assertEquals(
+                "[[INFO] Full path to project: %s]"
+                        .formatted(System.getProperty("user.dir")),
+                logWatcher.getLoggedEvents(Level.INFO).toString());
+    }
+
+    @Test
+    void testCsvReaderNotFile() {
+
+        String errorMessage = null;
+        var file = "files";
+
+        try {
+            reportHtmlCsvCases("error", readCsvToArray(file));
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
+
+        assertEquals(
+                "Failed to read file: " + file,
+                errorMessage);
+
+        assertEquals(
+                "[[INFO] Full path to project: %s]"
+                        .formatted(System.getProperty("user.dir")),
+                logWatcher.getLoggedEvents(Level.INFO).toString());
     }
 
 }

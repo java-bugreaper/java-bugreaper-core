@@ -50,7 +50,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     @Step("↑(Assert) List have JSON CONTAINS part(ignoring extensive array elements):")
     public AssertableStringList seeListAnyContainsJsonSubset(String expectedJsonPart) {
 
-        AllureReporter.attachJson("expected json part",  expectedJsonPart);
+        AllureReporter.attachJson("expected json part", expectedJsonPart);
         ListAsserts.containsJsonSubsetInList(expectedJsonPart, arrayList);
 
         return this;
@@ -60,7 +60,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     @Step("↑(Assert) List have JSON CONTAINS part:")
     public AssertableStringList seeListAnyContainsJson(String expectedJsonPart) {
 
-        AllureReporter.attachJson("expected json part",  expectedJsonPart);
+        AllureReporter.attachJson("expected json part", expectedJsonPart);
         ListAsserts.containsJsonInList(expectedJsonPart, arrayList);
 
         return this;
@@ -70,7 +70,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     @Step("↑(Assert) List have JSON CONTAINS (EXTENDED) part:")
     public AssertableStringList seeListAnyContainsExtendedJson(String expectedJsonPart) {
 
-        AllureReporter.attachJson("expected json with options",  expectedJsonPart);
+        AllureReporter.attachJson("expected json with options", expectedJsonPart);
         ListAsserts.containsJsonExtendedInList(expectedJsonPart, arrayList);
 
         return this;
@@ -164,7 +164,7 @@ public class AssertableStringList implements AssertableListAsserts, AssertableLi
     @Step("↑(Grab) Last element from list")
     public String grabLastElement() {
 
-        if (arrayList.isEmpty()){
+        if (arrayList.isEmpty()) {
             throw new IllegalArgumentException("List is empty");
         }
 

@@ -24,16 +24,16 @@ public class ProjectPaths {
      * Works when core is a dependency (Maven or Gradle), regardless of module structure.
      */
     public static String getTestResourcesPath() {
-            // Try to locate a known resource from the test resources classpath
+        // Try to locate a known resource from the test resources classpath
 
-            //can be moved to param or to config
-            Path testResources = getProjectPath().resolve("src/test/resources");
+        //can be moved to param or to config
+        Path testResources = getProjectPath().resolve("src/test/resources");
 
-            if (!testResources.toFile().exists()) {
-                LOGGER.warn("Test resources directory not found: {}", testResources);
-            }
+        if (!testResources.toFile().exists()) {
+            LOGGER.warn("Test resources directory not found: {}", testResources);
+        }
 
-            return testResources.toAbsolutePath() + "/";
+        return testResources.toAbsolutePath() + "/";
     }
 
     public static Path getProjectPath() {

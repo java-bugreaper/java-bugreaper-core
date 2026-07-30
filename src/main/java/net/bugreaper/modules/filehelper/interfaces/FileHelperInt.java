@@ -34,6 +34,7 @@ public interface FileHelperInt {
      *
      * @param filePath path to file in <b>test</b> resources
      * @param message  text to append
+     * @throws FileReaderException if writing fails
      */
     void addToFile(String filePath, String message);
 
@@ -44,6 +45,7 @@ public interface FileHelperInt {
      *
      * @param filePath    path to file in <b>test</b> resources
      * @param sizeInBytes desired file size in bytes
+     * @throws FileReaderException if writing fails
      */
     void createFileWithSize(String filePath, long sizeInBytes);
 
@@ -54,6 +56,7 @@ public interface FileHelperInt {
      *
      * @param filePath path to file in <b>test</b> resources
      * @return file size in bytes
+     * @throws FileReaderException if the file is missing or cannot be read
      */
     long getFileSize(String filePath);
 
@@ -63,6 +66,7 @@ public interface FileHelperInt {
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath path to file in <b>test</b> resources
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void showDataFromFile(String filePath);
 
@@ -75,6 +79,7 @@ public interface FileHelperInt {
      * @param expectedText expected text or regular expression
      * @param regex        whether the expected text should be treated as a regular expression
      * @return number of occurrences in the file
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     int countMatchesInFile(String filePath, String expectedText, boolean regex);
 
@@ -87,95 +92,105 @@ public interface FileHelperInt {
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedSize expected file size in bytes
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or the size cannot be determined
      */
     void seeFileSizeIsExactly(String filePath, long expectedSize);
 
     /**
-     * Asserts that the size of the file in <b>test</b> resources is greater than the specified minimum size.//TODO good
+     * Asserts that the size of the file in <b>test</b> resources is greater than the specified minimum size.
      * <p><b>with await</b>
      *
      * @param filePath path to file in <b>test</b> resources
      * @param minSize  minimum file size in bytes
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or the size cannot be determined
      */
     void seeFileSizeIsGreaterThan(String filePath, long minSize);
 
     /**
-     * Asserts that the size of the file in <b>test</b> resources is less than the specified maximum size.//TODO good
+     * Asserts that the size of the file in <b>test</b> resources is less than the specified maximum size.
      * <p><b>with await</b>
      *
      * @param filePath path to file in <b>test</b> resources
      * @param maxSize  maximum file size in bytes
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or the size cannot be determined
      */
     void seeFileSizeIsLessThan(String filePath, long maxSize);
 
     /**
-     * Asserts that the <b>test</b> resources file contains text matching the specified regular expression.
+     * Asserts that file in <b>test</b> resources contains text matching the specified regular expression.
      * <p><b>with await</b>
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath            path to file in <b>test</b> resources
      * @param expectedTextPattern expected text pattern (regular expression)
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileContainsRegex(String filePath, String expectedTextPattern);
 
     /**
-     * Asserts that the <b>test</b> resources file contains the specified text (not a regular expression).
+     * Asserts that the file in <b>test</b> resources contains the specified text (not a regular expression).
      * <p><b>with await</b>
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath     path to the file in <b>test</b> resources
      * @param expectedText expected text
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileContainString(String filePath, String expectedText);
 
     /**
-     * Asserts that the <b>test</b> resources file does not contain the specified text (not a regular expression).
+     * Asserts that the file in <b>test</b> resources does not contain the specified text (not a regular expression).
      *
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath       path to the file in <b>test</b> resources
      * @param unexpectedText text that must not be present
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileDoesNotContainString(String filePath, String unexpectedText);
 
     /**
-     * Asserts that the <b>test</b> resources file's MD5 hash matches the expected hash.
+     * Asserts that the MD5 hash of the file in <b>test</b> resources matches the expected hash.
      *
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedHash expected MD5 hash
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileHashMd5Equal(String filePath, String expectedHash);
 
     /**
-     * Asserts that the <b>test</b> resources file's SHA-1 hash matches the expected hash.
+     * Asserts that the SHA-1 hash of the file in <b>test</b> resources matches the expected hash.
      *
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedHash expected SHA-1 hash
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileHashSha1Equal(String filePath, String expectedHash);
 
     /**
-     * Asserts that the <b>test</b> resources file's SHA-256 hash matches the expected hash.
+     * Asserts that the SHA-256 hash of the file in <b>test</b> resources matches the expected hash.
      *
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedHash expected SHA-256 hash
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileHashSha256Equal(String filePath, String expectedHash);
 
     /**
-     * Asserts that the <b>test</b> resources file's SHA-512 hash matches the expected hash.
+     * Asserts that the SHA-512 hash of the file in <b>test</b> resources matches the expected hash.
      *
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedHash expected SHA-512 hash
      * @throws AssertionError if the assertion fails
+     * @throws FileReaderException  if the file is missing or cannot be read
      */
     void seeFileHashSha512Equal(String filePath, String expectedHash);
 
