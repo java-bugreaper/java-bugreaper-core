@@ -362,7 +362,7 @@ class AssertionsCatchTests {
                 }""";
 
         String expected = """
-                 1010""";
+                1010""";
 
         Throwable exception = assertThrows(AssertionError.class, () ->
                 containsJson(expected, actual));
@@ -380,7 +380,7 @@ class AssertionsCatchTests {
                 }""";
 
         String expected = """
-                 1010""";
+                1010""";
 
         Throwable exception = assertThrows(AssertionError.class, () ->
                 assertJson(expected, actual));
@@ -394,7 +394,7 @@ class AssertionsCatchTests {
     void testContainsJsonWrongActualType() {
 
         String all = """
-                 1010, 77}""";
+                1010, 77}""";
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 containsJson("77", all));
@@ -402,6 +402,47 @@ class AssertionsCatchTests {
         assertEquals("org.json.JSONException: Unparsable JSON string: " + all,
                 exception.getMessage(),
                 "Exception for contains JSON type error");
+    }
+
+    @Test
+    void testContainsJsonWrongActual2Type() {
+
+        String valid = """
+                {
+                  "id": 1010
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson(valid, "77"));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("Expected: a JSON object"));
+    }
+
+    @Test
+    void testContainsJsonWrongExpectedType() {
+
+        String valid = """
+                {
+                  "id": 1010
+                }""";
+
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson("77", valid));
+
+        MatcherAssert.assertThat(
+                exception.getMessage(),
+                StringContains.containsString("Expected: org.skyscreamer.jsonassert.JSONParser"));
+    }
+
+    @Test
+    void testContainsJsonWrongExpectedAndActualType() {
+        Throwable exception = assertThrows(AssertionError.class, () ->
+                containsJson("77", "88"));
+
+        assertEquals("",
+                exception.getMessage());
     }
 
     @Test
@@ -454,11 +495,14 @@ class AssertionsCatchTests {
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 assertValidJson(actual));
 
-        MatcherAssert.assertThat(
-                "Exception for assert JSON type error",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        {
+                          "id": 1010,
+                        }""",
+                exception.getMessage());
     }
+
     @Test
     void testJsonArrayStrictWithTrailingCommaTest() {
 
@@ -475,11 +519,19 @@ class AssertionsCatchTests {
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 assertValidJson(actual));
 
-        MatcherAssert.assertThat(
-                "Exception for assert JSON type error",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        [
+                        {
+                          "id": 1010,
+                        },
+                        {
+                          "id": 1011,
+                        },
+                        ]""",
+                exception.getMessage());
     }
+
     @Test
     void testJsonStrictNotJsonTest() {
 
@@ -488,10 +540,10 @@ class AssertionsCatchTests {
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 assertValidJson(actual));
 
-        MatcherAssert.assertThat(
-                "Exception for assert JSON type error",
-                exception.getMessage(),
-                StringContains.containsString("Invalid strict JSON/JSONArray:"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (strict):
+                        test""",
+                exception.getMessage());
     }
 
     @Test
@@ -505,10 +557,12 @@ class AssertionsCatchTests {
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
                 assertLenientValidJson(actual));
 
-        MatcherAssert.assertThat(
-                "Exception for assert JSON type error",
-                exception.getMessage(),
-                StringContains.containsString("Invalid lenient JSON/JSONArray:"));
+        assertEquals("""
+                        Invalid JSON or JSON array format (lenient):
+                        {
+                          "id"
+                        }""",
+                exception.getMessage());
     }
 
     @Test

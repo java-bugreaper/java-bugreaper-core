@@ -186,6 +186,7 @@ class AllureUtilsTests {
 
     @Test
     @Order(4)
+    //can not work from UI check from console
     void checkResultTest2() {
         JsonNode result = AllureResultLoader.loadByTestName("createResultTest2");
 

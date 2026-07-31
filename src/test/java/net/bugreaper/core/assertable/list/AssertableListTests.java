@@ -245,6 +245,7 @@ class AssertableListTests {
 
     @Test
     @Order(2)
+    //can not work from UI check from console
     void allureForListCheck() {
         JsonNode result = AllureResultLoader.loadByTestName("testListAssertsJsonFromFileAsserts");
 

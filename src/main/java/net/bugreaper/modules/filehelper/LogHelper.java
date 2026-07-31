@@ -1,6 +1,7 @@
 package net.bugreaper.modules.filehelper;
 
 import net.bugreaper.core.config.YamlUtils;
+import net.bugreaper.core.exceptions.ConfigException;
 import net.bugreaper.modules.filehelper.interfaces.LogHelperInt;
 import io.qameta.allure.Allure;
 import net.bugreaper.core.filereaders.ResourcesFileReader;
@@ -19,12 +20,19 @@ import static net.bugreaper.core.utils.AwaitUtils.awaitCustom;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Class consists methods that operate with LOG files in <b>src/test/resources</b> (can be mounted from service)
+ * Provides methods for working with log files in <b>src/test/resources</b>.
  *
- * <p>For one instance run recommended: {@code LogHelper lh = LogHelper.getInstance();}</p>
+ * <p>The log file path is provided during initialization. Log files can be mounted
+ * from external services or created and updated during test execution.</p>
  *
+ * <p>Supports reading and managing dynamic log files created during test execution.</p>
  *
- * <p> Await for some asserts default: {@link #awaitMs}, can be changed by: {@link #setAwaitMs(int)}
+ * <p>Recommended to use one instance:
+ * {@code LogHelper lh = LogHelper.getInstance();}
+ * </p>
+ *
+ * <p>Default await timeout for assertions with await is configured by {@link #awaitMs}.
+ * It can be changed using {@link #setAwaitMs(int)}.</p>
  *
  * @author Oleksii Betin "ambu550"
  * @since 1.0.0
@@ -40,18 +48,11 @@ public class LogHelper implements LogHelperInt {
      * default ms await in tests
      */
     private volatile int awaitMs = 2000;
-    private volatile String logFilePath = "default/server.log";
+    private volatile String logFilePath;
 
 
-    /**
-     * Constructor with provided params
-     * @param logFilePath path to logfile in test resources (example "logs/server/logs.log"
-     */
     public LogHelper(String logFilePath) {
-        if (logFilePath == null || logFilePath.isBlank()) {
-            throw new IllegalArgumentException("logPath can`t be empty or null");
-        }
-        this.logFilePath = logFilePath;
+        setLogFile(logFilePath);
     }
 
     /**
@@ -60,6 +61,7 @@ public class LogHelper implements LogHelperInt {
      * This implementation is thread-safe using method-level synchronization.
      *
      * @return the singleton instance of {@link LogHelper}
+     * @throws ConfigException if the configuration contains invalid values
      * @see #LogHelper() config setup
      */
     public static synchronized LogHelper getInstance() {
@@ -71,7 +73,7 @@ public class LogHelper implements LogHelperInt {
     }
 
     /**
-     * Constructs a FileHelper client configuration.
+     * Constructs a LogHelper client using YAML configuration.
      *
      * <p>Loads configuration values from a YAML file.</p>
      *
@@ -81,12 +83,14 @@ public class LogHelper implements LogHelperInt {
      * <pre>
      * modules:
      *   log-helper:
-     *     logfile: 'logs/byyml/config.log'
-     *     await: 500   # optional
+     *     logfile: 'logs/server/logs.log'  # path in src/test/resources
+     *     await: 500   # (optional) await timeout in milliseconds
      * </pre>
      *
      * <p>Missing required keys will result in configuration errors.
      * Missing optional keys will fall back to predefined defaults.</p>
+     *
+     * @throws ConfigException if the configuration contains invalid values
      */
     public LogHelper() {
         loadFromYaml();
@@ -96,7 +100,7 @@ public class LogHelper implements LogHelperInt {
 
         //required config fields
         String fileVal = YamlUtils.getStringValueByPath("modules.log-helper.logfile");
-        setLogfile(fileVal);
+        setLogFile(fileVal);
 
         //optional config fields
         Object awaitVal = YamlUtils.getValueByPath("modules.log-helper.await", true);
@@ -118,9 +122,9 @@ public class LogHelper implements LogHelperInt {
     }
 
     @Override
-    public LogHelper setLogfile(String logFilePath) {
+    public LogHelper setLogFile(String logFilePath) {
         if (logFilePath == null || logFilePath.isEmpty()) {
-            throw new IllegalArgumentException("logfile can`t bee empty or null");
+            throw new IllegalArgumentException("Log file path must not be null or empty");
         }
         this.logFilePath = logFilePath;
         return this;
@@ -131,9 +135,9 @@ public class LogHelper implements LogHelperInt {
     @Override
     public String getConfigSummary() {
         String info = String.format("""
-        %s:
-            await=%d
-            logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
+                %s:
+                    await=%d
+                    logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
 
         LOGGER.info(info);
         return info;
@@ -214,7 +218,7 @@ public class LogHelper implements LogHelperInt {
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                  "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
+                    "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
         }
     }
 

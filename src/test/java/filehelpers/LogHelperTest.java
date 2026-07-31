@@ -20,6 +20,17 @@ class LogHelperTest {
 
 
     @Test
+    void testWrongFileProvided() {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () ->
+                new LogHelper(null));
+
+        assertEquals(
+                "Log file path must not be null or empty",
+                exception.getMessage());
+    }
+
+    @Test
     void testExistLogsFailedSetAwaitMsSetTime() {
         logReaderV2.cleanLogs();
         Throwable exception = assertThrows(AssertionError.class, () ->
@@ -59,10 +70,10 @@ class LogHelperTest {
     void configLogHelperLogfileEmptyTest() {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                logReaderV2.setLogfile(""));
+                logReaderV2.setLogFile(""));
 
         assertEquals(
-                "logfile can`t bee empty or null",
+                "Log file path must not be null or empty",
                 exception.getMessage());
     }
 
@@ -70,10 +81,10 @@ class LogHelperTest {
     void configLogHelperLogfileNullTest() {
 
         Throwable exception = assertThrows(IllegalArgumentException.class, () ->
-                logReaderV2.setLogfile(null));
+                logReaderV2.setLogFile(null));
 
         assertEquals(
-                "logfile can`t bee empty or null",
+                "Log file path must not be null or empty",
                 exception.getMessage());
     }
 

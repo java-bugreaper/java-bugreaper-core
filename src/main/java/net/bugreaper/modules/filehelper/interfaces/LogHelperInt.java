@@ -6,74 +6,75 @@ import net.bugreaper.modules.filehelper.LogHelper;
 public interface LogHelperInt {
 
     /**
-     * Configure await in asserts with await
+     * Configures the global await timeout for assertions and operations that use await.
      *
-     * @param awaitMs ms await
+     * @param awaitMs await timeout in milliseconds
      * @return this
-     * @throws IllegalArgumentException on invalid setup
+     * @throws IllegalArgumentException if the provided timeout is invalid or less than 200 milliseconds
      */
     LogHelper setAwaitMs(int awaitMs);
 
-    /**
-     * Configure log file for interaction
-     *
-     * @param logFilePath log file in test resources
-     * @return this
-     * @throws IllegalArgumentException on invalid setup
-     */
-    LogHelper setLogfile(String logFilePath);
 
     /**
-     * Delete all data from file
+     * Creates a helper with the specified log file path.
+     *
+     * @param logFilePath path to the log file in <b>test</b> resources (example: {@code logs/server/logs.log})
+     * @return this
+     * @throws IllegalArgumentException if the log file path is null or empty
+     */
+    LogHelper setLogFile(String logFilePath);
+
+    /**
+     * Clears all content from the log file.
      *
      */
     void cleanLogs();
 
     /**
-     * Add text to file
+     * Appends text to the end of the log file.
      *
-     * @param message text to add
+     * @param message text to append
      */
     void addToLogs(String message);
 
     /**
-     * Show all data from log file in Allure attach
+     * Adds the log file content as an Allure attachment.
      *
      */
     void showDataFromLogs();
 
     /**
-     * Get expected text count from log file
+     * Returns the number of times the text occurs in the log file.
      *
-     * @param expectedText expected text
-     * @param regex true: use regex, false: strict string
-     * @return int with count
+     * @param expectedText expected text or regular expression
+     * @param regex        whether the expected text should be treated as a regular expression
+     * @return number of occurrences in the log file
      */
     int countInLogs(String expectedText, boolean regex);
 
     /**
-     * Asserts that the log file contains expected text(by regex)
+     * Asserts that the log file contains text matching the specified regular expression.
      * <p><b>with await</b>
      *
      * @param expectedText expected text with regex
-     * @throws AssertionError on assert fail
+     * @throws AssertionError if the assertion fails
      */
     void seeLogsContainsRegex(String expectedText);
 
     /**
-     * Asserts that the log file contains expected text(exactly - not regex)
+     * Asserts that the log file contains the specified text (not a regular expression).
      * <p><b>with await</b>
      *
      * @param expectedText expected text
-     * @throws AssertionError on assert fail
+     * @throws AssertionError if the assertion fails
      */
     void seeLogsContainString(String expectedText);
 
     /**
-     * Asserts that the log file not contains expected text(exactly)
+     * Asserts that the file does not contain the specified text (not a regular expression).
      *
-     * @param unexpectedText unexpected text
-     * @throws AssertionError on assert fail
+     * @param unexpectedText text that must not be present
+     * @throws AssertionError if the assertion fails
      */
     void seeLogsDoesNotContainString(String unexpectedText);
 
