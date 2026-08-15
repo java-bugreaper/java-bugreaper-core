@@ -87,7 +87,7 @@ public interface FileHelperInt {
 
     /**
      * Asserts that the <b>test</b> resources file size is exactly the expected size
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      *
      * @param filePath     path to file in <b>test</b> resources
      * @param expectedSize expected file size in bytes
@@ -98,7 +98,7 @@ public interface FileHelperInt {
 
     /**
      * Asserts that the size of the file in <b>test</b> resources is greater than the specified minimum size.
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      *
      * @param filePath path to file in <b>test</b> resources
      * @param minSize  minimum file size in bytes
@@ -109,7 +109,7 @@ public interface FileHelperInt {
 
     /**
      * Asserts that the size of the file in <b>test</b> resources is less than the specified maximum size.
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      *
      * @param filePath path to file in <b>test</b> resources
      * @param maxSize  maximum file size in bytes
@@ -120,7 +120,7 @@ public interface FileHelperInt {
 
     /**
      * Asserts that file in <b>test</b> resources contains text matching the specified regular expression.
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath            path to file in <b>test</b> resources
@@ -132,7 +132,7 @@ public interface FileHelperInt {
 
     /**
      * Asserts that the file in <b>test</b> resources contains the specified text (not a regular expression).
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      * <p>File size is limited by {@link FileHelper#maxFileSize}.</p>
      *
      * @param filePath     path to the file in <b>test</b> resources

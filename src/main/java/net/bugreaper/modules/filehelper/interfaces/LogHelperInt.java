@@ -54,7 +54,7 @@ public interface LogHelperInt {
 
     /**
      * Asserts that the log file contains text matching the specified regular expression.
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      *
      * @param expectedText expected text with regex
      * @throws AssertionError if the assertion fails
@@ -63,7 +63,7 @@ public interface LogHelperInt {
 
     /**
      * Asserts that the log file contains the specified text (not a regular expression).
-     * <p><b>with await</b>
+     * <p><b>Uses await.</b></p>
      *
      * @param expectedText expected text
      * @throws AssertionError if the assertion fails

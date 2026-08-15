@@ -47,6 +47,7 @@ class LogHelperConfigTests {
                 StringContains.containsString("""
                         LogHelper:
                             await=600
+                            await-poll-interval=120
                             logfile=logs/byyml/config.log"""));
 
     }
@@ -80,6 +81,7 @@ class LogHelperConfigTests {
                 StringContains.containsString("""
                         LogHelper:
                             await=2000
+                            await-poll-interval=100
                             logfile=logs/byyml/noop.log"""));
     }
 

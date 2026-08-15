@@ -56,14 +56,13 @@ public class ProjectPaths {
 
     /**
      * Walks up the filesystem tree until the project root is found.
-     * Assumes presence of 'build.gradle', 'pom.xml', or '.git' as project root marker.
+     * Assumes presence of 'build.gradle' or 'pom.xml' as project root marker.
      */
     private static Path findProjectRoot(Path start) {
         Path current = start.toAbsolutePath();
         while (current != null) {
             if (new File(current.toFile(), "pom.xml").exists()
-                    || new File(current.toFile(), "build.gradle").exists()
-                    || new File(current.toFile(), ".git").exists()) {
+                    || new File(current.toFile(), "build.gradle").exists()) {
                 return current;
             }
             current = current.getParent();

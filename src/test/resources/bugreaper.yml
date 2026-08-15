@@ -1,7 +1,9 @@
 modules:
   file-helper:
     await: 550 #optional
+    await-poll-interval: 110 #optional
     maxFileSize: 800 #optional
   log-helper:
     await: 600 #optional
+    await-poll-interval: 120 #optional
     logfile: 'logs/byyml/config.log'

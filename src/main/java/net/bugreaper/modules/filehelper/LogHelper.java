@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * <p>Supports reading and managing dynamic log files created during test execution.</p>
  *
- * <p>Recommended to use one instance:
+ * <p>It is recommended to use a single instance:
  * {@code LogHelper lh = LogHelper.getInstance();}
  * </p>
  *
@@ -45,9 +45,15 @@ public class LogHelper implements LogHelperInt {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogHelper.class);
 
     /**
-     * default ms await in tests
+     * Default await timeout for tests, in milliseconds.
      */
     private volatile int awaitMs = 2000;
+
+    /**
+     * Default await polling interval in milliseconds for tests.
+     */
+    private volatile int awaitPollInterval = 100;
+
     private volatile String logFilePath;
 
 
@@ -60,7 +66,7 @@ public class LogHelper implements LogHelperInt {
      * <p>
      * This implementation is thread-safe using method-level synchronization.
      *
-     * @return the singleton instance of {@link LogHelper}
+     * @return the shared instance of {@link LogHelper}
      * @throws ConfigException if the configuration contains invalid values
      * @see #LogHelper() config setup
      */
@@ -84,7 +90,7 @@ public class LogHelper implements LogHelperInt {
      * modules:
      *   log-helper:
      *     logfile: 'logs/server/logs.log'  # path in src/test/resources
-     *     await: 500   # (optional) await timeout in milliseconds
+     *     await: 500  # (optional)
      * </pre>
      *
      * <p>Missing required keys will result in configuration errors.
@@ -107,7 +113,10 @@ public class LogHelper implements LogHelperInt {
         if (awaitVal instanceof Number number) {
             setAwaitMs(number.intValue());
         }
-
+        Object awaitPollIntervalVal = YamlUtils.getValueByPath("modules.log-helper.await-poll-interval", true);
+        if (awaitPollIntervalVal instanceof Number number) {
+            this.awaitPollInterval = number.intValue();
+        }
     }
 
     //setters
@@ -137,7 +146,8 @@ public class LogHelper implements LogHelperInt {
         String info = String.format("""
                 %s:
                     await=%d
-                    logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, logFilePath);
+                    await-poll-interval=%d
+                    logfile=%s%n""", this.getClass().getSimpleName(), awaitMs, awaitPollInterval, logFilePath);
 
         LOGGER.info(info);
         return info;
@@ -213,19 +223,26 @@ public class LogHelper implements LogHelperInt {
 
     private void seeLogsContainWithAwaitSetup(String expectedText, Boolean regex) {
         try {
-            awaitCustom(awaitMs).untilAsserted(() ->
+            awaitCustom(awaitMs, awaitPollInterval).untilAsserted(() ->
                     assertNotEquals(0,
                             countInLogs(expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                    "%nLog file '%s' does not contain expected text <<%s>> within %s".formatted(logFilePath, expectedText, formatMilliseconds(awaitMs)));
+                    "%nLog file '%s' does not contain expected text%s <<%s>> within %s".formatted(logFilePath, regText(regex), expectedText, formatMilliseconds(awaitMs)));
         }
     }
 
     private void seeLogsDoesNotContainSetup(String expectedText, Boolean regex) {
         assertEquals(0,
                 countInLogs(expectedText, regex),
-                "%nText <<%s>> should not be present in log file: %s".formatted(expectedText, logFilePath));
+                "%nText%s <<%s>> should not be present in log file: %s".formatted(regText(regex), expectedText, logFilePath));
+    }
+
+    private String regText(boolean regex){
+        if (regex) {
+            return "(regex)";
+        }
+        return "";
     }
 
 }
