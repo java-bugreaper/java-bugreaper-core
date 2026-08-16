@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * <p>Supports reading and managing dynamic files created during test execution.</p>
  *
- * <p>Recommended to use one instance:
+ * <p>It is recommended to use a single instance:
  * {@code FileHelper fh = FileHelper.getInstance();}
  * </p>
  *
@@ -51,9 +52,14 @@ public class FileHelper implements FileHelperInt {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
 
     /**
-     * default ms await in tests
+     * Default await timeout for tests, in milliseconds.
      */
     private volatile int awaitMs = 2000;
+
+    /**
+     * Default await polling interval in milliseconds for tests.
+     */
+    private volatile int awaitPollInterval = 100;
 
     /**
      * default max file size in bytes for:
@@ -66,7 +72,7 @@ public class FileHelper implements FileHelperInt {
      * <p>
      * This implementation is thread-safe using method-level synchronization.
      *
-     * @return the singleton instance of {@link FileHelper}
+     * @return the shared instance of {@link FileHelper}
      * @see #FileHelper() config setup
      */
     public static synchronized FileHelper getInstance() {
@@ -108,6 +114,10 @@ public class FileHelper implements FileHelperInt {
             if (awaitVal instanceof Number number) {
                 setAwaitMs(number.intValue());
             }
+            Object awaitPollIntervalVal = YamlUtils.getValueByPath("modules.file-helper.await-poll-interval", true);
+            if (awaitPollIntervalVal instanceof Number number) {
+                this.awaitPollInterval = number.intValue();
+            }
             Object fileSizeVal = YamlUtils.getValueByPath("modules.file-helper.maxFileSize", true);
             if (fileSizeVal instanceof Number size) {
                 setMaxFileSize(size.longValue());
@@ -145,8 +155,9 @@ public class FileHelper implements FileHelperInt {
         String info = String.format("""
                         %s:
                             await=%d
+                            await-poll-interval=%d
                             maxFileSize=%d%n""",
-                this.getClass().getSimpleName(), awaitMs, maxFileSize);
+                this.getClass().getSimpleName(), awaitMs, awaitPollInterval, maxFileSize);
 
         LOGGER.info(info);
         return info;
@@ -241,27 +252,40 @@ public class FileHelper implements FileHelperInt {
     @Override
     @Step("(FILE)[ASSERT] {filePath} size is exactly: {expectedSize} bytes")
     public void seeFileSizeIsExactly(String filePath, long expectedSize) {
+
+        AtomicLong actual = new AtomicLong();
         try {
             awaitCustom(awaitMs).untilAsserted(() ->
-                    assertEquals(expectedSize, getResourceFileSize(filePath)));
+            {
+                long value = getResourceFileSize(filePath);
+                actual.set(value);
+
+                assertEquals(actual.get(), expectedSize);
+            });
         } catch (ConditionTimeoutException e) {
 
-            throw new AssertionError("File '%s' size expected to be EXACTLY <%s> but got <%s> within %s"
-                    .formatted(filePath, formatBytes(expectedSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+            throw new AssertionError(
+                    assertSizeMessageBuilder(filePath, "EXACTLY", formatBytes(expectedSize), formatBytes(actual.get()), formatMilliseconds(awaitMs)));
         }
     }
 
     @Override
     @Step("(FILE)[ASSERT] {filePath} size is greater: {minSize} bytes")
     public void seeFileSizeIsGreaterThan(String filePath, long minSize) {
+
+        AtomicLong actual = new AtomicLong();
         try {
-            awaitCustom(awaitMs).untilAsserted(() ->
-                    Assertions.assertTrue(
-                            getResourceFileSize(filePath) > minSize));
+            awaitCustom(awaitMs, awaitPollInterval).untilAsserted(() ->
+                    {
+                        long value = getResourceFileSize(filePath);
+                        actual.set(value);
+
+                        assertTrue(actual.get() > minSize);
+                    });
         } catch (ConditionTimeoutException e) {
 
-            throw new AssertionError("File '%s' size expected to be GREATER <%s> but got <%s> within %s"
-                    .formatted(filePath, formatBytes(minSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+            throw new AssertionError(
+                    assertSizeMessageBuilder(filePath, "GREATER", formatBytes(minSize), formatBytes(actual.get()), formatMilliseconds(awaitMs)));
         }
     }
 
@@ -269,14 +293,24 @@ public class FileHelper implements FileHelperInt {
     @Override
     @Step("(FILE)[ASSERT] {filePath} size is less: {maxSize} bytes")
     public void seeFileSizeIsLessThan(String filePath, long maxSize) {
+        AtomicLong actual = new AtomicLong();
         try {
-            awaitCustom(awaitMs).untilAsserted(() ->
-                    Assertions.assertTrue(
-                            getResourceFileSize(filePath) < maxSize));
+            awaitCustom(awaitMs, awaitPollInterval).untilAsserted(() ->
+            {
+                long value = getResourceFileSize(filePath);
+                actual.set(value);
+
+                assertTrue(actual.get() < maxSize);
+            });
         } catch (ConditionTimeoutException e) {
-            throw new AssertionError("File '%s' size expected to be LESS <%s> but got <%s> within %s"
-                    .formatted(filePath, formatBytes(maxSize), formatBytes(getResourceFileSize(filePath)), formatMilliseconds(awaitMs)));
+            throw new AssertionError(
+                    assertSizeMessageBuilder(filePath, "LESS", formatBytes(maxSize), formatBytes(actual.get()), formatMilliseconds(awaitMs)));
         }
+    }
+
+    private String assertSizeMessageBuilder(String filePath, String operator, String expected, String actual, String await) {
+        return "File '%s' size expected to be %s <%s>, but got <%s> within %s"
+                .formatted(filePath, operator, expected, actual, await);
     }
 
 
@@ -307,14 +341,14 @@ public class FileHelper implements FileHelperInt {
                             countMatchesInFile(filePath, expectedText, regex)));
         } catch (ConditionTimeoutException e) {
             throw new AssertionError(
-                    "%nFile '%s' does not contain expected text <<%s>> within %s".formatted(filePath, expectedText, formatMilliseconds(awaitMs)));
+                    "%nFile '%s' does not contain expected text%s <<%s>> within %s".formatted(filePath, regText(regex), expectedText, formatMilliseconds(awaitMs)));
         }
     }
 
     private void seeFileDoesNotContainSetup(String filePath, String expectedText, Boolean regex) {
         assertEquals(0,
                 countMatchesInFile(filePath, expectedText, regex),
-                "%nText <<%s>> should not be present in file: %s".formatted(expectedText, filePath));
+                "%nText%s <<%s>> should not be present in file: %s".formatted(regText(regex), expectedText, filePath));
     }
 
     @Step("(FILE)[ASSERT] {filePath} equal to {algorithm} hash: <{expectedHash}>")
@@ -357,6 +391,13 @@ public class FileHelper implements FileHelperInt {
                     .formatted(filePath, formatBytes(getResourceFileSize(filePath)), formatBytes(maxFileSize)));
 
         }
+    }
+
+    private String regText(boolean regex){
+        if (regex) {
+            return "(regex)";
+        }
+        return "";
     }
 
 }

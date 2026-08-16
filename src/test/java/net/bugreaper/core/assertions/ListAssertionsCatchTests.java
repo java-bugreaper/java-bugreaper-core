@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static net.bugreaper.core.assertions.ListAsserts.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -161,30 +162,25 @@ class ListAssertionsCatchTests {
         actualList.add("dummy1");
         actualList.add("dummy2");
 
+
         Throwable exception = assertThrows(AssertionError.class, () ->
                 containsStringInList("test", actualList));
 
-        String exceptionText = exception.getMessage();
 
-        MatcherAssert.assertThat(
-                "Exception on failed contains String in list assertion main message",
-                exceptionText,
-                StringContains.containsString("""
-                        There is no elements in the list contain substring:
-                        test"""));
-
-        MatcherAssert.assertThat(
-                "Exception on failed contains String in list assertion (second element)",
-                exceptionText,
-                StringContains.containsString("""
-                        Expected: a string containing "test"
-                             but: was "dummy1\""""));
-        MatcherAssert.assertThat(
-                "Exception on failed contains String in list assertion (second element)",
-                exceptionText,
-                StringContains.containsString("""
-                        Expected: a string containing "test"
-                             but: was "dummy2\""""));
+        assertEquals("""
+                There is no elements in the list contain substring:
+                test
+                
+                -----------
+                
+                Expected: a string containing "test"
+                     but: was "dummy1"
+                
+                -----------
+                
+                Expected: a string containing "test"
+                     but: was "dummy2"
+                """, exception.getMessage());
     }
 
     @Test

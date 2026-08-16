@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ import static net.bugreaper.core.filereaders.pathfinder.ProjectPaths.getProjectP
 /**
  * Utility class for working with static resource files loaded by the classloader.
  *
- * <p>Vot support dynamic files created or updated during test execution.</p>
+ * <p>Not support dynamic files created or updated during test execution.</p>
  *
  * <p>For dynamic files, use {@link ResourcesFileReader}.</p>
  */
@@ -112,8 +113,14 @@ public final class FileReader {
 
     private static Path getFilePath(String filePath) {
         try {
-            return Path.of(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(filePath)).getPath());
-        } catch (NullPointerException e) {
+            return Path.of(
+                    Objects.requireNonNull(
+                            Thread.currentThread()
+                                    .getContextClassLoader()
+                                    .getResource(filePath)
+                    ).toURI()
+            );
+        } catch (NullPointerException | URISyntaxException e) {
             logFullPath();
             throw new FileReaderException("File does not exist in resources: " + filePath, e);
         }

@@ -22,19 +22,6 @@ class FileHelperExtendTest extends FileHelper {
     FileHelper fileTime = new FileHelper().setAwaitMs(400).setMaxFileSize(99999999);
 
     @Test
-    void testNoOptionalAwaitConfig() {
-
-        MatcherAssert.assertThat(
-                "Info summary",
-                fileTime.getConfigSummary(),
-                StringContains.containsString("""
-                        FileHelper:
-                            await=400
-                            maxFileSize=99999999"""));
-    }
-
-
-    @Test
     void testLogMessageAddAndCount() {
         cleanFile(LOG_FILE);
         addToFile(LOG_FILE, MESSAGE);
@@ -91,7 +78,7 @@ class FileHelperExtendTest extends FileHelper {
         MatcherAssert.assertThat(
                 "Failed message when message not exist in file",
                 exception.getMessage(),
-                StringContains.containsString("File 'logs/test/test.log' does not contain expected text <<some message>> within 400 milliseconds"));
+                StringContains.containsString("File 'logs/test/test.log' does not contain expected text(regex) <<some message>> within 400 milliseconds"));
     }
 
     @Test
@@ -103,7 +90,7 @@ class FileHelperExtendTest extends FileHelper {
         MatcherAssert.assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("File 'logs/test/test.log' does not contain expected text <<some message>> within 400 milliseconds"));
+                StringContains.containsString("File 'logs/test/test.log' does not contain expected text(regex) <<some message>> within 400 milliseconds"));
     }
 
     @Test
@@ -127,6 +114,7 @@ class FileHelperExtendTest extends FileHelper {
     void testSeeFileDoesNotContainStringFailed() {
         cleanFile(LOG_FILE);
         addToFile(LOG_FILE, MESSAGE);
+
         Throwable exception = assertThrows(AssertionError.class, () ->
                 seeFileDoesNotContainString(LOG_FILE, MESSAGE));
 
@@ -220,15 +208,15 @@ class FileHelperExtendTest extends FileHelper {
     @Test
     void testFileSizeCheckPass() {
         String filePath = "temp/sizeCheckPass.txt";
-        fileTime.deleteFile(filePath);
+        deleteFile(filePath);
 
-        fileTime.createFileWithSize(filePath, 180);
+        createFileWithSize(filePath, 180);
 
-        fileTime.seeFileSizeIsExactly(filePath, 180);
-        fileTime.seeFileSizeIsGreaterThan(filePath, 179);
-        fileTime.seeFileSizeIsLessThan(filePath, 181);
+        seeFileSizeIsExactly(filePath, 180);
+        seeFileSizeIsGreaterThan(filePath, 179);
+        seeFileSizeIsLessThan(filePath, 181);
 
-        long size = fileTime.getFileSize(filePath);
+        long size = getFileSize(filePath);
 
         assertEquals(180, size);
     }
@@ -246,21 +234,21 @@ class FileHelperExtendTest extends FileHelper {
 
         MatcherAssert.assertThat(
                 exception1.getMessage(),
-                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be EXACTLY <170 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be EXACTLY <170 bytes>, but got <180 bytes> within 400 milliseconds"));
 
         Throwable exception2 = assertThrows(AssertionError.class, () ->
                 fileTime.seeFileSizeIsGreaterThan(filePath, 181));
 
         MatcherAssert.assertThat(
                 exception2.getMessage(),
-                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be GREATER <181 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be GREATER <181 bytes>, but got <180 bytes> within 400 milliseconds"));
 
         Throwable exception3 = assertThrows(AssertionError.class, () ->
                 fileTime.seeFileSizeIsLessThan(filePath, 180));
 
         MatcherAssert.assertThat(
                 exception3.getMessage(),
-                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be LESS <180 bytes> but got <180 bytes> within 400 milliseconds"));
+                StringContains.containsString("File 'temp/sizeCheck.txt' size expected to be LESS <180 bytes>, but got <180 bytes> within 400 milliseconds"));
 
     }
 

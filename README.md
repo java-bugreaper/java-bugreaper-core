@@ -42,12 +42,12 @@ providing reusable functionality that is used across all other BugReaper modules
 
 | Lib                                                                                                | Version  | Description                                    |
 |----------------------------------------------------------------------------------------------------|----------|------------------------------------------------|
-| [Junit5](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)                   | 6.1.1    | test framework                                 |
-| [Junit Launcher](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher)    | 6.1.1    | for tests launch                               |
+| [Junit5](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)                   | 6.1.3    | test framework                                 |
+| [Junit Launcher](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher)    | 6.1.3    | for tests launch                               |
 | [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest)                               | 3.0      | matcher framework                              |
 | [AspectJ Weaver](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver)                     | 1.9.25.1 | applies aspects to Java classes (for test run) |
-| [Allure Attachments](https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments)       | 2.35.3   | Allure report generate                         |
-| [Logback Classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic)               | 1.5.38   | for logging                                    |
+| [Allure Attachments](https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments)       | 2.35.4   | Allure report generate                         |
+| [Logback Classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic)               | 1.6.2    | for logging                                    |
 | [Awaitility](https://mvnrepository.com/artifact/org.awaitility/awaitility)                         | 4.3.0    | for await in tests                             |
 | [Apache Commons Text](https://mvnrepository.com/artifact/org.apache.commons/commons-text)          | 1.15.0   | for Strings mapping                            |
 | [Jackson Databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) | 2.22.1   | for JSON features                              |

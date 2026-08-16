@@ -67,7 +67,7 @@ public interface AssertableListAsserts {
      *
      * <p>Extra object fields are ignored, but additional array elements cause an {@link AssertionError}.</p>
      *
-     * @param expectedJsonPart expected JSON subset (array order is ignored, but the number of elements must match)
+     * @param expectedJsonPart expected JSON subset (array order is ignored, but the number of elements must match if provided)
      * @return this instance for method chaining
      * @throws AssertionError           if the assertion fails
      * @throws IllegalArgumentException if the provided data is not valid JSON
@@ -79,7 +79,7 @@ public interface AssertableListAsserts {
      *
      * <p>Extra object fields are ignored, but additional array elements cause an {@link AssertionError}.</p>
      *
-     * @param filePath path to file in resources with expected JSON subset (array order is ignored, but the number of elements must match)
+     * @param filePath local file path, including the file name, relative to resources, containing the expected JSON subset (array order is ignored, but the number of elements must match if provided)
      * @return this instance for method chaining
      * @throws AssertionError      if the assertion fails
      * @throws FileReaderException if reading the file fails or the provided data is not valid JSON
@@ -103,7 +103,7 @@ public interface AssertableListAsserts {
      *
      * <p>Extra object fields and additional array elements are not allowed.</p>
      *
-     * @param filePath path to the resource file containing the expected full JSON with strict array ordering
+     * @param filePath local file path, including the file name, relative to resources, containing the expected JSON with strict array ordering
      * @return this instance for method chaining
      * @throws AssertionError      if the assertion fails
      * @throws FileReaderException if reading the file fails or the provided data is not valid JSON
@@ -123,7 +123,7 @@ public interface AssertableListAsserts {
     /**
      * Asserts that at least one element in the list matches the JSON schema.
      *
-     * @param filePath path to the resource file containing the JSON schema
+     * @param filePath local file path, including the file name, relative to resources, containing the expected JSON schema
      * @return this instance for method chaining
      * @throws AssertionError      if the assertion fails
      * @throws FileReaderException if reading the file fails or the provided data is not valid JSON

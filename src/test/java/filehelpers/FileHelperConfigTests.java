@@ -43,6 +43,7 @@ class FileHelperConfigTests {
                 StringContains.containsString("""
                         FileHelper:
                             await=550
+                            await-poll-interval=110
                             maxFileSize=800"""));
     }
 
@@ -57,6 +58,7 @@ class FileHelperConfigTests {
                 StringContains.containsString("""
                         FileHelper:
                             await=2000
+                            await-poll-interval=100
                             maxFileSize=1048576"""));
     }
 
@@ -71,6 +73,7 @@ class FileHelperConfigTests {
                 StringContains.containsString("""
                         FileHelper:
                             await=2000
+                            await-poll-interval=100
                             maxFileSize=1048576"""));
 
         assertEquals(

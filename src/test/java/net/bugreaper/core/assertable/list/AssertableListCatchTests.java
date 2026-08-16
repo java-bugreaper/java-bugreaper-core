@@ -232,6 +232,7 @@ class AssertableListCatchTests {
                 exception.getMessage());
 
     }
+
     @Test
     void testListAssertsJsonEqualCatchInput() {
         ArrayList<String> actualList = new ArrayList<>();
@@ -252,7 +253,6 @@ class AssertableListCatchTests {
 
 
     }
-
 
     @Test
     void testListAssertsJsonSchemaCatchInput() {

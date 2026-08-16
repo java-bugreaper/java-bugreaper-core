@@ -102,7 +102,7 @@ class LogHelperExtendTest extends LogHelper {
         assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("Log file 'logs/test/test.log' does not contain expected text <<some message>> within 2 seconds"));
+                StringContains.containsString("Log file 'logs/test/test.log' does not contain expected text(regex) <<some message>> within 2 seconds"));
     }
 
     @Test
@@ -114,7 +114,7 @@ class LogHelperExtendTest extends LogHelper {
         assertThat(
                 "Failed message when message not exist in logs",
                 exception.getMessage(),
-                StringContains.containsString("Log file 'logs/test/test.log' does not contain expected text <<some message>> within 400 milliseconds"));
+                StringContains.containsString("Log file 'logs/test/test.log' does not contain expected text(regex) <<some message>> within 400 milliseconds"));
     }
 
     @Test
