@@ -40,9 +40,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings("squid:S5960")
 public class LogHelper implements LogHelperInt {
 
-    private static LogHelper instance;
+    private static final String YML_PATH = "modules.log-helper.";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogHelper.class);
+
+    private static LogHelper instance;
 
     /**
      * Default await timeout for tests, in milliseconds.
@@ -105,15 +107,15 @@ public class LogHelper implements LogHelperInt {
     private void loadFromYaml() {
 
         //required config fields
-        String fileVal = YamlUtils.getStringValueByPath("modules.log-helper.logfile");
+        String fileVal = YamlUtils.getStringValueByPath(YML_PATH + "logfile");
         setLogFile(fileVal);
 
         //optional config fields
-        Object awaitVal = YamlUtils.getValueByPath("modules.log-helper.await", true);
+        Object awaitVal = YamlUtils.getValueByPath(YML_PATH + "await", true);
         if (awaitVal instanceof Number number) {
             setAwaitMs(number.intValue());
         }
-        Object awaitPollIntervalVal = YamlUtils.getValueByPath("modules.log-helper.await-poll-interval", true);
+        Object awaitPollIntervalVal = YamlUtils.getValueByPath(YML_PATH + "await-poll-interval", true);
         if (awaitPollIntervalVal instanceof Number number) {
             this.awaitPollInterval = number.intValue();
         }

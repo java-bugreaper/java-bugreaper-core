@@ -47,9 +47,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings("squid:S5960")
 public class FileHelper implements FileHelperInt {
 
-    private static FileHelper instance;
+    private static final String YML_PATH = "modules.file-helper.";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+
+    private static FileHelper instance;
 
     /**
      * Default await timeout for tests, in milliseconds.
@@ -110,15 +112,15 @@ public class FileHelper implements FileHelperInt {
 
         try {
             //optional config fields
-            Object awaitVal = YamlUtils.getValueByPath("modules.file-helper.await", true);
+            Object awaitVal = YamlUtils.getValueByPath(YML_PATH + "await", true);
             if (awaitVal instanceof Number number) {
                 setAwaitMs(number.intValue());
             }
-            Object awaitPollIntervalVal = YamlUtils.getValueByPath("modules.file-helper.await-poll-interval", true);
+            Object awaitPollIntervalVal = YamlUtils.getValueByPath(YML_PATH + "await-poll-interval", true);
             if (awaitPollIntervalVal instanceof Number number) {
                 this.awaitPollInterval = number.intValue();
             }
-            Object fileSizeVal = YamlUtils.getValueByPath("modules.file-helper.maxFileSize", true);
+            Object fileSizeVal = YamlUtils.getValueByPath(YML_PATH + "maxFileSize", true);
             if (fileSizeVal instanceof Number size) {
                 setMaxFileSize(size.longValue());
             }

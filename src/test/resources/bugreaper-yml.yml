@@ -1,8 +1,25 @@
 for-test:
   test: my-string
-  test-n1: 8080
+  test-short: 1 # short
+  test-n1: 2147483647 # max int
+  test-long: 9223372036854775807 # long not int
+  test-big: 9992233720368547758079999999999 # BIG INT
+  test-dec: 22.55 # decimal
   test-b: false
   test-w1: 1111
   test-w3: string_data
   test-w4: "true"
   test-null: null
+  map-key:
+    int: 2147483647 #max int
+    long: 7000 # max int to low for long
+    longBig: 9223372036854775807 # long not int
+    string: myString
+    boolean: true
+    string:dots: dots
+  map-key2:
+    test.string2: test
+  map-key3:
+    int: 10
+  map-key4:
+    data: null

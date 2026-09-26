@@ -46,12 +46,12 @@ providing reusable functionality that is used across all other BugReaper modules
 | [Junit Launcher](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher)    | 6.1.3    | for tests launch                               |
 | [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest)                               | 3.0      | matcher framework                              |
 | [AspectJ Weaver](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver)                     | 1.9.25.1 | applies aspects to Java classes (for test run) |
-| [Allure Attachments](https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments)       | 2.35.4   | Allure report generate                         |
-| [Logback Classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic)               | 1.6.2    | for logging                                    |
+| [Allure Attachments](https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments)       | 2.35.5   | Allure report generate                         |
+| [Logback Classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic)               | 1.6.3    | for logging                                    |
 | [Awaitility](https://mvnrepository.com/artifact/org.awaitility/awaitility)                         | 4.3.0    | for await in tests                             |
 | [Apache Commons Text](https://mvnrepository.com/artifact/org.apache.commons/commons-text)          | 1.15.0   | for Strings mapping                            |
-| [Jackson Databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) | 2.22.1   | for JSON features                              |
+| [Jackson Databind](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind) | 2.22.3   | for JSON features                              |
 | [JSONAssert](https://mvnrepository.com/artifact/org.skyscreamer/jsonassert)                        | 1.5.3    | for JSON asserts                               |
-| [JSONObject](https://mvnrepository.com/artifact/org.json/json)                                     | 20260522 | for JSON parse                                 |
+| [JSONObject](https://mvnrepository.com/artifact/org.json/json)                                     | 20260814 | for JSON parse                                 |
 | [JsonSchemaValidator](https://mvnrepository.com/artifact/com.networknt/json-schema-validator)      | 1.5.9    | for JSON Schema validate                       |
-| [SnakeYAML](https://mvnrepository.com/artifact/org.yaml/snakeyaml)                                 | 2.6      | for YML config parse                           |
+| [SnakeYAML](https://mvnrepository.com/artifact/org.yaml/snakeyaml)                                 | 2.7      | for YML config parse                           |
