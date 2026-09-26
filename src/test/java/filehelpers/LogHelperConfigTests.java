@@ -146,7 +146,7 @@ class LogHelperConfigTests {
                 "No required field",
                 exception.getMessage(),
                 StringContains.containsString("""
-                        Missing required config field: modules.log-helper.logfile"""));
+                        Missing required config field: 'modules.log-helper.logfile'"""));
     }
 
     @Test

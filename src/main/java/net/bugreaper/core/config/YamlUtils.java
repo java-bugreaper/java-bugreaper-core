@@ -4,6 +4,7 @@ import net.bugreaper.core.exceptions.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -52,7 +53,7 @@ public class YamlUtils {
     }
 
     /**
-     * Reads a  nested required YAML String value by dot-separated path.
+     * Reads a nested required YAML String value by dot-separated path.
      * <p>
      * Example:
      * <pre>
@@ -66,13 +67,12 @@ public class YamlUtils {
     public static String getStringValueByPath(String path){
 
         Object value = getValueByPath(path, false);
-
         checkType(value, path, String.class);
         return value.toString();
     }
 
     /**
-     * Reads a  nested required YAML integer value by dot-separated path.
+     * Reads a nested required YAML integer value by dot-separated path.
      * <p>
      * Example:
      * <pre>
@@ -91,7 +91,27 @@ public class YamlUtils {
     }
 
     /**
-     * Reads a  nested required YAML boolean value by dot-separated path.
+     * Reads a nested required YAML long value by dot-separated path.
+     * <p>
+     * Example:
+     * <pre>
+     * users.user1.id
+     * </pre>
+     *
+     * @param path dot-separated path to the key
+     * @return int with data
+     * @throws ConfigException when field not provided or data is null
+     */
+    public static long getLongValueByPath(String path){
+
+        Object value = getValueByPath(path, false);
+        checkType(value, path, long.class);
+
+        return ((Number)value).longValue();
+    }
+
+    /**
+     * Reads a nested required YAML boolean value by dot-separated path.
      * <p>
      * Example:
      * <pre>
@@ -109,16 +129,61 @@ public class YamlUtils {
         return (boolean) value;
     }
 
+    /**
+     * Reads a nested YAML map value by dot-separated path.
+     * <p>
+     * Example:
+     * <pre>
+     * db.mysql.hikary
+     * </pre>
+     *
+     * @param path dot-separated path to the key
+     * @param isOptional if true - key can be absent, false - key is required
+     * @return {@link ConfigMap} with keys:values
+     * @throws ConfigException when field not provided or data is null (for non-optional fields)
+     */
+    public static ConfigMap getConfigMapValueByPath(String path, boolean isOptional){
+
+        Object value = getValueByPath(path, isOptional);
+
+        if(value != null) {
+            checkType(value, path, Map.class);
+            return new ConfigMap((Map<String, Object>) value, path);
+        }
+        return new ConfigMap(Collections.emptyMap(), path);
+    }
+
     private static void checkType(Object value, String path, Class<?> expectedType) {
-        if (!expectedType.isInstance(value)) {
+
+        boolean valid = value != null
+                && ((expectedType == long.class && isLongValue(value))
+                || expectedType.isInstance(value));
+
+        if (!valid) {
             throw new IllegalArgumentException(
-                    String.format("%s must be a %s but was: %s",
-                            getValueKey(path),
+                    String.format("Config key '%s' must have type <%s>, but got: <%s>(%s)",
+                            path,
                             expectedType.getSimpleName(),
-                            value == null ? "null" : value.getClass().getName() //null validated on previous steps!
+                            value == null ? "null" : value.getClass().getName(), //null validated on previous steps!
+                            value
                     )
             );
         }
+    }
+
+    /**
+     * Checks whether the specified value is an integral numeric type that can be
+     * safely represented as a {@code long}.
+     *
+     * @param value value to check
+     * @return {@code true} if the value is a {@link Byte}, {@link Short},
+     *         {@link Integer}, or {@link Long}, otherwise {@code false}
+     */
+    static boolean isLongValue(Object value) {
+        return value instanceof Byte
+                || value instanceof Short
+                || value instanceof Integer
+                || value instanceof Long;
     }
 
     /**
@@ -131,33 +196,22 @@ public class YamlUtils {
     @SuppressWarnings("unchecked")
     public static Object getValueByPath(String path, boolean isOptional) {
         Map<String, Object> root = getConfig();
-        if (root == null) {
-            throw new ConfigException("Config file is empty");
-        } else if (path == null || path.isEmpty()) {
-            throw new ConfigException("Field not provided or empty");
-        }
 
-        String[] keys = path.split("\\.");
+        validateConfig(root, path);
+
         Object current = root;
 
-        for (String key : keys) {
-
-            // Must be a Map at each level
+        for (String key : path.split("\\.")) {
             if (!(current instanceof Map)) {
-                if (isOptional){
-                    return optionalFieldMissing(path);
-                }
-                throw new ConfigException("Path segment '" + key + "' does not lead to a map (path: " + path + ")");
+                return handleInvalidPath(path, isOptional,
+                        "Path segment '%s' does not lead to a map (path: %s)".formatted(key, path));
             }
 
             Map<String, Object> map = (Map<String, Object>) current;
 
-            // Key must exist
             if (!map.containsKey(key)) {
-                if (isOptional){
-                    return optionalFieldMissing(path);
-                }
-                throw new ConfigException("Missing required config field: " + path);
+                return handleInvalidPath(path, isOptional,
+                        "Missing required config field: '%s'".formatted(path));
             }
 
             current = map.get(key);
@@ -165,19 +219,35 @@ public class YamlUtils {
 
         if (current == null) {
             throw new ConfigException(
-                    "Config key '" + path + "' is present but null. Null is not allowed"
+                    "Config key '%s' is present but null. Null is not allowed".formatted(path)
             );
         }
-        return current; // valid, non-null optional
+
+        return current;
     }
+
+    private static void validateConfig(Map<String, Object> root, String path) {
+        if (root == null || root.isEmpty()) {
+            throw new ConfigException("Config file is empty");
+        }
+
+        if (path == null || path.isEmpty()) {
+            throw new ConfigException("Field not provided or empty");
+        }
+    }
+
+    private static Object handleInvalidPath(String path, boolean isOptional, String errorMessage) {
+        if (isOptional) {
+            return optionalFieldMissing(path);
+        }
+
+        throw new ConfigException(errorMessage);
+    }
+
 
     private static Object optionalFieldMissing(String path){
         LOGGER.debug("Optional config field '{}' not found - using default value.", path);
         return null;
-    }
-
-    private static String getValueKey(String path) {
-        return path.substring(path.lastIndexOf('.') + 1);
     }
 
     /**

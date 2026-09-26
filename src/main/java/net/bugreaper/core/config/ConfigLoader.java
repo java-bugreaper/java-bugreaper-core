@@ -33,7 +33,7 @@ public class ConfigLoader {
 
         Map<String, Object> result = new LinkedHashMap<>();
 
-        LOGGER.debug("Start read config from: {}", fileName);
+        LOGGER.info("Start read config from: {}", fileName);
         try (InputStream input = getInputStream(fileName, ConfigLoader.class)) {
 
 
