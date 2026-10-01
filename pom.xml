@@ -8,11 +8,11 @@
     <groupId>net.bugreaper</groupId>
     <artifactId>core</artifactId>
     <name>BugReaper Core</name>
-    <description>Core module for the BugReaper components</description>
+    <description>Core module of the BugReaper test helper framework, providing shared functionality for all other BugReaper modules.</description>
     <url>https://bugreaper.net/</url>
 
     <packaging>jar</packaging>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
 
 
 

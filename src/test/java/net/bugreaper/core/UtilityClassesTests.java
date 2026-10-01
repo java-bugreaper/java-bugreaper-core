@@ -6,6 +6,7 @@ import net.bugreaper.core.assertions.Asserts;
 import net.bugreaper.core.assertions.JsonAsserts;
 import net.bugreaper.core.assertions.ListAsserts;
 import net.bugreaper.core.config.ConfigLoader;
+import net.bugreaper.core.config.ConfigurationReader;
 import net.bugreaper.core.config.YamlUtils;
 import net.bugreaper.core.filereaders.FileReader;
 import net.bugreaper.core.filereaders.ResourcesFileReader;
@@ -210,6 +211,14 @@ class UtilityClassesTests {
         );
     }
 
+    @Test
+    void shouldBeUtilityConfigurationReader() throws NoSuchMethodException {
+        assertUtilityClass(
+                ConfigurationReader.class,
+                IllegalStateException.class,
+                "Utility class"
+        );
+    }
 
     private static void assertUtilityClass(
             Class<?> utilityClass,
